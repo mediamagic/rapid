@@ -1,7 +1,7 @@
 .page
 	.page-header 
 		.page-header-content
-			h1 Cookies admin
+			h1 Skoda Rapid admin
 				small &nbsp;
 
 	.page-region
@@ -11,40 +11,66 @@
 					.span4
 						h3.padding5.bg-color-red
 							i.icon-stats-up
-							span  Cookies
+							span  Items
 						table.bg-color-red
 							thead
 								tr
-									th nominee
-									th votes
+									th title
+									th description
+									th categories
+									th date created
+									th status
+									th actions
+									th edit
 							tbody
-								tr(ng-repeat="user in users")
-									td {{user.name}}
-									td {{user.votes}}
+								tr(ng-repeat="item in content")
+									td {{ item.sidebar.title }}
+									td {{ item.sidebar.description }}
+									td {{ item.categories | categories }}
+									td {{ item.dateCreated | date }}
+									td {{ item.status | status }} 
+										a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
+									td 
+										a(ng-click="itemPreview(item._id)") preview
+									td 
+										a(ng-click="itemEdit(item._id)") edit
 
-					.span4
-						h3.padding5.bg-color-blue
-							i.icon-facebook
-							span  Shares
-						table.bg-color-blue
-							thead
-								tr
-									th shared name
-									th total
-							tbody
-								tr(ng-repeat="share in shares")
-									td {{share.ref}}
-									td {{share.count}}
-					.span4
-						h3.padding5.bg-color-green
-							i.icon-share-2
-							span  References
-						table.bg-color-green
-							thead
-								tr
-									th ref id
-									th total
-							tbody
-								tr(ng-repeat="ref in refs")
-									td {{ref.ref}}
-									td {{ref.count}}
+					//- .span4
+					//- 	h3.padding5.bg-color-red
+					//- 		i.icon-stats-up
+					//- 		span  Cookies
+					//- 	table.bg-color-red
+					//- 		thead
+					//- 			tr
+					//- 				th nominee
+					//- 				th votes
+					//- 		tbody
+					//- 			tr(ng-repeat="user in users")
+					//- 				td {{user.name}}
+					//- 				td {{user.votes}}
+					//- .span4
+					//- 	h3.padding5.bg-color-blue
+					//- 		i.icon-facebook
+					//- 		span  Shares
+					//- 	table.bg-color-blue
+					//- 		thead
+					//- 			tr
+					//- 				th shared name
+					//- 				th total
+					//- 		tbody
+					//- 			tr(ng-repeat="share in shares")
+					//- 				td {{share.ref}}
+					//- 				td {{share.count}}
+					//- .span4
+					//- 	h3.padding5.bg-color-green
+					//- 		i.icon-share-2
+					//- 		span  References
+					//- 	table.bg-color-green
+					//- 		thead
+					//- 			tr
+					//- 				th ref id
+					//- 				th total
+					//- 		tbody
+					//- 			tr(ng-repeat="ref in refs")
+					//- 				td {{ref.ref}}
+					//- 				td {{ref.count}}
