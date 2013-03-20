@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+var db = mongoose.connection
 /*
  * Users Schema
  */
@@ -11,15 +13,18 @@ var usersSchema = new mongoose.Schema({
 		shareTitle: String,
 		shareText: String,
 		shareReference: Number
-	}ß
+	}
 });
 
 /*
  * Users manipulation
  */
-usersSchema.statics = extendStaticMethods('Users', ['list','get','add','edit']);
 
-/*
- * Users Model
- */
-exports.Users = db.model('Users', usersSchema);
+module.exports = function(extendStaticMethods, cb){
+
+	usersSchema.statics = extendStaticMethods('Users', ['list','get','add','edit']);
+	/*
+	 * Users Model
+	 */
+	return cb(db.model('Users', usersSchema));
+};

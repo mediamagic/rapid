@@ -1,16 +1,18 @@
+var mongoose = require('mongoose');
+var db = mongoose.connection
 /*
-	 * Settings Schema
-	 */
-	var settingsSchema = new mongoose.Schema({
-		modeState: {type: Boolean, default: true},
-		title: String,
-		facebook: {
-			shareTitle: String,
-			shareText: String,
-			shareReference: Number
-		}
-	});
-
+ * Settings Schema
+ */
+var settingsSchema = new mongoose.Schema({
+	modeState: {type: Boolean, default: true},
+	title: String,
+	facebook: {
+		shareTitle: String,
+		shareText: String,
+		shareReference: Number
+	}
+});
+module.exports = function(extendStaticMethods, callback) {
 	/*
 	 * Settings Manipulation
 	 */
@@ -39,23 +41,26 @@
 			return cb(null,doc);
 		});
 	}
-	
 	/*
 	 * Settings Model
 	 */
-	exports.Settings = db.model('Settings', settingsSchema);
+	var Settings = db.model('Settings', settingsSchema);
 
 	/*
 	 * Settings Auto-populate
 	 */
-	exports.Settings.count({}, function(err,c){
+
+	Settings.count({}, function(err,c){
 		if(err)
 			return err;
 		if (c == 0) {
-			exports.Settings.populate({title: 'Telma Cookies'}, function(err, doc){
+			Settings.populate({title: 'Skoda Rapid'}, function(err, doc){
 				if(err)
 					return err;
+				return callback(Settings);
 			});
-		} else 
-			return;
+		} else {
+			return callback(Settings);
+		}
 	})
+}

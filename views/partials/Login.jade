@@ -1,0 +1,9 @@
+form()
+	div
+		label username
+		input(type="text", name="username", ng-model="username")
+	div
+		label password
+		input(type="password", name="password", ng-model="password")
+	div
+		input(type="submit", value="Log in",  ng-click="loginSubmit()")
