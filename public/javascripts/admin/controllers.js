@@ -18,6 +18,17 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 		$scope.settings = settings
 	});
 
+	$scope.safeApply = function(fn) {
+	  var phase = this.$root.$$phase;	  
+	  if(phase == '$apply' || phase == '$digest') {
+	    if(fn && (typeof(fn) === 'function')) {
+	      fn();
+	    }
+	  } else {
+	    this.$apply(fn);
+	  }
+	};
+
 	$scope.filterCategory = 0;
 	$scope.categories = ['family', 'business', 'something', 'someothercat'];	
 
@@ -235,40 +246,106 @@ var ListsCtrl = ['$scope', function($scope){
 
 	$scope.showListsSaveButton = true;
 	$scope.sortableOptions = {
-								update: function(event, ui) {									
-									//var fromIndex = ui.item.sortable.index;
-									//var toIndex = $(ui.item).index();
-									
-									if($scope.filterCategory != 0) {
-										// var tempIndexFrom = $scope.tempContent[fromIndex].categories[$scope.filterCategory];
-										// var tempIndexTo = $scope.tempContent[toIndex].categories[$scope.filterCategory];
-										// $scope.tempContent[fromIndex].categories[$scope.filterCategory] = tempIndexTo;
-										// $scope.tempContent[toIndex].categories[$scope.filterCategory] = tempIndexFrom;
-
-										//$scope.category[$scope.filterCategory][fromIndex].categories[$scope.filterCategory] = toIndex;
-										//$scope.category[$scope.filterCategory][toIndex].categories[$scope.filterCategory] = fromIndex;
-
-										// setTimeout(function() {
-										// 	for(var i = 0; i < $scope.category[$scope.filterCategory].length; i++) {
-										// 		var item = $scope.category[$scope.filterCategory][i];
-										// 		item.categories[$scope.filterCategory] = i;
-										// 	}											
-										// }, 2000);
+								update: function(event, ui) {	
+									for(var i = 0; i < $scope.category[$scope.filterCategory].length; i++) {
+										var item = $scope.category[$scope.filterCategory][i];
+										item.categories[$scope.filterCategory] = i;
 									}
-								}
-	};
+								},
+								axis: 'y'
+	};	
 
 	$scope.orderCategories = function(item) {		
-		//return item.categories[$scope.filterCategory];
-		return $scope.category[$scope.filterCategory];
+		return item.categories[$scope.filterCategory];
+		//return $scope.category[$scope.filterCategory];
 	}
 	
 	$scope.previewNewList = function() {
 		$scope.showListsSaveButton = false;
 	}
 
+	// $scope.$watch("category['family']", function(n, o) {
+	// 	console.log('change')
+	// }, true);
+
 }];
 
+var EditorCtrl = ['$scope', function($scope){
+	var id = $scope.route.id;
+
+	$scope.editor = {
+		open: {
+			colorPickerClass:'colorPicker_1'
+		},
+		closed: {
+			colorPickerClass:'colorPicker_1'
+		}
+	}
+
+	$scope.toggleColor = function(status) {		
+		var currentColor = 0;
+
+		currentColor = $scope.editor[status].colorPickerClass.split('_')[1];
+
+		if(currentColor >= 1 && currentColor <3) {
+			currentColor++;
+		} else {
+			currentColor = 1;
+		}
+
+		$scope.safeApply(function() {	
+			$scope.editor[status].colorPickerClass = 'colorPicker_' + currentColor;			
+		});
+	}
+	
+	tinyMCE.init({
+		// General options
+		mode : "specific_textareas",
+        editor_selector : "tinyEditor",
+		theme : "advanced",
+		plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
+
+		width: "700",
+        height: "400",
+
+		// Theme options
+		theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+		theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
+		theme_advanced_toolbar_location : "top",
+		theme_advanced_toolbar_align : "left",
+		theme_advanced_statusbar_location : "bottom",
+		theme_advanced_resizing : false,
+
+		// // Example content CSS (should be your site CSS)
+		// content_css : "css/content.css",
+
+		// // Drop lists for link/image/media/template dialogs
+		// template_external_list_url : "lists/template_list.js",
+		// external_link_list_url : "lists/link_list.js",
+		// external_image_list_url : "lists/image_list.js",
+		// media_external_list_url : "lists/media_list.js",
+
+		// // Style formats
+		// style_formats : [
+		// 	{title : 'Bold text', inline : 'b'},
+		// 	{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
+		// 	{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
+		// 	{title : 'Example 1', inline : 'span', classes : 'example1'},
+		// 	{title : 'Example 2', inline : 'span', classes : 'example2'},
+		// 	{title : 'Table styles'},
+		// 	{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
+		// ],
+
+		// // Replace values for the template plugin
+		// template_replace_values : {
+		// 	username : "Some User",
+		// 	staffid : "991234"
+		// }
+	});
+
+}];
 
 
 

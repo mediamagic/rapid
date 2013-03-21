@@ -15,6 +15,7 @@ html(ng-app="admin", ng-controller="GlobalCtrl")
 		script(src="/javascripts/angular-ui.min.js")
 		script(src="/javascripts/admin/app.js")
 		script(src="/javascripts/admin/controllers.js")
+		script(src="/javascripts/tinymce/jscripts/tiny_mce/tiny_mce.js")
 	body.modern-ui
 		.page
 			.nav-bar
@@ -33,7 +34,7 @@ html(ng-app="admin", ng-controller="GlobalCtrl")
 								i.icon-user-2
 								span  List Editor
 						li
-							a.navigation-text(href="#/nominees")
+							a.navigation-text(href="#/editor")
 								i.icon-user-2
 								span  Add New Content
 						//- li
