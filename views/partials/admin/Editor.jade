@@ -1,0 +1,54 @@
+.page.secondary
+	.page-header 
+		.page-header-content
+			h1 Content Editor
+				small &nbsp;
+			a.back-button.big.page-back(href="#/main")
+.page
+	.page-region
+		.page-region-content
+			.grid
+				.row
+					.span12
+						h1 Closed Editor
+						#closedEditorWrapper
+							#leftSide
+								textarea#editorClosed.tinyEditor(rows="15", cols="80", width="700", style="width:700px !important")
+							#rightSide
+								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
+								select(width="150", style="width:150px;")
+									option(value="0") select type
+									option(value="text") text
+									option(value="video") video
+									option(value="flash") flash
+									option(value="iframe") iframe
+									option(value="image") image
+								select(width="150", style="width:150px;")
+									option(value="0") select size
+									option(value="1x1") 1x1
+									option(value="1x2") 1x2
+									option(value="2x2") 2x2
+									option(value="2x1") 2x1																	
+								select(width="150", style="width:150px;")
+									option(value="0") select link type
+									option(value="none") none
+									option(value="inner") inner
+									option(value="external") external
+								input(type="text", style="width:150px;", placeholder="mouse over title")
+						h1 Open Editor
+						#openEditorWrapper
+							#leftSide
+								textarea#editorOpen.tinyEditor(rows="15", cols="80", width="700", style="width:700px !important")
+							#rightSide
+								.colorPicker(ng-click="toggleColor('open')", class="{{editor.open.colorPickerClass}}")
+								select(width="150", style="width:150px;")
+									option(value="0") select type
+									option(value="text") text
+									option(value="video") video
+									option(value="flash") flash
+									option(value="iframe") iframe
+									option(value="image") image
+								input(type="text", style="width:150px;", placeholder="title")
+								textarea(rows="5", cols="80", width="150", style="width:150px !important", placeholder="description")
+								input(type="text", style="width:150px;", placeholder="url")
+								input(type="text", style="width:150px;", placeholder="url title")								
