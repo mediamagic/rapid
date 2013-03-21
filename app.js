@@ -75,7 +75,7 @@
 
   //load db async
   require('./models')(function(resp){
-      Users   = require('./controllers/users')(resp)
+      Articles   = require('./controllers/articles')(resp)
     , Settings= require('./controllers/settings')(resp)
     , Stats   = require('./controllers/statistics')(resp)
     , PowerUsers = require('./controllers/powerUsers')(resp)
@@ -125,10 +125,10 @@
     app.post('/api/upload/:type', ensureAuthenticated, Api.upload);
 
     //RESTful RESOURCES
-    app.get ('/resources/users', Users.index);
-    app.get ('/resources/users/:id', Users.load, Users.show);
-    app.post('/resources/users', ensureAuthenticated, Users.create);
-    app.put ('/resources/users/:id', ensureAuthenticated, Users.load, Users.update);
+    app.get ('/resources/articles', Articles.index);
+    app.get ('/resources/articles/:id', Articles.load, Articles.show);
+    app.post('/resources/articles', ensureAuthenticated, Articles.create);
+    app.put ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.update);
     app.get ('/resources/settings', Settings.index);
     app.put ('/resources/settings', ensureAuthenticated, Settings.update);
     app.post('/resources/stats/:type', Stats.create);

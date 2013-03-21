@@ -44,7 +44,6 @@ module.exports = function(extendStaticMethods, cb) {
 						, unhashed: candidatePassword
 						, salt: this.salt }
 						, function(err, isMatch) {
-							console.log(isMatch);
 							if (err) return cb(err);
 							cb(null, isMatch);
 						});
