@@ -1,1 +1,3 @@
-h1 main
+#articles
+	.article.preview(ng-repeat="article in articles | filter:getCategory | orderBy:orderCategory", class=" size{{article.preview.size}}")
+		.title {{article.sidebar.title}}
