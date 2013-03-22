@@ -1,5 +1,5 @@
 doctype 5
-html(ng-app="app", ng-controller="GlobalCtrl", class="{{glob.mode}}")
+html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 	head
 		title(ng-bind="settings.title")
 		link(rel='stylesheet', href='/stylesheets/style.css')
@@ -19,4 +19,10 @@ html(ng-app="app", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
+		#header
+			ul#nav
+				li(ng-repeat="category in settings.categories")
+					label {{category}}
+					input(type="radio", name="category", ng-model="filters.category", value="{{category}}") 
 		#wrapper(ng-view)
+		#footer
