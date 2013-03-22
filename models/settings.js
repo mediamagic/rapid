@@ -4,13 +4,13 @@ var db = mongoose.connection
  * Settings Schema
  */
 var settingsSchema = new mongoose.Schema({
-	modeState: {type: Boolean, default: true},
 	title: String,
 	facebook: {
 		shareTitle: String,
 		shareText: String,
 		shareReference: Number
-	}
+	},
+	categories: []
 });
 module.exports = function(extendStaticMethods, callback) {
 	/*
