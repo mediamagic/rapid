@@ -24,10 +24,28 @@ a {
 	color: #ffe821;
 }
 
+
 #wrapper {
 	background: transparent url(../images/main_bg.png) no-repeat top left;
 	height: 700px;
 	margin: 0 auto;
-	width: 1024px;
+	width: 1020px;
 	position: relative;
+	outline: red solid 1px;
+}
+
+#articles {
+	width: 940px;
+	margin: 0 auto;
+	outline: green solid 1px;
+}
+.article.preview {
+	float: right;
+	margin: 5px;
+	outline: blue solid 1px;
+	&.size1x1 {
+		width: 220px;
+		height: 220px;
+	}
+
 }
