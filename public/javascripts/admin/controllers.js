@@ -34,7 +34,7 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 
 	$scope.content = [
 						{
-							_id: 5976234598654832,
+							_id: 111111111111,
 							sidebar: {
 										title:'title1',
 										description: 'description1',
@@ -47,26 +47,26 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 											business:0
 							},					
 							preview: {
-										type:'text/video/flash/iframe/image',
+										type:'text',
 										link:{
-														type:'none/inner/ext',
+														type:'none',
 														url:'url to the link',
 														text: 'text on mouse over'
 										},
 										content:'this is preview content',
-										size:'1x1',
-										bgColor:'#fff/green/grey'										
+										size:'1x2',
+										bgColor:'#ffffff'										
 							},
 							content: {
-										type:'text/video/flash/iframe/image',							
+										type:'text',							
 										content:'this is the content',	
-										bgColor:'#fff/green/grey',										
+										bgColor:'#ffffff',										
 							},			
 							dateCreated: new Date(),											
 							status: true
 						},
 						{
-							_id: 5976234598654832,
+							_id: 22222222222222,
 							sidebar: {
 										title:'title2',
 										description: 'description1',
@@ -81,26 +81,26 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 											something:0
 							},					
 							preview: {
-										type:'text/video/flash/iframe/image',
+										type:'video',
 										link:{
-														type:'none/inner/ext',
+														type:'none',
 														url:'url to the link',
 														text: 'text on mouse over'
 										},
 										content:'this is preview content',
-										size:'1x1',
-										bgColor:'#fff/green/grey'										
+										size:'2x1',
+										bgColor:'#4aa82e'										
 							},
 							content: {
-										type:'text/video/flash/iframe/image',							
+										type:'video',							
 										content:'this is the content',	
-										bgColor:'#fff/green/grey',										
+										bgColor:'#4aa82e',										
 							},			
 							dateCreated: new Date(),											
 							status: false
 						},
 						{
-							_id: 5976234598654832,
+							_id: 33333333333333,
 							sidebar: {
 										title:'title3',
 										description: 'description1',
@@ -114,26 +114,26 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 											business:2
 							},					
 							preview: {
-										type:'text/video/flash/iframe/image',
+										type:'flash',
 										link:{
-														type:'none/inner/ext',
+														type:'inner',
 														url:'url to the link',
 														text: 'text on mouse over'
 										},
 										content:'this is preview content',
 										size:'1x1',
-										bgColor:'#fff/green/grey'										
+										bgColor:'#ffffff'										
 							},
 							content: {
-										type:'text/video/flash/iframe/image',							
+										type:'flash',							
 										content:'this is the content',	
-										bgColor:'#fff/green/grey',										
+										bgColor:'#ffffff',										
 							},			
 							dateCreated: new Date(),											
 							status: true
 						},
 						{
-							_id: 5976234598654832,
+							_id: 44444444444444444,
 							sidebar: {
 										title:'title4',
 										description: 'description1',
@@ -148,26 +148,26 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 
 							},					
 							preview: {
-										type:'text/video/flash/iframe/image',
+										type:'iframe',
 										link:{
-														type:'none/inner/ext',
+														type:'external',
 														url:'url to the link',
 														text: 'text on mouse over'
 										},
 										content:'this is preview content',
-										size:'1x1',
-										bgColor:'#fff/green/grey'										
+										size:'2x2',
+										bgColor:'#ffffff'										
 							},
 							content: {
-										type:'text/video/flash/iframe/image',							
+										type:'iframe',							
 										content:'this is the content',	
-										bgColor:'#fff/green/grey',										
+										bgColor:'#ffffff',										
 							},			
 							dateCreated: new Date(),											
 							status: true
 						},
 						{
-							_id: 5976234598654832,
+							_id: 5555555555555555555,
 							sidebar: {
 										title:'title5',
 										description: 'description1',
@@ -181,27 +181,25 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 											something:1							
 							},					
 							preview: {
-										type:'text/video/flash/iframe/image',
+										type:'image',
 										link:{
-														type:'none/inner/ext',
+														type:'inner',
 														url:'url to the link',
 														text: 'text on mouse over'
 										},
 										content:'this is preview content',
 										size:'1x1',
-										bgColor:'#fff/green/grey'										
+										bgColor:'#8c9299'										
 							},
 							content: {
-										type:'text/video/flash/iframe/image',							
+										type:'image',							
 										content:'this is the content',	
-										bgColor:'#fff/green/grey',										
+										bgColor:'#8c9299',										
 							},			
 							dateCreated: new Date(),											
 							status: true
 						}					
 	]
-
-	//$scope.tempContent = angular.copy($scope.content);
 
 	$scope.category = {};
 	for(var cat = 0; cat < $scope.categories.length; cat++) {
@@ -229,15 +227,13 @@ var MainCtrl = ['$scope', function($scope){
 	// 	$scope.shares = resp;
 	// });
 
-	$scope.toggleStatus = function(id) {
-		console.log(id);
+	$scope.toggleStatus = function(index) {
+		$scope.content[index].status = !$scope.content[index].status;
+
+		//TODO: update database
 	}
 
 	$scope.itemPreview = function(id) {
-
-	}
-
-	$scope.itemEdit = function(id) {
 
 	}
 }];
@@ -256,8 +252,7 @@ var ListsCtrl = ['$scope', function($scope){
 	};	
 
 	$scope.orderCategories = function(item) {		
-		return item.categories[$scope.filterCategory];
-		//return $scope.category[$scope.filterCategory];
+		return item.categories[$scope.filterCategory];		
 	}
 	
 	$scope.previewNewList = function() {
@@ -271,17 +266,100 @@ var ListsCtrl = ['$scope', function($scope){
 }];
 
 var EditorCtrl = ['$scope', function($scope){
-	var id = $scope.route.id;
+	var index = $scope.route.id;
 
 	$scope.editor = {
+		data: {
+			sidebar: {
+						title:'',
+						description: '',
+						readMore: {
+									title:'',
+									url: ''
+						}
+			},		
+			categories: {				
+			},							
+			preview: {
+						type:'text',
+						link:{
+										type:'none',
+										url:'',
+										text: ''
+						},
+						content:'',
+						size:'1x1',
+						bgColor:''										
+			},
+			content: {
+						type:'text',							
+						content:'',	
+						bgColor:'',										
+			},		
+		},
 		open: {
 			colorPickerClass:'colorPicker_1'
 		},
 		closed: {
-			colorPickerClass:'colorPicker_1'
+			colorPickerClass:'colorPicker_1',
+			showLinkText: false,
+			showLinkUrl: false
+		},
+		categories: [
+		],
+		tinymceOptions: {
+			// General options			
+			theme : "advanced",
+			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
+
+			width: "700",
+	        height: "400",
+			directionality : "rtl",
+
+			//content_css : "custom_content.css"
+
+			// Theme options
+			theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+			theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+			theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : false
 		}
+	}	
+
+	$scope.checkLinkType = function(param)	{
+		var type = $scope.editor.data.preview.link.type;
+
+		if(param === 'text') {
+			if(type === 'none') {
+				return false;
+			} else if(type === 'inner') {
+				// TODO: show Open Editor
+				return true;
+			} else if(type === 'external') {
+				return true;
+			}
+		} else if(param === 'url') {
+			if(type === 'none') {
+				return false;
+			} else if(type === 'external') {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
+	// $scope.$watch("editor.data.preview.link.type", function(n, o) {
+	// 	if(n === 'none') {
+	// 		$scope.editor.
+	// 	}
+	// }, true);
+
+	var colorPicker = ['#ffffff', '#8c9299', '#4aa82e'];
 	$scope.toggleColor = function(status) {		
 		var currentColor = 0;
 
@@ -293,167 +371,137 @@ var EditorCtrl = ['$scope', function($scope){
 			currentColor = 1;
 		}
 
+		if(status === 'open') {
+			$scope.editor.data.content.bgColor = colorPicker[currentColor - 1];
+		} else if (status === 'closed') {
+			$scope.editor.data.preview.bgColor = colorPicker[currentColor - 1];
+		}
+
 		$scope.safeApply(function() {	
 			$scope.editor[status].colorPickerClass = 'colorPicker_' + currentColor;			
 		});
 	}
-	
-	tinyMCE.init({
-		// General options
-		mode : "specific_textareas",
-        editor_selector : "tinyEditor",
-		theme : "advanced",
-		plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
 
-		width: "700",
-        height: "400",
+	$scope.saveContent = function() {
+		var newCategories = $scope.editor.categories;
+		var oldCategories = $scope.editor.data.categories;
 
-		// Theme options
-		theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-		theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
-		theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-		theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
-		theme_advanced_toolbar_location : "top",
-		theme_advanced_toolbar_align : "left",
-		theme_advanced_statusbar_location : "bottom",
-		theme_advanced_resizing : false,
-
-		// // Example content CSS (should be your site CSS)
-		// content_css : "css/content.css",
-
-		// // Drop lists for link/image/media/template dialogs
-		// template_external_list_url : "lists/template_list.js",
-		// external_link_list_url : "lists/link_list.js",
-		// external_image_list_url : "lists/image_list.js",
-		// media_external_list_url : "lists/media_list.js",
-
-		// // Style formats
-		// style_formats : [
-		// 	{title : 'Bold text', inline : 'b'},
-		// 	{title : 'Red text', inline : 'span', styles : {color : '#ff0000'}},
-		// 	{title : 'Red header', block : 'h1', styles : {color : '#ff0000'}},
-		// 	{title : 'Example 1', inline : 'span', classes : 'example1'},
-		// 	{title : 'Example 2', inline : 'span', classes : 'example2'},
-		// 	{title : 'Table styles'},
-		// 	{title : 'Table row 1', selector : 'tr', classes : 'tablerow1'}
-		// ],
-
-		// // Replace values for the template plugin
-		// template_replace_values : {
-		// 	username : "Some User",
-		// 	staffid : "991234"
-		// }
-	});
-
-}];
-
-
-
-
-
-
-
-
-var NomineesCtrl = ['$scope', function($scope){
-	$scope.Users.query({}, function(response){
-		$scope.users = response;
-	});
-}];
-
-var NomineeCtrl = ['$scope', function($scope){
-	var userId = $scope.route.id;
-	$scope.Users.get({user: userId}, function(resp){
-		$scope.user = resp;
-		$scope.Voters.query({voted_user: userId}, function(resp){
-			$scope.voters = resp;
-		});
-	});
-}];
-
-var EditNomineeCtrl = ['$scope', function($scope){
-	var userId = $scope.route.id;
-	$scope.Users.get({user: userId}, function(resp){
-		$scope.user = resp;
-	});
-}];
-
-var VotersCtrl = ['$scope', function($scope){
-	$scope.Voters.query({}, function(resp){
-		$scope.voters = resp;
-	});
-}];
-
-var SettingsCtrl = ['$scope', function($scope){
-	$scope.Settings.get({}, function(settings){
-		$scope.settings = settings;
-	});
-	$scope.usersObj = [];
-	$scope.Users.query({}, function(response){
-		$scope.users = response;
-	});
-	$scope.fileElm = [];
-	$scope.save = function(action){
-		if (action==='title')
-			$scope.Settings.update({},{title: $scope.settings.title}, function(resp){
-				//console.log(resp);
-			});
-		else if (action==='toggle') {
-			$scope.Settings.update({}, {modeState: !$scope.settings.modeState}, function(resp){
-				//console.log(resp);
-				$scope.settings.modeState = resp.modeState;
-			});
-		} else if (action==='facebook')
-			$scope.Settings.update({}, {facebook: $scope.settings.facebook}, function(resp){
-				$scope.settings.facebook = resp.facebook;
-			});
-	}
-	$scope.updateUser = function(index){
-		var sendObj = $scope.users[index];
-		delete sendObj.votes, sendObj._id, sendObj.hidden;
-		$scope.Users.update({user: sendObj._id}, sendObj, function(resp){
-			//console.log(resp);
-		});
-	}
-	$scope.videoCheck = function(id, cb){
-		$scope.Api.get({action: 'videoCheck', id: id}, function (resp) {
-			var invalid = (resp.type === undefined) ? true : false;
-			cb( invalid );
-		})
-	}
-	$scope.formInvalid = function(formObj, id){
-		$scope.videoCheck(id, function(resp){
-			formObj.$invalid = resp;
-		});
-	}
-	$scope.setFiles = function (_element) {
-		$scope.$apply(function ($scope) {
-			for (var i=0;i<_element.files.length;i++){
-				$scope.file = _element.files[i];
-				$scope.prepareUpload(_element.files[i]);
-			}
-		});
-	};
-	$scope.prepareUpload = function(_file){
-		var imageType = /image.*/
-		if(!_file.type.match(imageType)){ 
-			return alert('only images allowed');
-		} else {
-			var reader = new FileReader();
-			reader.onload = (function (file){
-				return function (env){
-					$scope.upload();
-				}
-			}(_file))
-			reader.readAsDataURL(_file);
+		// clean categories that was removed
+		for(var cat in oldCategories) {
+			if(newCategories.indexOf(cat) == -1) {
+				delete oldCategories[cat]
+			}			
 		}
+
+		// add new categories
+		for(var cat in newCategories) {
+			if(oldCategories[newCategories[cat]] == undefined) {
+				oldCategories[newCategories[cat]] = $scope.category[newCategories[cat]].length;
+			}
+		}
+
+
+		console.log('NEW cats');
+		for(var cat in newCategories) {
+			console.log(newCategories[cat]);
+		}
+
+		console.log('');
+		console.log('OLD cats');
+		for(var cat in oldCategories) {
+			console.log(cat + ' : ' + oldCategories[cat]);
+		}
+		
 	}
 
-	$scope.upload = function(){
-		$scope.fd = new FormData();
-		$scope.fd.append('leadersImage', $scope.file);
-		$scope.fd.append('_csrf', $scope.cookies['csrf.token'])
-		$scope.xhr = new XMLHttpRequest();
-        $scope.xhr.open("POST", "/api/upload/leaders" , true);
-       	$scope.xhr.send($scope.fd);
+	if(index != undefined) {
+		$scope.editor.data = $scope.content[index];
+		$scope.safeApply(function() {	
+			$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
+			$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
+		});		
+
+		for(var cat in $scope.editor.data.categories) {
+			$scope.editor.categories.push(cat);
+		}
+
+	} else {
+		$scope.editor.data.categories[$scope.categories[0]] = $scope.category[$scope.categories[0]].length;		
+		$scope.editor.categories.push($scope.categories[0]);
 	}
 }];
+
+// var SettingsCtrl = ['$scope', function($scope){
+// 	$scope.Settings.get({}, function(settings){
+// 		$scope.settings = settings;
+// 	});
+// 	$scope.usersObj = [];
+// 	$scope.Users.query({}, function(response){
+// 		$scope.users = response;
+// 	});
+// 	$scope.fileElm = [];
+// 	$scope.save = function(action){
+// 		if (action==='title')
+// 			$scope.Settings.update({},{title: $scope.settings.title}, function(resp){
+// 				//console.log(resp);
+// 			});
+// 		else if (action==='toggle') {
+// 			$scope.Settings.update({}, {modeState: !$scope.settings.modeState}, function(resp){
+// 				//console.log(resp);
+// 				$scope.settings.modeState = resp.modeState;
+// 			});
+// 		} else if (action==='facebook')
+// 			$scope.Settings.update({}, {facebook: $scope.settings.facebook}, function(resp){
+// 				$scope.settings.facebook = resp.facebook;
+// 			});
+// 	}
+// 	$scope.updateUser = function(index){
+// 		var sendObj = $scope.users[index];
+// 		delete sendObj.votes, sendObj._id, sendObj.hidden;
+// 		$scope.Users.update({user: sendObj._id}, sendObj, function(resp){
+// 			//console.log(resp);
+// 		});
+// 	}
+// 	$scope.videoCheck = function(id, cb){
+// 		$scope.Api.get({action: 'videoCheck', id: id}, function (resp) {
+// 			var invalid = (resp.type === undefined) ? true : false;
+// 			cb( invalid );
+// 		})
+// 	}
+// 	$scope.formInvalid = function(formObj, id){
+// 		$scope.videoCheck(id, function(resp){
+// 			formObj.$invalid = resp;
+// 		});
+// 	}
+// 	$scope.setFiles = function (_element) {
+// 		$scope.$apply(function ($scope) {
+// 			for (var i=0;i<_element.files.length;i++){
+// 				$scope.file = _element.files[i];
+// 				$scope.prepareUpload(_element.files[i]);
+// 			}
+// 		});
+// 	};
+// 	$scope.prepareUpload = function(_file){
+// 		var imageType = /image.*/
+// 		if(!_file.type.match(imageType)){ 
+// 			return alert('only images allowed');
+// 		} else {
+// 			var reader = new FileReader();
+// 			reader.onload = (function (file){
+// 				return function (env){
+// 					$scope.upload();
+// 				}
+// 			}(_file))
+// 			reader.readAsDataURL(_file);
+// 		}
+// 	}
+
+// 	$scope.upload = function(){
+// 		$scope.fd = new FormData();
+// 		$scope.fd.append('leadersImage', $scope.file);
+// 		$scope.fd.append('_csrf', $scope.cookies['csrf.token'])
+// 		$scope.xhr = new XMLHttpRequest();
+//         $scope.xhr.open("POST", "/api/upload/leaders" , true);
+//        	$scope.xhr.send($scope.fd);
+// 	}
+// }];

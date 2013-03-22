@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 .clear{clear:both;}
 .page{width:940px;margin:0 auto;background:white;}
-@media (min-width:768px) and (max-width:979px){.page{width:724px;} .hero-unit>img{zoom:.6;} .browsers-icons img{zoom:.8;}}@media (max-width:767px){.page{width:100%;}}
-=======
-html{background:url(../images/main_bg_pat.png);}html.pop{background:#011520;}
+@media (min-width:768px) and (max-width:979px){.page{width:724px;} .hero-unit>img{zoom:.6;} .browsers-icons img{zoom:.8;}}@media (max-width:767px){.page{width:100%;}}html{background:url(../images/main_bg_pat.png);}html.pop{background:#011520;}
 body{background:transparent;font:14px "Lucida Grande",Helvetica,Arial,sans-serif;margin:0;padding:0;}
 h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 a{color:#ffe821;}
@@ -14,7 +11,6 @@ a{color:#ffe821;}
 #openEditorWrapper{position:relative;width:900px;height:415px;}#openEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
 #openEditorWrapper #rightSide{position:absolute;top:0px;right:0px;width:200px;height:415px;border:solid #ccc 1px;}
 .colorPicker{width:24px;height:24px;cursor:pointer;border:solid #ccc 1px;}
-.colorPicker_1{background-color:white;}
-.colorPicker_2{background-color:gray;}
-.colorPicker_3{background-color:green;}
->>>>>>> e029c83e7785bd9ff902517ef87bfa6abb3409c2
+.colorPicker_1{background-color:#ffffff;}
+.colorPicker_2{background-color:#8c9299;}
+.colorPicker_3{background-color:#4aa82e;}

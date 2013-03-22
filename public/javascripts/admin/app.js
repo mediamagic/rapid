@@ -7,7 +7,7 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
 		when('/editor', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'editor'}).
 		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'editor'}).
 		//when('/settings', {templateUrl: '/views/admin/Settings.html', controller: SettingsCtrl, name:'settings'}).		
-		when('/voters', {templateUrl: '/views/admin/Voters.html', controller: VotersCtrl, name:'Statistics'}).
+		//when('/voters', {templateUrl: '/views/admin/Voters.html', controller: VotersCtrl, name:'Statistics'}).
 		otherwise({redirectTo: '/main'});
 }]).
 filter('status', function() {

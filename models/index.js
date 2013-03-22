@@ -3,7 +3,7 @@ module.exports = function(cb){
 	, fs = require('fs')
 	, async = require('async');
 	//mongoose.set('debug', function(a,b,c,d,e){console.log('---'); console.log(a); console.log(b); console.log(c); console.log(d);})
-	mongoose.connect('mongodb://localhost/rapidDB');
+	mongoose.connect('mongodb://mongo.db/rapidDB');
 	var db = mongoose.connection
 	, ObjectId = mongoose.Schema.ObjectId;
 

@@ -11,7 +11,7 @@
 					.span4
 						h3.padding5.bg-color-red
 							i.icon-stats-up
-							span  Items
+							span  Items						
 						table.bg-color-red
 							thead
 								tr
@@ -29,11 +29,11 @@
 									td {{ item.categories | categories }}
 									td {{ item.dateCreated | date }}
 									td {{ item.status | status }} 
-										a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
+										a(ng-click="toggleStatus($index)") {{ !item.status | status }}
 									td 
 										a(ng-click="itemPreview(item._id)") preview
 									td 
-										a(ng-click="itemEdit(item._id)") edit
+										a(href="/admin#/editor/{{$index}}") edit										
 
 					//- .span4
 					//- 	h3.padding5.bg-color-red
