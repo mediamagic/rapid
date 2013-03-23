@@ -26,7 +26,7 @@
 								tr(ng-repeat="item in content")
 									td {{ item.sidebar.title }}
 									td {{ item.sidebar.description }}
-									td {{ item.categories | categories }}
+									td {{ item.categories | remove:'all' | categories}}
 									td {{ item.dateCreated | date }}
 									td {{ item.status | status }} 
 										a(ng-click="toggleStatus($index)") {{ !item.status | status }}

@@ -39,6 +39,28 @@ filter('categories', function() {
 
 		return arr;
 	}
+}).filter('remove', function() {
+  return function(items, category) {
+    var obj = {};
+    var isArray = false;
+
+    if( Object.prototype.toString.call(items) === '[object Array]') {
+      obj = [];
+      isArray = true;
+    }
+    
+    for(var item in items){   
+      if(isArray) {
+        if(items[item] !== category)
+          obj.push(items[item])
+      } else {        
+        if(item !== category)
+          obj[item] = items[item];
+      }
+    }    
+
+    return obj;
+  }
 });
 
 angular.module('ui.directives').directive('uiSortable', [

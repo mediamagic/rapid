@@ -16,7 +16,7 @@
 								textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.data.preview.content", rows="15", cols="80", width="700", style="width:700px !important")
 							#rightSide
 								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
-								select(width="150", style="width:150px;", size="5", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories")									
+								select(width="150", style="width:150px;", size="5", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")									
 									//- option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}	
 								select(width="150", style="width:150px;", ng-model="editor.data.preview.type")									
 									option(value="text") text
