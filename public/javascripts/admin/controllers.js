@@ -9,13 +9,27 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	, $scope.resource = $resource
 	, $scope.route = $routeParams
 	, $scope.Math = $window.Math
-	, $scope.Users = $scope.resource('/resources/users/:user/:vote', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}})
-	, $scope.Voters = $scope.resource('/resources/voters/:voter', {_csrf: $cookies['csrf.token']})
+	, $scope.Articles = $scope.resource('/resources/articles/:id', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}})
+	//, $scope.Users = $scope.resource('/resources/users/:user/:vote', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}})
+	//, $scope.Voters = $scope.resource('/resources/voters/:voter', {_csrf: $cookies['csrf.token']})
 	, $scope.Stats = $scope.resource('/resources/stats/:type', {_csrf: $cookies['csrf.token']})
 	, $scope.Api = $scope.resource('/api/:action/:id', {_csrf: $cookies['csrf.token']});
 	$scope.cookies = $cookies;
+	
+	$scope.categories = [];
+
 	$scope.Settings.get({}, function(settings){
 		$scope.settings = settings
+		$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
+
+		$scope.Articles.query({}, function(res) {
+			$scope.content = res;
+
+			$scope.category = {};
+			$scope.splitCategories();	
+
+			$scope.$broadcast('SETTINGS_LOADED');
+		});		
 	});
 
 	$scope.safeApply = function(fn) {
@@ -30,190 +44,219 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	};
 
 	$scope.filterCategory = 0;
-	$scope.categories = ['family', 'business', 'something', 'someothercat'];	
+	
 
-	$scope.content = [
-						{
-							_id: 111111111111,
-							sidebar: {
-										title:'title1',
-										description: 'description1',
-										readMore: {
-													title:'title',
-													url: 'url'
-										}
-							},							
-							categories: {											
-											business:0
-							},					
-							preview: {
-										type:'text',
-										link:{
-														type:'none',
-														url:'url to the link',
-														text: 'text on mouse over'
-										},
-										content:'this is preview content',
-										size:'1x2',
-										bgColor:'#ffffff'										
-							},
-							content: {
-										type:'text',							
-										content:'this is the content',	
-										bgColor:'#ffffff',										
-							},			
-							dateCreated: new Date(),											
-							status: true
-						},
-						{
-							_id: 22222222222222,
-							sidebar: {
-										title:'title2',
-										description: 'description1',
-										readMore: {
-													title:'title',
-													url: 'url'
-										}
-							},							
-							categories: {
-											family:0,
-											business:1,
-											something:0
-							},					
-							preview: {
-										type:'video',
-										link:{
-														type:'none',
-														url:'url to the link',
-														text: 'text on mouse over'
-										},
-										content:'this is preview content',
-										size:'2x1',
-										bgColor:'#4aa82e'										
-							},
-							content: {
-										type:'video',							
-										content:'this is the content',	
-										bgColor:'#4aa82e',										
-							},			
-							dateCreated: new Date(),											
-							status: false
-						},
-						{
-							_id: 33333333333333,
-							sidebar: {
-										title:'title3',
-										description: 'description1',
-										readMore: {
-													title:'title',
-													url: 'url'
-										}
-							},							
-							categories: {
-											family:1,
-											business:2
-							},					
-							preview: {
-										type:'flash',
-										link:{
-														type:'inner',
-														url:'url to the link',
-														text: 'text on mouse over'
-										},
-										content:'this is preview content',
-										size:'1x1',
-										bgColor:'#ffffff'										
-							},
-							content: {
-										type:'flash',							
-										content:'this is the content',	
-										bgColor:'#ffffff',										
-							},			
-							dateCreated: new Date(),											
-							status: true
-						},
-						{
-							_id: 44444444444444444,
-							sidebar: {
-										title:'title4',
-										description: 'description1',
-										readMore: {
-													title:'title',
-													url: 'url'
-										}
-							},							
-							categories: {
-											family:2,
-											business:3
+	// $scope.content = [
+	// 					{
+	// 						_id: 111111111111,
+	// 						sidebar: {
+	// 									title:'title1',
+	// 									description: 'description1',
+	// 									readMore: {
+	// 												title:'title',
+	// 												url: 'url'
+	// 									}
+	// 						},							
+	// 						categories: {											
+	// 										business:0
+	// 						},					
+	// 						preview: {
+	// 									type:'text',
+	// 									link:{
+	// 													type:'none',
+	// 													url:'url to the link',
+	// 													text: 'text on mouse over'
+	// 									},
+	// 									content:'this is preview content',
+	// 									size:'1x2',
+	// 									bgColor:'#ffffff'										
+	// 						},
+	// 						content: {
+	// 									type:'text',							
+	// 									content:'this is the content',	
+	// 									bgColor:'#ffffff',										
+	// 						},			
+	// 						dateCreated: new Date(),											
+	// 						status: true
+	// 					},
+	// 					{
+	// 						_id: 22222222222222,
+	// 						sidebar: {
+	// 									title:'title2',
+	// 									description: 'description1',
+	// 									readMore: {
+	// 												title:'title',
+	// 												url: 'url'
+	// 									}
+	// 						},							
+	// 						categories: {
+	// 										family:0,
+	// 										business:1,
+	// 										something:0
+	// 						},					
+	// 						preview: {
+	// 									type:'video',
+	// 									link:{
+	// 													type:'none',
+	// 													url:'url to the link',
+	// 													text: 'text on mouse over'
+	// 									},
+	// 									content:'this is preview content',
+	// 									size:'2x1',
+	// 									bgColor:'#4aa82e'										
+	// 						},
+	// 						content: {
+	// 									type:'video',							
+	// 									content:'this is the content',	
+	// 									bgColor:'#4aa82e',										
+	// 						},			
+	// 						dateCreated: new Date(),											
+	// 						status: false
+	// 					},
+	// 					{
+	// 						_id: 33333333333333,
+	// 						sidebar: {
+	// 									title:'title3',
+	// 									description: 'description1',
+	// 									readMore: {
+	// 												title:'title',
+	// 												url: 'url'
+	// 									}
+	// 						},							
+	// 						categories: {
+	// 										family:1,
+	// 										business:2
+	// 						},					
+	// 						preview: {
+	// 									type:'flash',
+	// 									link:{
+	// 													type:'inner',
+	// 													url:'url to the link',
+	// 													text: 'text on mouse over'
+	// 									},
+	// 									content:'this is preview content',
+	// 									size:'1x1',
+	// 									bgColor:'#ffffff'										
+	// 						},
+	// 						content: {
+	// 									type:'flash',							
+	// 									content:'this is the content',	
+	// 									bgColor:'#ffffff',										
+	// 						},			
+	// 						dateCreated: new Date(),											
+	// 						status: true
+	// 					},
+	// 					{
+	// 						_id: 44444444444444444,
+	// 						sidebar: {
+	// 									title:'title4',
+	// 									description: 'description1',
+	// 									readMore: {
+	// 												title:'title',
+	// 												url: 'url'
+	// 									}
+	// 						},							
+	// 						categories: {
+	// 										family:2,
+	// 										business:3
 
-							},					
-							preview: {
-										type:'iframe',
-										link:{
-														type:'external',
-														url:'url to the link',
-														text: 'text on mouse over'
-										},
-										content:'this is preview content',
-										size:'2x2',
-										bgColor:'#ffffff'										
-							},
-							content: {
-										type:'iframe',							
-										content:'this is the content',	
-										bgColor:'#ffffff',										
-							},			
-							dateCreated: new Date(),											
-							status: true
-						},
-						{
-							_id: 5555555555555555555,
-							sidebar: {
-										title:'title5',
-										description: 'description1',
-										readMore: {
-													title:'title',
-													url: 'url'
-										}
-							},							
-							categories: {
-											family:3,
-											something:1							
-							},					
-							preview: {
-										type:'image',
-										link:{
-														type:'inner',
-														url:'url to the link',
-														text: 'text on mouse over'
-										},
-										content:'this is preview content',
-										size:'1x1',
-										bgColor:'#8c9299'										
-							},
-							content: {
-										type:'image',							
-										content:'this is the content',	
-										bgColor:'#8c9299',										
-							},			
-							dateCreated: new Date(),											
-							status: true
-						}					
-	]
+	// 						},					
+	// 						preview: {
+	// 									type:'iframe',
+	// 									link:{
+	// 													type:'external',
+	// 													url:'url to the link',
+	// 													text: 'text on mouse over'
+	// 									},
+	// 									content:'this is preview content',
+	// 									size:'2x2',
+	// 									bgColor:'#ffffff'										
+	// 						},
+	// 						content: {
+	// 									type:'iframe',							
+	// 									content:'this is the content',	
+	// 									bgColor:'#ffffff',										
+	// 						},			
+	// 						dateCreated: new Date(),											
+	// 						status: true
+	// 					},
+	// 					{
+	// 						_id: 5555555555555555555,
+	// 						sidebar: {
+	// 									title:'title5',
+	// 									description: 'description1',
+	// 									readMore: {
+	// 												title:'title',
+	// 												url: 'url'
+	// 									}
+	// 						},							
+	// 						categories: {
+	// 										family:3,
+	// 										something:1							
+	// 						},					
+	// 						preview: {
+	// 									type:'image',
+	// 									link:{
+	// 													type:'inner',
+	// 													url:'url to the link',
+	// 													text: 'text on mouse over'
+	// 									},
+	// 									content:'this is preview content',
+	// 									size:'1x1',
+	// 									bgColor:'#8c9299'										
+	// 						},
+	// 						content: {
+	// 									type:'image',							
+	// 									content:'this is the content',	
+	// 									bgColor:'#8c9299',										
+	// 						},			
+	// 						dateCreated: new Date(),											
+	// 						status: true
+	// 					}					
+	// ]
 
-	$scope.category = {};
-	for(var cat = 0; cat < $scope.categories.length; cat++) {
-		$scope.category[$scope.categories[cat]] = angular.copy($scope.content);
+	$scope.splitCategories = function() {		
+		for(var cat = 0; cat < $scope.categories.length; cat++) {
+			$scope.category[$scope.categories[cat]] = angular.copy($scope.content);
 
-		var arr = $scope.category[$scope.categories[cat]];
-		var newArr = [];
-		for(var i = 0; i < arr.length; i++) {			
-			if(arr[i].categories[$scope.categories[cat]] != undefined)
-				newArr.push(arr[i]);
-		}	
+			var arr = $scope.category[$scope.categories[cat]];
+			var newArr = [];
+			for(var i = 0; i < arr.length; i++) {			
+				if(arr[i].categories[$scope.categories[cat]] != undefined)
+					newArr.push(arr[i]);
+			}	
 
-		$scope.category[$scope.categories[cat]] = newArr;
+			$scope.category[$scope.categories[cat]] = newArr;
+		}
 	}
+
+	// function createArticle(i){
+	// 	 article = { sidebar:  { title:  'title ' + i
+	// 	     , description: 'description ' + i
+	// 	     , readMore: { title:  'read more ' +i
+	// 	        , url:   'http://readmore/' +i } }
+	// 	  , preview:  { type:  'text'
+	// 	     , link:  { type: 'inner'
+	// 	        , url:  'n-a'
+	// 	        , text: 'mouse over text' }
+	// 	     , content:  'this is the content in html'
+	// 	     , size:  '1x1'
+	// 	     , bgColor:  '#ffffff' }
+	// 	  , content:  { type:  'text'
+	// 	     , content:  'this is the inner content in html'
+	// 	     , bgColor:  '#ffffff' }
+	// 	  , categories:  { all:(i-1), family: (i-1), business: i, other: (i+1) }
+	// 	  , status:  true
+	// 	 }
+	// 	 $.ajax({
+	// 	  url: '/resources/articles?_csrf=RtXJJh5Stt%2FBRZDi7cgEcr8m',
+	// 	  data: article,
+	// 	  type: 'POST',
+	// 	  success: function(resp){
+	// 	   console.log(resp);
+	// 	  }
+	// 	 })
+	// 	}
 }];
 
 var MainCtrl = ['$scope', function($scope){
@@ -414,21 +457,24 @@ var EditorCtrl = ['$scope', function($scope){
 		
 	}
 
-	if(index != undefined) {
-		$scope.editor.data = $scope.content[index];
-		$scope.safeApply(function() {	
-			$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
-			$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
-		});		
+	$scope.$on('SETTINGS_LOADED', function(event) {					
+		if(index != undefined) {
+			$scope.editor.data = $scope.content[index];
+			$scope.safeApply(function() {	
+				$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
+				$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
+			});		
 
-		for(var cat in $scope.editor.data.categories) {
-			$scope.editor.categories.push(cat);
+			for(var cat in $scope.editor.data.categories) {
+				$scope.editor.categories.push(cat);
+			}
+
+		} else {
+			// $scope.editor.data.categories[$scope.categories[0]] = $scope.category[$scope.categories[0]].length;		
+			// $scope.editor.categories.push($scope.categories[0]);
+			// console.log($scope.categories);
 		}
-
-	} else {
-		$scope.editor.data.categories[$scope.categories[0]] = $scope.category[$scope.categories[0]].length;		
-		$scope.editor.categories.push($scope.categories[0]);
-	}
+	});
 }];
 
 // var SettingsCtrl = ['$scope', function($scope){
