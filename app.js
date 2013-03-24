@@ -75,11 +75,13 @@
 
   //load db async
   require('./models')(function(resp){
-      Articles   = require('./controllers/articles')(resp)
-    , Settings= require('./controllers/settings')(resp)
-    , Stats   = require('./controllers/statistics')(resp)
-    , PowerUsers = require('./controllers/powerUsers')(resp)
-    , Api     = require('./controllers/api')(resp)
+      Articles    = require('./controllers/articles')(resp)
+    , Settings    = require('./controllers/settings')(resp)
+    , Images      = require('./controllers/images')(resp)
+    , Swfs        = require('./controllers/swfs')(resp)
+    , Stats       = require('./controllers/statistics')(resp)
+    , PowerUsers  = require('./controllers/powerUsers')(resp)
+    , Api         = require('./controllers/api')(resp)
 
     pass.use(new LocalS(
       function(username, password, done){
@@ -122,7 +124,11 @@
     });
     app.get ('/api/createCSV', ensureAuthenticated,  Api.createCSV);
     app.get ('/api/createCSV/:id', ensureAuthenticated, Api.createCSV);
-    app.post('/api/upload/:type', ensureAuthenticated, Api.upload);
+
+    app.get ('/api/uploads/images', ensureAuthenticated, Images.index);
+    app.post('/api/uploads/images', ensureAuthenticated, Images.create);
+    app.get ('/api/uploads/swfs', ensureAuthenticated, Swfs.index);
+    app.post('/api/uploads/swfs', ensureAuthenticated, Swfs.create);
 
     //RESTful RESOURCES
     app.get ('/resources/articles', Articles.index);

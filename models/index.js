@@ -35,7 +35,6 @@ module.exports = function(cb){
 				if (data._csrf) delete data._csrf;
 				var tmp = new this(data);
 				tmp.save(function(err,doc){
-					console.log('yay save worked');
 					if(err)
 						return cb(err);
 					return cb(null,doc);
