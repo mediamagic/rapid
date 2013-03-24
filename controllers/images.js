@@ -19,6 +19,7 @@ module.exports = function(db){
 			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Images(obj.fileName);
 			tmp.hashName = tmp._id + '.jpg';
+			console.log(req.files);
 			fs.readFile(req.files.fileName, function(err, data){
 				if (err)
 					return res.send(500, err);
