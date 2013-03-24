@@ -14,12 +14,12 @@ var ArticlesSchema = new mongoose.Schema(
 									, default: 'inner' }
 							, url: 	{ type: String }
 							, text: { type: String } }
-				, content: 	{ type: String } 
+				, content: 	{ type: mongoose.Schema.Types.Mixed } 
 				, size: 	{ type: String
 							, default: '1x1' } 
 				, bgColor: 	{ type: String
 							, default: '#ffffff' } }
-	, content: 	{ type:		{ type: String
+	, content: 	{ type:		{ type: mongoose.Schema.Types.Mixed
 							, default: 'text' }
 				, content: 	{ type: String } 
 				, bgColor: 	{ type: String
