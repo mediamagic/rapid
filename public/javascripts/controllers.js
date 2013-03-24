@@ -29,7 +29,7 @@ var MainCtrl = ['$scope', function($scope){
 			, arr 	= []
 			, cat = $scope.filters.category
 		arr.push('size'+item.preview.size);
-		if (item.categories[cat] >= $scope.articles.length)
+		if (item.categories[cat] > $scope.articles.length)
 			arr.push('disabled');
 		(item.preview.link.type == 'none') ? 
 			arr.push('unlinked') : arr.push('linked')
@@ -38,7 +38,7 @@ var MainCtrl = ['$scope', function($scope){
 
 	$scope.Articles.query({}, function(resp){
 		var cats = $scope.settings.categories
-			, l = resp.length
+			, l = resp.length +1;
 		for (var cat in resp){
 			var itm = resp[cat];
 			for (var i = 0;i<cats.length;i++){
