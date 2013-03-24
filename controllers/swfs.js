@@ -19,6 +19,7 @@ module.exports = function(db){
 			if (data._csrf) delete data._csrf;
 			var tmp = new db.Swfs(obj.fileName);
 			tmp.hashName = tmp._id + '.swf';
+			console.log(req.files);
 			fs.readFile(req.files.fileName, function(err, data){
 				if (err)
 					res.send(500, err);
