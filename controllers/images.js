@@ -21,12 +21,12 @@ module.exports = function(db){
 			tmp.hashName = tmp._id + '.jpg';
 			fs.readFile(req.files.fileName, function(err, data){
 				if (err)
-					res.send(500, err);
-				var newPath = global.root + "public/images/img/"+tmp.hashName;
+					return res.send(500, err);
+				var newPath = global.root + "public/images/imgs/"+tmp.hashName;
 				fs.writeFile(newPath, data, function(err){
 					tmp.save(function(err,doc){
 						if(err)
-							res.send(handle(err,null));
+							return res.send(handle(err,null));
 						return res.send(doc);
 					});
 				});

@@ -22,7 +22,7 @@ module.exports = function(db){
 			fs.readFile(req.files.fileName, function(err, data){
 				if (err)
 					res.send(500, err);
-				var newPath = global.root + "public/images/swf/"+tmp.hashName;
+				var newPath = global.root + "public/images/swfs/"+tmp.hashName;
 				fs.writeFile(newPath, data, function(err){
 					tmp.save(function(err,doc){
 						if(err)
