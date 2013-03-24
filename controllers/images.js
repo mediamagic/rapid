@@ -15,10 +15,10 @@ module.exports = function(db){
 		},
 		create: function(req,res,next){
 			var obj 	= req.body
-				, fs 	= require('fs');
+				, fs 	= require('fs'),
+				, path 	= require('path')
 			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Images(obj.fileName);
-			tmp.hashName = tmp._id + '.jpg';
 			console.log(req.files);
 			fs.readFile(req.files.fileName.path, function(err, data){
 				if (err) {
@@ -26,8 +26,17 @@ module.exports = function(db){
 					console.log(err);
 					return res.send(500, err);
 				}
+				var ext = path.extname(req.fileName.name||'').split('.');
+				ext = ext[ext.length - 1];
+				tmp.hashName = tmp._id + '.' + ext;
 				var newPath = global.root + "public/images/imgs/"+tmp.hashName;
+				console.log(newPath);
 				fs.writeFile(newPath, data, function(err){
+					if (err) {
+						console.log('error 3')
+						console.log(err);
+						return res.send(handle(err,null))
+					}
 					tmp.save(function(err,doc){
 						if(err) {
 							console.log('error 2');
