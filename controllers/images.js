@@ -26,7 +26,7 @@ module.exports = function(db){
 					console.log(err);
 					return res.send(500, err);
 				}
-				var ext = path.extname(req.fileName.name||'').split('.');
+				var ext = path.extname(req.files.fileName.name||'').split('.');
 				ext = ext[ext.length - 1];
 				tmp.hashName = tmp._id + '.' + ext;
 				var newPath = global.root + "public/images/imgs/"+tmp.hashName;
