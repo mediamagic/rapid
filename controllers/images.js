@@ -20,7 +20,7 @@ module.exports = function(db){
 			var tmp = new db.Images(obj.fileName);
 			tmp.hashName = tmp._id + '.jpg';
 			console.log(req.files);
-			fs.readFile(req.files.fileName, function(err, data){
+			fs.readFile(req.files.fileName.path, function(err, data){
 				if (err) {
 					console.log('error 1');
 					console.log(err);

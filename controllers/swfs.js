@@ -20,7 +20,7 @@ module.exports = function(db){
 			var tmp = new db.Swfs(obj.fileName);
 			tmp.hashName = tmp._id + '.swf';
 			console.log(req.files);
-			fs.readFile(req.files.fileName, function(err, data){
+			fs.readFile(req.files.fileName.path, function(err, data){
 				if (err)
 					res.send(500, err);
 				var newPath = global.root + "public/images/swfs/"+tmp.hashName;
