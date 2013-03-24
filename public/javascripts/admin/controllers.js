@@ -247,6 +247,7 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	// 	     , bgColor:  '#ffffff' }
 	// 	  , categories:  { all:(i-1), family: (i-1), business: i, other: (i+1) }
 	// 	  , status:  true
+	// 	  , dateCreated: new Date()
 	// 	 }
 	// 	 $.ajax({
 	// 	  url: '/resources/articles?_csrf=RtXJJh5Stt%2FBRZDi7cgEcr8m',
@@ -341,14 +342,39 @@ var EditorCtrl = ['$scope', function($scope){
 			},		
 		},
 		open: {
-			colorPickerClass:'colorPicker_1'
+			colorPickerClass:'colorPicker_1',
+			tempContent:''
 		},
 		closed: {
 			colorPickerClass:'colorPicker_1',
 			showLinkText: false,
-			showLinkUrl: false
+			showLinkUrl: false,
+			tempContent:''
 		},
 		categories: [
+		],
+		flashFiles: [
+			{
+				fileName: 'one.swf',
+				hashName: 'ldkjaslkdjaslkjds.swf'
+			},
+			{
+				fileName: 'two.swf',
+				hashName: 'hhfdgfsdgfsdgdfs.swf'
+			},
+			{
+				fileName: 'tree.swf',
+				hashName: 'hahahfdsahfahfahfbzx.swf'
+			},
+			{
+				fileName: 'four.swf',
+				hashName: 'zxbzxcbzxcbxzcbzxcb.swf'
+			},
+			{
+				fileName: 'five.swf',
+				hashName: 'iiiriirtitiyirt.swf'
+			},
+
 		],
 		tinymceOptions: {
 			// General options			
@@ -372,6 +398,12 @@ var EditorCtrl = ['$scope', function($scope){
 			theme_advanced_resizing : false
 		}
 	}	
+
+	//fix for tinymce that wont let me update the preview content while two ng-model are connected to it
+	$scope.$watch('editor.closed.tempContent', function(n, o) { 
+		if(n != '')
+			$scope.editor.data.preview.content = n;
+	});
 
 	$scope.checkLinkType = function(param)	{
 		var type = $scope.editor.data.preview.link.type;
