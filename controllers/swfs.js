@@ -15,20 +15,27 @@ module.exports = function(db){
 		},
 		create: function(req,res,next){
 			var obj 	= req.body
-				, fs 	= require('fs');
-			if (data._csrf) delete data._csrf;
+				, fs 	= require('fs')
+				, path 	= require('path');
+			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Swfs(obj.fileName);
-			tmp.hashName = tmp._id + '.swf';
-			console.log(req.files);
 			fs.readFile(req.files.fileName.path, function(err, data){
 				if (err)
-					res.send(500, err);
-				var newPath = global.root + "public/images/swfs/"+tmp.hashName;
+					return res.send(500, err);
+				var ext = path.extname(req.files.fileName.name||'').split('.');
+					ext = ext[ext.length - 1];
+				tmp.hashName 	= tmp._id + '.' + ext;
+				tmp.fileName 	= req.files.fileName.name;
+				var newPath		= global.root + "public/images/swfs/"+tmp.hashName;
 				fs.writeFile(newPath, data, function(err){
+					if (err)
+						return res.send(handle(err,null))
 					tmp.save(function(err,doc){
 						if(err)
-							res.send(handle(err,null));
-						return res.send(doc);
+							return res.send(handle(err,null));
+						var obj = 	{ fileName: doc.fileName
+									, hashName: doc.hashName }
+						return res.send(obj);
 					});
 				});
 			});

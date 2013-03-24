@@ -19,31 +19,23 @@ module.exports = function(db){
 				, path 	= require('path')
 			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Images(obj.fileName);
-			console.log(req.files);
 			fs.readFile(req.files.fileName.path, function(err, data){
-				if (err) {
-					console.log('error 1');
-					console.log(err);
+				if (err)
 					return res.send(500, err);
-				}
 				var ext = path.extname(req.files.fileName.name||'').split('.');
-				ext = ext[ext.length - 1];
-				tmp.hashName = tmp._id + '.' + ext;
-				var newPath = global.root + "public/images/imgs/"+tmp.hashName;
-				console.log(newPath);
+					ext = ext[ext.length - 1];
+				tmp.hashName 	= tmp._id + '.' + ext;
+				tmp.fileName 	= req.files.fileName.name;
+				var newPath		= global.root + "public/images/imgs/"+tmp.hashName;
 				fs.writeFile(newPath, data, function(err){
-					if (err) {
-						console.log('error 3')
-						console.log(err);
+					if (err)
 						return res.send(handle(err,null))
-					}
 					tmp.save(function(err,doc){
-						if(err) {
-							console.log('error 2');
-							console.log(err);
+						if(err)
 							return res.send(handle(err,null));
-						}
-						return res.send(doc);
+						var obj = 	{ fileName: doc.fileName
+									, hashName: doc.hashName }
+						return res.send(obj);
 					});
 				});
 			});
