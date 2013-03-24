@@ -23,17 +23,17 @@
 									th actions
 									th edit
 							tbody
-								tr(ng-repeat="item in content")
+								tr(ng-repeat="item in content | orderBy:'-_id'")
 									td {{ item.sidebar.title }}
 									td {{ item.sidebar.description }}
 									td {{ item.categories | remove:'all' | categories}}
 									td {{ item.dateCreated | date }}
 									td {{ item.status | status }} 
-										a(ng-click="toggleStatus($index)") {{ !item.status | status }}
+										a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
 									td 
 										a(ng-click="itemPreview(item._id)") preview
 									td 
-										a(href="/admin#/editor/{{$index}}") edit										
+										a(href="/admin#/editor/{{item._id}}") edit										
 
 					//- .span4
 					//- 	h3.padding5.bg-color-red

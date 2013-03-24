@@ -14,15 +14,24 @@
 						#closedEditorWrapper
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'")
-									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.data.preview.content", rows="15", cols="80", width="700", style="width:700px !important")
+									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
-									input(type="text", ng-model="editor.data.preview.content", placeholder="url to swf file", style="width:300px;")
-									input(type="file", accept="application/x-shockwave-flash")
-									select(width="250", style="width:250px;", size="5", ng-model="editor.data.preview.content", ng-options="swf.fileName for swf in editor.flashFiles")
-								#ifranePreview(ng-show="editor.data.preview.type == 'iframe'")
-									input(type="text", ng-model="editor.data.preview.content", placeholder="url to external link", style="width:300px;")
+									input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
+									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handlePreviewFile('flash', this.files[0])") 
+									span {{ uploadprogress }}
+									select#previewSelectFlash(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+								#iframePreview(ng-show="editor.data.preview.type == 'iframe'")
+									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="width:300px;")
 								#imagePreview(ng-show="editor.data.preview.type == 'image'")									
-									input(type="file", accept="image/*")
+									input(type="file", accept="image/*", onchange="angular.element(this).scope().handlePreviewFile('image', this.files[0])") 
+									span {{ uploadprogress }}
+									#previewImages
+										.previewImage(ng-repeat="image in editor.tempContent.preview.image", style="position:relative; float:left; width:100px; height:120px; margin:10px;")
+											img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
+											span(ng-click="removeImage(image)", style="cursor:pointer;") X
+											.br 
+											span {{ image.fileName }}
+
 							#rightSide
 								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
 								select(width="150", style="width:150px;", size="5", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
@@ -52,8 +61,8 @@
 								#flashContent(ng-show="editor.data.content.type == 'flash'")
 									input(type="text", ng-model="editor.data.content.content", placeholder="url to swf file", style="width:300px;")
 									input(type="file", accept="application/x-shockwave-flash")
-									select(width="250", style="width:250px;", size="5", ng-model="editor.data.content.content", ng-options="swf.fileName for swf in editor.flashFiles")
-								#ifraneContent(ng-show="editor.data.content.type == 'iframe'")
+									select(width="250", style="width:250px;", size="5", ng-model="editor.data.content.content", ng-options="swf.fileName for swf in editor.files.flash")
+								#iframeContent(ng-show="editor.data.content.type == 'iframe'")
 									input(type="text", ng-model="editor.data.content.content", placeholder="url to external link", style="width:300px;")
 								#imageContent(ng-show="editor.data.content.type == 'image'")									
 									input(type="file", accept="image/*")
