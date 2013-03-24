@@ -1,3 +1,7 @@
-#articles
-	.article.preview(ng-repeat="article in articles | filter:getCategory | orderBy:orderCategory", class=" size{{article.preview.size}}")
-		.title {{article.sidebar.title}}
+span {{contentLoaded}}
+.timedWrapper(ui-if="contentLoaded")
+	#articles(ui-isotope, options='{"itemSelector":".article", "layoutMode":"masonry", "animationEngine":"best-available"}')
+		.article.preview(ng-repeat="article in articles", ng-class="getCategory($index)", rel="{{article.categories}}", iso-item)
+			.title {{article.sidebar.title}}
+			.order {{article.categories | json}}
+	.clr

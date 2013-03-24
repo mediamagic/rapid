@@ -5,7 +5,6 @@
 // * CSS *//
 
 html {
-	background:  url(../images/main_bg_pat.png);
 	&.pop {
 		background: #011520;
 	}
@@ -23,15 +22,14 @@ h1,h2,h3,h4,h5,h6 {
 a {
 	color: #ffe821;
 }
-
+.clr {
+	clear:both;
+}
 
 #wrapper {
-	background: transparent url(../images/main_bg.png) no-repeat top left;
-	height: 700px;
 	margin: 0 auto;
 	width: 1020px;
 	position: relative;
-	outline: red solid 1px;
 }
 
 #articles {
@@ -39,13 +37,43 @@ a {
 	margin: 0 auto;
 	outline: green solid 1px;
 }
-.article.preview {
-	float: right;
-	margin: 5px;
-	outline: blue solid 1px;
-	&.size1x1 {
-		width: 220px;
-		height: 220px;
-	}
+.article {
+	&.preview {
+		margin: 5px;
+		outline: blue solid 1px;
+		&.size1x1 {
+			width: 220px;
+			height: 220px;
+		}
+		&.size1x2 {
+			width: 220px;
+			height: 450px;
+		}
+		&.size2x1 {
+			width: 450px;
+			height: 220px;
+		}
+		&.size2x2 {
+			width: 450px;
+			height: 450px;
+		}
+		&.linked {
+			cursor: pointer;
+		}
+		&.unlinked {
+			cursor: default;
+		}
+		&.disabled {
+			background: #ddd;
+		}
 
+	}
+	&.open {
+		width:920px;
+		height: 300px;
+		margin: 5px;
+		outline: red solid 1px;
+	}
 }
+
+@import "isotope.less";
