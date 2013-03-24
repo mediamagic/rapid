@@ -15,7 +15,7 @@ module.exports = function(db){
 		},
 		create: function(req,res,next){
 			var obj 	= req.body
-				, fs 	= require('fs'),
+				, fs 	= require('fs')
 				, path 	= require('path')
 			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Images(obj.fileName);
