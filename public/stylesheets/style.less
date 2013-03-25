@@ -1,4 +1,12 @@
+//* VARS *//
+	@size: 220px;
+	@margin: 5px;
 //* MIXINS *//
+.size(@width: 1, @height: 1, @size:220px, @margin:5px) {
+	margin: @margin;
+	width: @width*@size + (@margin * 2 * (@width - 1));
+	height: @height*@size + (@margin * 2 *(@height - 1));
+}
 
 //* COLORS *//
 
@@ -38,24 +46,20 @@ a {
 	outline: green solid 1px;
 }
 .article {
-	&.preview {
-		margin: 5px;
+	.preview {
+		//margin: 5px;
 		outline: blue solid 1px;
 		&.size1x1 {
-			width: 220px;
-			height: 220px;
+			.size(1,1);
 		}
 		&.size1x2 {
-			width: 220px;
-			height: 450px;
+			.size(1,2);
 		}
 		&.size2x1 {
-			width: 450px;
-			height: 220px;
+			.size(2,1);
 		}
 		&.size2x2 {
-			width: 450px;
-			height: 450px;
+			.size(2,2);
 		}
 		&.linked {
 			cursor: pointer;
@@ -68,11 +72,14 @@ a {
 		}
 
 	}
-	&.open {
+	.content {
 		width:910px;
 		height: 300px;
 		margin: 5px;
 		outline: red solid 1px;
+	}
+	&.masked {
+
 	}
 }
 

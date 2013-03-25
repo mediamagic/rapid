@@ -18,6 +18,7 @@
     , pass    = require('passport')
     , LocalS  = require('passport-local').Strategy
     , mcache  = require('connect-memcached')(express)
+    , compress= require('node-minify')
     , app     = express()
     global.root = process.cwd() + '/';
 
@@ -57,6 +58,14 @@
                                         , compress: true
                                         , optimization: 2 }));
     app.use(express.static(path.join(__dirname, 'public')));
+    new compress.minify({
+      type: 'gcc',
+      fileIn: ['public/javascripts/app.js', 'public/javascripts/controllers.js'],
+      fileOut: 'public/javascripts/app.min.js',
+      callback: function(err){
+      console.log(err);
+      }
+    });
     console.log('development mode');
   });
 
