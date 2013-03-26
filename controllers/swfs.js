@@ -58,7 +58,7 @@ module.exports = function(db){
 				fs.unlink(global.root + "public/images/swfs/"+hashName, function (err) {
 				  if (err)
 				  	return res.send(handle(err,null));
-				  return res.send(handle(null,'{error:0}'));
+				  return res.send(handle(null,{error:0}));
 				});
 			})
 		}
