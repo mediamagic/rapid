@@ -51,7 +51,7 @@ module.exports = function(db){
 			});
 		},
 		del: function(req,res,next){
-			var fileName = req.swf.hashName;
+			var hashName = req.swf.hashName;
 			db.Swfs.delete({_id:req.swf._id}, function(err, resp){
 				if (err)
 					return res.send(handle(err,null));
