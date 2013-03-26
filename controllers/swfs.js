@@ -1,3 +1,4 @@
+var fs 	= require('fs')
 module.exports = function(db){
 	function handle(err,doc){
 		if (err)
@@ -25,7 +26,6 @@ module.exports = function(db){
 		},
 		create: function(req,res,next){
 			var obj 	= req.body
-				, fs 	= require('fs')
 				, path 	= require('path');
 			if (obj._csrf) delete obj._csrf;
 			var tmp = new db.Swfs(obj.fileName);
