@@ -1,0 +1,41 @@
+.page
+	.page-header 
+		.page-header-content
+			h1 Flash Resources
+				small &nbsp;
+
+	.page-region
+		.page-region-content
+			.grid
+				.row
+					.span4(style="width:100%;")
+						h3.padding5.bg-color-blue
+							i.icon-stats-up
+							span Flash Resources
+						table.bg-color-blue
+							thead
+								tr
+									th Original File Name
+									th OnDisk File Name
+									th Delete
+							tbody
+								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id'")
+									td {{ swf.fileName }}
+									td 
+										a(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+									td 
+										a(ng-click="deleteSwf(swf)") 
+											img(src="/images/recycle_bin_full.png", width="32", height="32", style="cursor:pointer;")
+									//- td {{ item.categories | remove:'all' | categories}}
+									//- td {{ item.preview.type }}
+									//- td {{ showContentType(item) }}
+									//- td {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
+									//- td {{ item.status | status }} 
+									//- 	span (
+									//- 	a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
+									//- 	span )
+									//- td 
+									//- 	a(ng-click="itemPreview(item._id)") preview
+									//- td 
+									//- 	a(href="/admin#/editor/{{item._id}}") edit
+					

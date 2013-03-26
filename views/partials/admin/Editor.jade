@@ -15,20 +15,25 @@
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important")
+								//- #videoPreview(ui-if="editor.data.preview.type == 'video'")
+								//- 	input(type="text", ng-model="editor.tempContent.preview.video.id", placeholder="youtube video id", style="width:300px;")
+								//- 	img(ng-src="{{ editor.tempContent.preview.video.icon }}", width="32", height="32")
+								//- 	.br
+								//- 	button(ng-click="checkVideo('preview')") Check Video
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
-									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handlePreviewFile('flash', this.files[0])") 
+									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])") 
 									span {{ uploadprogress }}
-									select#previewSelectFlash(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+									select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
 								#iframePreview(ng-show="editor.data.preview.type == 'iframe'")
 									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="width:300px;")
 								#imagePreview(ng-show="editor.data.preview.type == 'image'")									
-									input(type="file", accept="image/*", onchange="angular.element(this).scope().handlePreviewFile('image', this.files[0])") 
+									input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('preview', 'image', this.files[0])") 
 									span {{ uploadprogress }}
-									#previewImages
-										.previewImage(ng-repeat="image in editor.tempContent.preview.image", style="position:relative; float:left; width:100px; height:120px; margin:10px;")
+									#previewImages(ui-sortable="{ axis:'x'}", ng-model="editor.tempContent.preview.image")
+										.previewImage(ng-repeat="image in editor.tempContent.preview.image", style="position:relative; float:left; width:100px; height:140px; margin:10px; overflow:hidden; border:solid red 1px")
 											img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
-											span(ng-click="removeImage(image)", style="cursor:pointer;") X
+											span(ng-click="removeImage('preview', image)", style="cursor:pointer;") X
 											.br 
 											span {{ image.fileName }}
 
@@ -38,7 +43,7 @@
 									//- option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}	
 								select(width="150", style="width:150px;", ng-model="editor.data.preview.type")									
 									option(value="text") text
-									option(value="video") video
+									//option(value="video") video
 									option(value="flash") flash
 									option(value="iframe") iframe
 									option(value="image") image
@@ -56,16 +61,29 @@
 						h1 Open Editor
 						#openEditorWrapper(ng-show="editor.data.preview.link.type == 'inner'")
 							#leftSide								
-								#textContent(ui-if="editor.data.content.type == 'text'")
-									textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.data.content.content", rows="15", cols="80", width="700", style="width:700px !important")
+								#textContent(ui-if="editor.data.content.type == 'text'")									
+									textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important")
+								#videoContent(ui-if="editor.data.content.type == 'video'")
+									input(type="text", ng-model="editor.tempContent.content.video.id", placeholder="youtube video id", style="width:300px;")
+									img(ng-src="{{ editor.tempContent.content.video.icon }}", width="32", height="32")
+									.br
+									button(ng-click="checkVideo('content')") Check Video
 								#flashContent(ng-show="editor.data.content.type == 'flash'")
-									input(type="text", ng-model="editor.data.content.content", placeholder="url to swf file", style="width:300px;")
-									input(type="file", accept="application/x-shockwave-flash")
-									select(width="250", style="width:250px;", size="5", ng-model="editor.data.content.content", ng-options="swf.fileName for swf in editor.files.flash")
-								#iframeContent(ng-show="editor.data.content.type == 'iframe'")
-									input(type="text", ng-model="editor.data.content.content", placeholder="url to external link", style="width:300px;")
+									input(type="text", ng-model="editor.tempContent.content.flash.url", placeholder="url to swf file", style="width:300px;")
+									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('content', 'flash', this.files[0])")
+									span {{ uploadprogress }}
+									select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.content.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+								#iframeContent(ng-show="editor.data.content.type == 'iframe'")									
+									input(type="text", ng-model="editor.tempContent.content.iframe", placeholder="url to external link", style="width:300px;")									
 								#imageContent(ng-show="editor.data.content.type == 'image'")									
-									input(type="file", accept="image/*")
+									input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('content', 'image', this.files[0])") 
+									span {{ uploadprogress }}
+									#contentImages(ui-sortable="{ axis:'x'}", ng-model="editor.tempContent.content.image")
+										.contentImage(ng-repeat="image in editor.tempContent.content.image", style="position:relative; float:left; width:100px; height:140px; margin:10px; overflow:hidden; border:solid red 1px")
+											img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
+											span(ng-click="removeImage('content', image)", style="cursor:pointer;") X
+											.br 
+											span {{ image.fileName }}
 							#rightSide
 								.colorPicker(ng-click="toggleColor('open')", class="{{editor.open.colorPickerClass}}")
 								select(width="150", style="width:150px;", ng-model="editor.data.content.type")									
@@ -81,3 +99,4 @@
 					button(ng-click="saveContent()") Save
 					pre(ng-bind="editor.data | json")
 					//pre(ng-bind="editor.categories | json")
+					//pre(ng-bind="editor.tempContent.preview.image | json")

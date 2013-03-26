@@ -3,9 +3,10 @@ angular.module('admin', ['ngResource','ngCookies', 'ui']).
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider.
 		when('/main', {templateUrl: '/views/admin/Main.html', controller: MainCtrl, name:'Main'}).
-		when('/lists', {templateUrl: '/views/admin/Lists.html', controller: ListsCtrl, name:'lists'}).		
-		when('/editor', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'editor'}).
-		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'editor'}).
+		when('/lists', {templateUrl: '/views/admin/Lists.html', controller: ListsCtrl, name:'Lists'}).		
+		when('/editor', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
+		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
+    when('/swfs', {templateUrl: '/views/admin/swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
 		//when('/settings', {templateUrl: '/views/admin/Settings.html', controller: SettingsCtrl, name:'settings'}).		
 		//when('/voters', {templateUrl: '/views/admin/Voters.html', controller: VotersCtrl, name:'Statistics'}).
 		otherwise({redirectTo: '/main'});

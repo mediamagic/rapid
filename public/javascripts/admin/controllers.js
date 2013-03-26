@@ -237,6 +237,106 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 		}
 	}
 
+	$scope.editor = {
+		data: {
+			sidebar: {
+						title:'',
+						description: '',
+						readMore: {
+									title:'',
+									url: ''
+						}
+			},		
+			categories: {				
+			},							
+			preview: {
+						type:'text',
+						link:{
+										type:'none',
+										url:'',
+										text: ''
+						},
+						content:'',
+						size:'1x1',
+						bgColor:''										
+			},
+			content: {
+						type:'text',							
+						content:'',	
+						bgColor:'',										
+			},		
+		},
+		open: {
+			colorPickerClass:'colorPicker_1'			
+		},
+		closed: {
+			colorPickerClass:'colorPicker_1',
+			showLinkText: false,
+			showLinkUrl: false			
+		},
+		tempContent: {
+			preview: {
+						text: '',
+						video: { 
+									id:'',
+									icon:'images/disabled.png',
+									valid:false
+						},
+						flash: {
+									data:{},
+									url:''
+						},
+						iframe:'',
+						image: []
+					},
+			content: {					
+						text: '',
+						video: { 
+									id:'',
+									icon:'images/disabled.png',
+									valid:false
+						},
+						flash: {
+									data:{},
+									url:''
+						},
+						iframe:'',
+						image: []
+					}
+		},
+		categories: [
+		],
+		files: {
+			flash:[],
+			images: []
+		},		
+		tinymceOptions: {
+			// General options			
+			theme : "advanced",
+			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
+
+			width: "700",
+	        height: "400",
+			directionality : "rtl",
+
+			//content_css : "custom_content.css"
+
+			// Theme options
+			theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
+			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
+			theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
+			theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_resizing : false
+		}
+	}	
+
+	$scope.Files.query({type:'swfs'}, function(res) {
+		$scope.editor.files.flash = res;
+	});
+
 	// function createArticle(i){
 	// 	 article = { sidebar:  { title:  'title ' + i
 	// 	     , description: 'description ' + i
@@ -292,24 +392,55 @@ var MainCtrl = ['$scope', function($scope){
 	$scope.itemPreview = function(id) {
 
 	}
+
+	$scope.getDateById = function(id) {
+	    return new Date(parseInt(id.toString().slice(0,8), 16)*1000);
+	}
+
+	$scope.showContentType = function(item) {
+		return item.preview.link.type == 'none' ? 'none' : item.preview.link.type == 'external' ? 'external' : item.content.type;
+	}
 }];
 
 var ListsCtrl = ['$scope', function($scope){
 
+	function compare(a,b) {
+		a = parseInt(a.categories[$scope.filterCategory]);
+		b = parseInt(b.categories[$scope.filterCategory]);
+		if (a < b)
+			return -1;
+		if (a > b)
+			return 1;
+		return 0;
+	}
+
+	$scope.$watch('filterCategory', function(n,o){
+		if (n!=o)
+			$scope.category[n].sort(compare);
+	});
+
 	$scope.showListsSaveButton = true;
 	$scope.sortableOptions = {
-								update: function(event, ui) {	
+								update: function(event, ui) {									
 									for(var i = 0; i < $scope.category[$scope.filterCategory].length; i++) {
 										var item = $scope.category[$scope.filterCategory][i];
 										item.categories[$scope.filterCategory] = i;
 									}
 								},
+								start: function(event, ui) {
+							        //ui.item.startPos = ui.item.index();							        
+							    },
+							    stop: function(event, ui) {								    	
+							        // console.log("Start position: " + ui.item.startPos);
+							        // console.log("New position: " + ui.item.index());							        
+							    },
 								axis: 'y'
 	};	
 
-	$scope.orderCategories = function(item) {		
-		return item.categories[$scope.filterCategory];		
-	}
+	// $scope.orderCategories = function(item) {	
+	// 	var index = parseInt(item.categories[$scope.filterCategory]);
+	// 	return index;				
+	// }
 	
 	$scope.previewNewList = function() {
 		$scope.showListsSaveButton = false;
@@ -324,136 +455,6 @@ var ListsCtrl = ['$scope', function($scope){
 var EditorCtrl = ['$scope', function($scope){
 	var id = $scope.route.id;
 
-	$scope.editor = {
-		data: {
-			sidebar: {
-						title:'',
-						description: '',
-						readMore: {
-									title:'',
-									url: ''
-						}
-			},		
-			categories: {				
-			},							
-			preview: {
-						type:'text',
-						link:{
-										type:'none',
-										url:'',
-										text: ''
-						},
-						content:'',
-						size:'1x1',
-						bgColor:''										
-			},
-			content: {
-						type:'text',							
-						content:'',	
-						bgColor:'',										
-			},		
-		},
-		open: {
-			colorPickerClass:'colorPicker_1'			
-		},
-		closed: {
-			colorPickerClass:'colorPicker_1',
-			showLinkText: false,
-			showLinkUrl: false			
-		},
-		tempContent: {
-			preview: {
-						text: '',
-						video:'',
-						flash: {
-									data:{},
-									url:''
-						},
-						iframe:'',
-						image: []
-					},
-			content: {					
-						text: '',
-						video:'',
-						flash: {
-									data:{},
-									url:''
-						},
-						iframe:'',
-						image: []
-					}
-		},
-		categories: [
-		],
-		files: {
-			flash:[
-					{
-						fileName: 'one.swf',
-						hashName: 'ldkjaslkdjaslkjds.swf'
-					},
-					{
-						fileName: 'two.swf',
-						hashName: 'hhfdgfsdgfsdgdfs.swf'
-					},
-					{
-						fileName: 'tree.swf',
-						hashName: 'hahahfdsahfahfahfbzx.swf'
-					},
-					{
-						fileName: 'four.swf',
-						hashName: 'zxbzxcbzxcbxzcbzxcb.swf'
-					},
-					{
-						fileName: 'five.swf',
-						hashName: 'iiiriirtitiyirt.swf'
-					}
-				],
-			images: [
-					{
-						fileName: 'one.jpg',
-						hashName: 'ldkjaslkdjaslkjds.jpg'
-					},
-					{
-						fileName: 'two.jpg',
-						hashName: 'hhfdgfsdgfsdgdfs.jpg'
-					},
-					{
-						fileName: 'tree.jpg',
-						hashName: 'hahahfdsahfahfahfbzx.jpg'
-					},
-					{
-						fileName: 'four.jpg',
-						hashName: 'zxbzxcbzxcbxzcbzxcb.jpg'
-					},
-					{
-						fileName: 'five.jpg',
-						hashName: 'iiiriirtitiyirt.jpg'
-					}
-			]
-		},		
-		tinymceOptions: {
-			// General options			
-			theme : "advanced",
-			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
-
-			width: "700",
-	        height: "400",
-			directionality : "rtl",
-
-			//content_css : "custom_content.css"
-
-			// Theme options
-			theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
-			theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-			theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
-			theme_advanced_toolbar_location : "top",
-			theme_advanced_toolbar_align : "left",
-			theme_advanced_statusbar_location : "bottom",
-			theme_advanced_resizing : false
-		}
-	}	
-
 	//fix for tinymce that wont let me update the preview content while two ng-model are connected to it
 	$scope.$watch('editor.closed.tempContent', function(n, o) { 		
 		if(n != '' && n != undefined)
@@ -462,39 +463,7 @@ var EditorCtrl = ['$scope', function($scope){
 
 	$scope.uploadprogress = '';
 
-	$scope.handlePreviewFile = function(type, file) {
-		// var reader = new FileReader();
-		// reader.onload = (function(e) {    
-
-		// 	if(type == 'image') {
-		// 		var imageType = /image.*/;				
-		// 		if(!file.type.match(imageType))
-		// 			return alert('only image type allowed!');
-
-		// 		var image = {
-		// 						fileName:file.name,
-		// 						hashName:e.target.result
-		// 		}
-
-		// 		$scope.safeApply(function() {
-		// 			$scope.editor.tempContent.preview.image.push(image);
-		// 		});
-		// 	} else if(type == 'flash') {
-		// 		var imageType = 'application/x-shockwave-flash';
-		// 		if(!file.type.match(imageType))
-		// 			return alert('only flash (SWF) type allowed!');
-
-		// 		var flash = {
-		// 						fileName:file.name,
-		// 						hashName:e.target.result
-		// 		}
-
-		// 		$scope.safeApply(function() {
-		// 			$scope.editor.tempContent.preview.flash.data = flash;
-		// 		});
-		// 	}	
-		// });
-  //       reader.readAsDataURL(file);
+	$scope.handleFile = function(type, fileType, file) {
 
 		var fd = new FormData();
 		fd.append('fileName', file);
@@ -502,7 +471,7 @@ var EditorCtrl = ['$scope', function($scope){
 		
 		var xhr = new XMLHttpRequest();        
 
-		if(type == 'image') {
+		if(fileType == 'image') {
 			var imageType = /image.*/;				
 			if(!file.type.match(imageType))
 				return alert('only image type allowed!');
@@ -517,11 +486,11 @@ var EditorCtrl = ['$scope', function($scope){
 				}
 
 				$scope.safeApply(function() {
-					$scope.editor.tempContent.preview.image.push(image);
+					$scope.editor.tempContent[type].image.push(image);
 					$scope.uploadprogress = '';
 				});
 			}			
-		} else if(type == 'flash') {
+		} else if(fileType == 'flash') {
 			var imageType = 'application/x-shockwave-flash';
 			if(!file.type.match(imageType))
 				return alert('only flash (SWF) type allowed!');
@@ -535,7 +504,7 @@ var EditorCtrl = ['$scope', function($scope){
 				}
 				
 				$scope.safeApply(function() {
-					$scope.editor.tempContent.preview.flash.data = flash;			
+					$scope.editor.tempContent[type].flash.data = flash.hashName;			
 					$scope.editor.files.flash.push(flash);
 					$scope.uploadprogress = '';
 				});
@@ -552,12 +521,10 @@ var EditorCtrl = ['$scope', function($scope){
 		xhr.send(fd);
 	}
 
-	$scope.removeImage = function(image) {
-		if(confirm('are you sure you want to remove this image ?')) {
-			// var imageIndex = $scope.editor.files.images.indexOf(image);
-			// $scope.editor.files.images.splice(imageIndex, 1);
-			var imageIndex = $scope.editor.tempContent.preview.image.indexOf(image);
-			$scope.editor.tempContent.preview.image.splice(imageIndex, 1);
+	$scope.removeImage = function(type, image) {
+		if(confirm('are you sure you want to remove this image ?')) {			
+			var imageIndex = $scope.editor.tempContent[type].image.indexOf(image);
+			$scope.editor.tempContent[type].image.splice(imageIndex, 1);
 		} else { 
 			return; 
 		}
@@ -565,6 +532,23 @@ var EditorCtrl = ['$scope', function($scope){
 
 	$scope.checkLinkType = function(param)	{
 		var type = $scope.editor.data.preview.link.type;
+
+		// if(param === 'text') {
+		// 	if(type === 'none') {
+		// 		return false;
+		// 	} else if(type === 'inner' && $scope.editor.data.preview.type != 'flash') {
+		// 		// TODO: show Open Editor
+		// 		return true;
+		// 	} else if(type === 'external' && $scope.editor.data.preview.type != 'flash') {
+		// 		return true;
+		// 	}
+		// } else if(param === 'url') {
+		// 	if(type === 'none') {
+		// 		return false;
+		// 	} else if(type === 'external' && $scope.editor.data.preview.type != 'flash') {
+		// 		return true;
+		// 	}
+		// }
 
 		if(param === 'text') {
 			if(type === 'none') {
@@ -621,7 +605,7 @@ var EditorCtrl = ['$scope', function($scope){
 
 		// clean categories that was removed
 		for(var cat in oldCategories) {
-			if(newCategories.indexOf(cat) == -1) {
+			if(newCategories.indexOf(cat) == -1 && cat != 'all') {
 				delete oldCategories[cat]
 			}			
 		}
@@ -654,6 +638,9 @@ var EditorCtrl = ['$scope', function($scope){
 				case 'text':
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.text;
 				break;
+				case 'video':					
+					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.video.id;					
+				break;
 				case 'iframe':
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.iframe;
 				break;
@@ -662,6 +649,26 @@ var EditorCtrl = ['$scope', function($scope){
 				break;
 				case 'image':
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.image;
+				break;
+				default:
+				break;
+			}
+
+			switch($scope.editor.data.content.type) {
+				case 'text':
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.text;
+				break;		
+				case 'video':					
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.video.id;					
+				break;
+				case 'iframe':
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.iframe;
+				break;		
+				case 'flash':
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.flash.data;
+				break;
+				case 'image':
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.image;
 				break;
 				default:
 				break;
@@ -677,13 +684,21 @@ var EditorCtrl = ['$scope', function($scope){
 		}
 	}, true);
 
+	$scope.$watch("editor.tempContent.content.flash.data", function(n, o) {				
+		if(n != undefined) {
+			$scope.safeApply(function() {
+				$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
+			});
+		}
+	}, true);
+
 	$scope.$on('SETTINGS_LOADED', function(event) {					
 		$scope.loadContent();
 	});
 
 	$scope.loadContent = function() {	
-		$scope.Files.query({type:'swfs'}, function(res) {
-			$scope.editor.files.flash = res;
+		//$scope.Files.query({type:'swfs'}, function(res) {
+			//$scope.editor.files.flash = res;
 			if(id != undefined) {
 				for(var item in $scope.content) {
 					if($scope.content[item]._id == id) {
@@ -707,7 +722,7 @@ var EditorCtrl = ['$scope', function($scope){
 				// $scope.editor.categories.push($scope.categories[0]);
 				// console.log($scope.categories);
 			}
-		});
+		//});
 	}
 
 	$scope.loadTempContent = function(index) {
@@ -736,9 +751,59 @@ var EditorCtrl = ['$scope', function($scope){
 		});
 	}
 
+	$scope.videoCheck = function(id, cb){
+		$scope.Api.get({action: 'videoCheck', id: id}, function (resp) {			
+			var valid = (resp.type === undefined) ? false : true;
+			cb(valid);
+		});
+	}
+
+	$scope.checkVideo = function(type) {		
+		$scope.videoCheck($scope.editor.tempContent[type].video.id, function(valid) {
+			$scope.editor.tempContent[type].video.valid = valid;
+			if(valid) {
+				$scope.editor.tempContent[type].video.icon = 'images/enabled.png';
+			} else {
+				$scope.editor.tempContent[type].video.icon = 'images/disabled.png';
+			}
+		});
+	}
 
 	if($scope.settingsLoaded)
 		$scope.loadContent();
+}];
+
+var SwfsCtrl = ['$scope', function($scope){
+
+	// $scope.Files.query({type:'swfs'}, function(res) {
+	// 	$scope.editor.files.flash = res;
+	// });
+
+	$scope.deleteSwf = function(swf) {
+		var inUse = false;
+		var confirmText = 'are you sure you want to delete ' + swf.fileName + ' ?';
+
+		for(var item in $scope.content) {
+
+			if($scope.content[item].preview.type == 'flash' && typeof($scope.content[item].preview.content) == 'string' && $scope.content[item].preview.content == swf.hashName) 
+				inUse = true;
+
+			if($scope.content[item].content.type == 'flash' && typeof($scope.content[item].content.content) == 'string' && $scope.content[item].content.content == swf.hashName)
+				inUse = true;			
+
+			if(inUse) {
+				confirmText = 'one or more articles are using this SWF, are you sure you want to delete ' + swf.fileName + ' ?';
+				break;
+			}
+		}
+
+		if(confirm(confirmText)) {
+			$scope.Files.delete({type:'swfs', id:swf._id}, function(res) {
+				console.log(res);
+				//$scope.editor.files.flash.splice($scope.editor.files.flash.indexOf(swf), 1);
+			});
+		}
+	}
 }];
 
 // var SettingsCtrl = ['$scope', function($scope){
