@@ -14,6 +14,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     priority: 0,
     restrict: 'A',
     link: function(scope, elm, attr) {
+
     	var opts = JSON.parse(attr.options)
     	opts.getSortData = {}
     	for (var cat in scope.settings.categories) {
@@ -45,6 +46,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             var itemIndex   = scope.$index
                 , article   = scope.articles[itemIndex]
                 , preview   = elm.children('.preview')
+            article.index = scope.$index;
             createPreview(preview, article);
         }
     }
@@ -78,7 +80,7 @@ function createPreview(elm, obj){
     }
     elm
         .html(html)
-        .css('background', obj.bgColor)
+        .css('background', obj.preview.bgColor)
         .bind('click', function(){
             $('.close').click()
             elm
@@ -86,12 +88,16 @@ function createPreview(elm, obj){
                 .parent()
                 .append(content.show())
                 .parent()
-                .isotope('reLayout');
+                .isotope('reLayout', function(){
+                    console.log($('#item_'+obj.index).offset())
+                    $("html, body")
+                        .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
+                });
         });
 }
 
 function createContent(obj){
-    var elm = $('<div class="content"><div class="close">X</div></div>')
+    var elm = $('<div class="content"><div class="close">x סגור</div></div>')
         , content = obj.content
         , html  = '';
     switch(content.type) {
@@ -108,7 +114,7 @@ function createContent(obj){
     }
     elm.
         append(html)
-        .css('background', content.bgColor)
+        .css('background', obj.content.bgColor)
         .show()
         .children('.close')
         .bind('click', function(){
@@ -116,7 +122,8 @@ function createContent(obj){
             elm
                 .parent()
                 .parent()
-                .isotope('reLayout');
+                .isotope('reLayout', function(){
+                });
         })
     return elm;
 }

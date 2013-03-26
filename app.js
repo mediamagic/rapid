@@ -58,14 +58,14 @@
                                         , compress: true
                                         , optimization: 2 }));
     app.use(express.static(path.join(__dirname, 'public')));
-    new compress.minify({
-      type: 'gcc',
-      fileIn: ['public/javascripts/app.js', 'public/javascripts/controllers.js'],
-      fileOut: 'public/javascripts/app.min.js',
-      callback: function(err){
-      console.log(err);
-      }
-    });
+    // new compress.minify({
+    //   type: 'gcc',
+    //   fileIn: ['public/javascripts/app.js', 'public/javascripts/controllers.js'],
+    //   fileOut: 'public/javascripts/app.min.js',
+    //   callback: function(err){
+    //   console.log(err);
+    //   }
+    // });
     console.log('development mode');
   });
 

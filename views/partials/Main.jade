@@ -1,7 +1,6 @@
-span {{contentLoaded}}
 .timedWrapper(ui-if="contentLoaded")
-	#articles(ui-isotope, options='{"itemSelector":".article", "animationEngine":"best-available", "masonry": { "columnWidth": 230} }')
-		.article(ng-repeat="article in articles", ng-class="getCategory($index)", rel="{{article.categories}}", iso-item)
-			.hover(style="display:none;") {{article._id}}
-			.preview(ui-preview="{{article.preview.type}}", class="size{{article.preview.size}}")
+	#articles(ui-isotope, options='{"itemSelector":".article", "animationEngine":"best-available", "masonry": { "columnWidth": 220, "gutterWidth": 20} }')
+		.article(ng-repeat="article in articles", rel="{{article.categories}}", iso-item, id="item_{{$index}}")
+			.hover(style="display:none;") {{article.preview.link.text}}
+			.preview(class="size{{article.preview.size}}", ng-class="getCategory($index)")
 	.clr

@@ -1,14 +1,15 @@
 //* VARS *//
 	@size: 220px;
-	@margin: 5px;
+	@margin: 20px;
 //* MIXINS *//
-.size(@width: 1, @height: 1, @size:220px, @margin:5px) {
-	margin: @margin;
-	width: @width*@size + (@margin * 2 * (@width - 1));
-	height: @height*@size + (@margin * 2 *(@height - 1));
+.size(@width: 1, @height: 1, @size:220px, @margin:20px) {
+	width: @width*@size + (@margin * (@width - 1));
+	height: @height*@size + (@margin * (@height - 1));
 }
 
 //* COLORS *//
+	@green: #4aa82e;
+	@gray: #8c9299;
 
 // * CSS *//
 
@@ -27,28 +28,67 @@ h1,h2,h3,h4,h5,h6 {
 	margin: 0;
 	padding: 0;
 }
-a {
-	color: #ffe821;
-}
 .clr {
 	clear:both;
 }
 
+#header {
+	position: fixed;
+	top: 0;
+	min-height: 171px;
+	width: 100%;
+	z-index: 2;
+	background: white;
+	outline: black solid 1px;
+	background: transparent url(../images/nav_bg.png) repeat-x;
+	&.ui-scrollfix {
+	}
+	#nav {
+		max-width: 940px;
+		min-width: 450px;
+		min-height: 171px;
+		margin: 0 auto;
+		background: transparent url(../images/nav_logo.png) no-repeat top right;
+		padding: 0;
+		#title {
+			display: block;
+			font-size: 25px;
+			color: white;
+			position: relative;
+			top: 100px;
+			font-weight: bold;
+			text-align: center;
+		}
+		ul {
+			position: relative;
+			top: 105px;
+			max-width: 650px;
+			min-width: 450px;
+			padding: 0;
+			margin: 0 auto;
+			li {
+				list-style-type: none;
+				float: right;
+			}
+		}
+	}
+}
 #wrapper {
-	margin: 0 auto;
-	width: 1020px;
+	margin: 191px auto 0 auto;
+	max-width: 1020px;
 	position: relative;
+	z-index: 1;
 }
 
 #articles {
-	width: 940px;
+	max-width: 940px;
+	min-width: 450px;
 	margin: 0 auto;
-	outline: green solid 1px;
 }
 .article {
 	.preview {
-		//margin: 5px;
-		outline: blue solid 1px;
+		margin-bottom: 20px;
+		//outline: blue solid 1px;
 		&.size1x1 {
 			.size(1,1);
 		}
@@ -68,15 +108,30 @@ a {
 			cursor: default;
 		}
 		&.disabled {
-			background: #ddd;
+			outline: red solid 2px;
 		}
 
 	}
 	.content {
-		width:910px;
-		height: 300px;
-		margin: 5px;
-		outline: red solid 1px;
+		position: relative;
+		width: 938px;
+		min-height: 582px;
+		border: solid 1px @gray;
+		margin-bottom: 20px;
+		margin-top: 20px;
+		.close {
+			position: absolute;
+			top: -20px;
+			right: 0;
+			width: 50px;
+			height: 20px;
+			direction: rtl;
+			background: @green;
+			text-align: center;
+			color: white;
+			font-weight: bold;
+			cursor: pointer;
+		}
 	}
 	&.masked {
 

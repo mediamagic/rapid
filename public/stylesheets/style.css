@@ -1,18 +1,20 @@
 html.pop{background:#011520;}
 body{background:transparent;font:14px "Lucida Grande",Helvetica,Arial,sans-serif;margin:0;padding:0;}
 h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
-a{color:#ffe821;}
 .clr{clear:both;}
-#wrapper{margin:0 auto;width:1020px;position:relative;}
-#articles{width:940px;margin:0 auto;outline:green solid 1px;}
-.article .preview{outline:blue solid 1px;}.article .preview.size1x1{margin:5px;width:220px;height:220px;}
-.article .preview.size1x2{margin:5px;width:220px;height:450px;}
-.article .preview.size2x1{margin:5px;width:450px;height:220px;}
-.article .preview.size2x2{margin:5px;width:450px;height:450px;}
+#header{position:fixed;top:0;min-height:171px;width:100%;z-index:2;background:white;outline:black solid 1px;background:transparent url(../images/nav_bg.png) repeat-x;}
+#header #nav{max-width:940px;min-width:450px;min-height:171px;margin:0 auto;background:transparent url(../images/nav_logo.png) no-repeat top right;padding:0;}#header #nav #title{display:block;font-size:25px;color:white;position:relative;top:100px;font-weight:bold;text-align:center;}
+#header #nav ul{position:relative;top:105px;max-width:650px;min-width:450px;padding:0;margin:0 auto;}#header #nav ul li{list-style-type:none;float:right;}
+#wrapper{margin:191px auto 0 auto;max-width:1020px;position:relative;z-index:1;}
+#articles{max-width:940px;min-width:450px;margin:0 auto;}
+.article .preview{margin-bottom:20px;}.article .preview.size1x1{width:220px;height:220px;}
+.article .preview.size1x2{width:220px;height:460px;}
+.article .preview.size2x1{width:460px;height:220px;}
+.article .preview.size2x2{width:460px;height:460px;}
 .article .preview.linked{cursor:pointer;}
 .article .preview.unlinked{cursor:default;}
-.article .preview.disabled{background:#ddd;}
-.article .content{width:910px;height:300px;margin:5px;outline:red solid 1px;}
+.article .preview.disabled{outline:red solid 2px;}
+.article .content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article .content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
 .isotope-item{z-index:2;}
 .isotope-hidden.isotope-item{pointer-events:none;z-index:1;}
 .isotope,.isotope .isotope-item{-webkit-transition-duration:0.8s;-moz-transition-duration:0.8s;-ms-transition-duration:0.8s;-o-transition-duration:0.8s;transition-duration:0.8s;}

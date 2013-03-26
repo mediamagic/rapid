@@ -9,8 +9,33 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 		script(src="//code.angularjs.org/1.0.3/angular-cookies.min.js")
 		script(src="/javascripts/vendor/angular-ui.min.js")
 		script(src="/javascripts/vendor/jquery.isotope.min.js")
-		script(src="/javascripts/app.min.js")
-		//script(src="/javascripts/controllers.js")
+		script(src="/javascripts/app.js")
+		script(src="/javascripts/controllers.js")
+		script
+			$.Isotope.prototype._getMasonryGutterColumns = function() {
+				var gutter = this.options.masonry && this.options.masonry.gutterWidth || 0;
+				containerWidth = this.element.width();
+				this.masonry.columnWidth = this.options.masonry && this.options.masonry.columnWidth ||
+				this.$filteredAtoms.outerWidth(true) ||
+				containerWidth;
+				this.masonry.columnWidth += gutter;
+				this.masonry.cols = Math.floor( ( containerWidth + gutter ) / this.masonry.columnWidth );
+				this.masonry.cols = Math.max( this.masonry.cols, 1 );
+			};
+			$.Isotope.prototype._masonryReset = function() {
+				this.masonry = {};
+				this._getMasonryGutterColumns();
+				var i = this.masonry.cols;
+				this.masonry.colYs = [];
+				while (i--) {
+					this.masonry.colYs.push( 0 );
+				}
+			};
+			$.Isotope.prototype._masonryResizeChanged = function() {
+				var prevSegments = this.masonry.cols;
+				this._getMasonryGutterColumns();
+				return ( this.masonry.cols !== prevSegments );
+			};
 	body
 		script
 			var _gaq = _gaq || [];
@@ -20,10 +45,13 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
-		#header
-			ul#nav
-				li(ng-repeat="category in settings.categories")
-					label {{category}}
-					input(type="radio", name="category", ng-model="filters.category", value="{{category}}") 
+		#header(ui-scrollfix="+20")
+			#nav
+				span#title The New ŠKODA Rapid
+				ul
+					li(ng-repeat="category in settings.categories")
+						label(for="nav_{{$index}}") {{category}}
+						input(type="radio", name="category", ng-model="filters.category", value="{{category}}", id="nav_{{$index}}")
+					.clr
 		#wrapper(ng-view)
 		#footer
