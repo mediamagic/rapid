@@ -52,10 +52,15 @@ module.exports = function(db){
 		},
 		del: function(req,res,next){
 			var fileName = req.swf.hashName;
-			fs.unlink(global.root + "public/images/swfs/"+hashName, function (err) {
-			  if (err) throw err;
-			  	return res.send(handle(null,'ok'));
-			});
+			db.Swfs.delete({_id:req.swf._id}, function(err, resp){
+				if (err)
+					return res.send(handle(err,null));
+				fs.unlink(global.root + "public/images/swfs/"+hashName, function (err) {
+				  if (err)
+				  	return res.send(handle(err,null));
+				  return res.send(handle(null,'ok'));
+				});
+			})
 		}
 	}
 }
