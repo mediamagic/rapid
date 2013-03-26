@@ -138,6 +138,7 @@
     app.post('/api/uploads/images', ensureAuthenticated, Images.create);
     app.get ('/api/uploads/swfs', ensureAuthenticated, Swfs.index);
     app.post('/api/uploads/swfs', ensureAuthenticated, Swfs.create);
+    app.del ('/api/uploads/swfs/:id', ensureAuthenticated, Swfs.load, Swfs.del);
 
     //RESTful RESOURCES
     app.get ('/resources/articles', Articles.index);

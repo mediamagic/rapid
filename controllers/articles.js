@@ -10,7 +10,6 @@ module.exports = function(db) {
 		 */
 		load: function(req, res, next) {
 			db.Articles.get({_id:req.params.id},function(err,doc){
-				console.log(doc);
 				if (doc) {
 					req.article = doc;
 					next();

@@ -8,6 +8,16 @@ module.exports = function(db){
 		/*
 		 * Statistics Operations
 		 */
+		load: function(req, res, next) {
+			db.Swfs.get({_id:req.params.id},function(err,doc){
+				if (doc) {
+					req.swf = doc;
+					next();
+				} else {
+					res.send({'error' : 'User Not Found'}, 404);
+				}
+	  		});
+		},
 		index: function(req,res,next){
 			db.Swfs.list({}, function(err,doc){
 				return res.send(handle(err,doc));
@@ -38,6 +48,13 @@ module.exports = function(db){
 						return res.send(obj);
 					});
 				});
+			});
+		},
+		del: function(req,res,next){
+			var fileName = req.swf.hashName;
+			fs.unlink(global.root + "public/images/swfs/"+hashName, function (err) {
+			  if (err) throw err;
+			  	return res.send(handle(null,'ok'));
 			});
 		}
 	}
