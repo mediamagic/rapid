@@ -17,6 +17,9 @@
 	}
 	.mobile {
 		width: @width*@size + (@margin * (@width - 1)) - 2;
+		.text {
+			width: @width*@size + (@margin * (@width - 1)) - 52;
+		}
 	}
 	.mask {
 		width: @width*@size + (@margin * (@width - 1));
@@ -112,6 +115,9 @@ h1,h2,h3,h4,h5,h6 {
 	.mask {
 		display: none;
 	}
+	.mobile {
+		display: none;
+	}
 	&.preview {
 		&.size1x1 {
 			.size(1,1);
@@ -127,7 +133,6 @@ h1,h2,h3,h4,h5,h6 {
 		}
 		.preview  {
 			margin-bottom: 20px;
-			//z-index: 1;
 		}
 		&.disabled {
 			.disabled {
@@ -136,7 +141,6 @@ h1,h2,h3,h4,h5,h6 {
 				top: 0;
 				left: 0;
 				background: red;
-				//z-index: 5;
 			}
 		}
 		&.enabled {
@@ -152,14 +156,23 @@ h1,h2,h3,h4,h5,h6 {
 				left: 0;
 				background: blue;
 				display: none;
-				//z-index: 10;
 			}
 			.mobile {
 				position: absolute;
-				bottom: 21px;
-				left: 1px;
-				background: white;
+				bottom: 20px;
+				left: 0px;
 				height: 48px;
+				border: @green solid 1px;
+				background: white url(../images/mobile_link.png) top left no-repeat;
+				.text {
+					height: 28px;
+					position: absolute;
+					right: 0;
+					color: @green;
+					direction: rtl;
+					line-height: 28px;
+					padding: 10px;
+				}
 			}
 			&:hover {
 				.hover {
@@ -170,10 +183,10 @@ h1,h2,h3,h4,h5,h6 {
 		&.unlinked {
 			cursor: default;
 			.hover {
-				display: none;
+				display: none !important;
 			}
 			.mobile {
-				display: none;
+				display: none !important;
 			}
 		}
 		&.masked {
@@ -190,33 +203,41 @@ h1,h2,h3,h4,h5,h6 {
 					.mask {
 						display: none;
 					}
+					.hover {
+						display: block !important;
+					}
 				}
 			}
 		}
 	}
-	.content {
-		position: relative;
-		width: 938px;
-		min-height: 582px;
-		border: solid 1px @gray;
-		margin-bottom: 20px;
-		margin-top: 20px;
-		.close {
-			position: absolute;
-			top: -20px;
-			right: 0;
-			width: 50px;
-			height: 20px;
-			direction: rtl;
-			background: @green;
-			text-align: center;
-			color: white;
-			font-weight: bold;
-			cursor: pointer;
+	&.content {
+		.content {
+			position: relative;
+			width: 938px;
+			min-height: 582px;
+			border: solid 1px @gray;
+			margin-bottom: 20px;
+			margin-top: 20px;
+			.close {
+				position: absolute;
+				top: -20px;
+				right: 0;
+				width: 50px;
+				height: 20px;
+				direction: rtl;
+				background: @green;
+				text-align: center;
+				color: white;
+				font-weight: bold;
+				cursor: pointer;
+			}
 		}
-	}
-	&.masked {
-
+		.mobile {
+			display: none !important;
+		}
+		.hover {
+			display: none !important;
+		}
 	}
 }
 

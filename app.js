@@ -147,6 +147,7 @@
     app.post('/resources/articles', ensureAuthenticated, Articles.create);
     app.put ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.update);
     app.del ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.del);
+    app.put ('/resource/articles/resort', ensureAuthenticated, Articles.resort);
     app.get ('/resources/settings', Settings.index);
     app.put ('/resources/settings', ensureAuthenticated, Settings.update);
     app.post('/resources/stats/:type', Stats.create);

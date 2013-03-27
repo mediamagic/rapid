@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
-var db = mongoose.connection
+var mongoose = require('mongoose')
+	, db = mongoose.connection
+	, async = require('async');
 /*
  * Users Schema
  */
@@ -35,10 +36,38 @@ var ArticlesSchema = new mongoose.Schema(
 /*
  * Users manipulation
  */
-
+function createReq(id, data, model){
+	var _this = model;
+	return function(callback){
+		_this.update({_id:id}, {categories: data}, function(err,doc){
+			if(err)
+				callback(err);
+			callback(null,doc);
+		})
+	}
+}
 module.exports = function(extendStaticMethods, cb){
 
 	ArticlesSchema.statics = extendStaticMethods('Articles', ['list','get','add','edit','delete']);
+
+	ArticlesSchema.statics.resort = function(data, cb){
+		var functions = {}
+		for (var i in data){
+			var id = i
+				, cat = data[i]
+				, func = createReq(id, cat, this.model('Articles'));
+			functions[id] = func;
+		}
+		async.parallel(functions, function(err,results){
+			if (err)
+				return cb(err);
+			this.model('Articles').find({},{},{},function(err,doc){
+				if (err)
+					return cb(err)
+				return cb(doc);
+			});
+		})
+	}
 	/*
 	 * Users Model
 	 */

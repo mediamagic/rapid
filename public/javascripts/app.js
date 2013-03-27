@@ -88,13 +88,14 @@ function createPreview(elm, obj){
                 .hide()
                 .parent()
                 .removeClass('preview')
+                .addClass('content')
                 .append(content.show())
                 .parent()
                 .isotope('reLayout', function(){
                     $("html, body")
                         .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
-                        $('.article.preview').addClass('masked');
                 });
+                $('.article.preview').addClass('masked');
         })
         .parent()
         .addClass('preview')
@@ -129,10 +130,11 @@ function createContent(obj){
             elm
                 .parent()
                 .addClass('preview')
+                .removeClass('content')
                 .parent()
                 .isotope('reLayout', function(){
-                     $('.article.masked').removeClass('masked');
                 });
+                $('.article.masked').removeClass('masked');
         })
     return elm;
 }

@@ -46,6 +46,12 @@ module.exports = function(db) {
 			db.Articles.delete({_id:id}, function(err,doc){
 				return res.send(handle(err,doc));
 			})
+		},
+		resort: function(req,res,ext){
+			var data = req.body;
+			db.Articles.resort({}, data, function(err,doc){
+				return res.send(handle(err,doc));
+			})
 		}
 	}
 }
