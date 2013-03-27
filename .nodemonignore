@@ -1,2 +1,4 @@
 # ignore the static directory
 app.min.js
+/swf/*
+/img/*
