@@ -9,37 +9,41 @@
 			.grid
 				.row
 					.span4(style="width:100%;")
-						h3.padding5.bg-color-red
-							i.icon-stats-up
-							span  Items						
-						table.bg-color-red
+						h3.padding5.bg-color-green
+							i.white.icon-clipboard-2
+							span.white Articles						
+						table.bg-color-green
 							thead
 								tr
-									th title
-									th description
-									th categories
-									th preview type
-									th content type
-									th date created
-									th status
-									th actions
-									th edit
+									th.white.bold.center title
+									th.white.bold.center description
+									th.white.bold.center categories
+									th.white.bold.center preview type
+									th.white.bold.center content type
+									th.white.bold.center date created
+									th.white.bold.center status
+									th.white.bold.center actions
+									th.white.bold.center edit
+									th.white.bold.center delete
 							tbody
-								tr(ng-repeat="item in content | orderBy:'-_id'")
-									td {{ item.sidebar.title }}
-									td {{ item.sidebar.description }}
-									td {{ item.categories | remove:'all' | categories}}
-									td {{ item.preview.type }}
-									td {{ showContentType(item) }}
-									td {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
-									td {{ item.status | status }} 
-										span (
-										a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
+								//tr(ng-repeat="item in content | orderBy:'-_id'")
+								tr(ng-repeat="item in content")
+									td.font12.white {{ item.sidebar.title }}
+									td.font12.white {{ item.sidebar.description }}
+									td.font12.white.center {{ item.categories | remove:'all' | categories}}
+									td.font12.white.center {{ item.preview.type }}									
+									td.font12.white.center {{ item | contentType }}
+									td.font12.white.center {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
+									td.font12.white.center {{ item.status | status }} 
+										span.font12.white.center (
+										a.font12(ng-click="toggleStatus($index)") {{ !item.status | status }}
 										span )
-									td 
-										a(ng-click="itemPreview(item._id)") preview
-									td 
-										a(href="/admin#/editor/{{item._id}}") edit										
+									td.font12.center
+										a.font12(ng-click="itemPreview(item._id)") preview
+									td.font12.center
+										a.font12(href="/admin#/editor/{{item._id}}") edit
+									td.font12.center
+										i.icon-remove.white.center.link										
 
 					//- .span4
 					//- 	h3.padding5.bg-color-red

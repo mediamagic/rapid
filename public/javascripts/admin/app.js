@@ -62,6 +62,11 @@ filter('categories', function() {
 
     return obj;
   }
+}).
+filter('contentType', function() {
+  return function(item) {     
+    return item.preview.link.type == 'none' ? 'none' : item.preview.link.type == 'external' ? 'external' : item.content.type;
+  }
 });
 
 angular.module('ui.directives').directive('uiSortable', [

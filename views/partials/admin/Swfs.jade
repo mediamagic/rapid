@@ -9,23 +9,30 @@
 			.grid
 				.row
 					.span4(style="width:100%;")
-						h3.padding5.bg-color-blue
-							i.icon-stats-up
-							span Flash Resources
-						table.bg-color-blue
+						h3.padding5.bg-color-green.progress-bar(style="height:40px;")
+							.bar.bg-color-blue(style="width:{{ progressBar }}%;")
+								.progressPercents.white.bold(style="float:right; padding-right:10px;") {{ uploadprogress }}
+							.a(style="position:absolute;left:5px;top:15px;")
+								i.icon-font.white
+								span.white Flash Resources
+						#uploadNewSwf							
+							button(ng-click="uploadNewSwf()", ng-disabled="uploading") Upload New SWF Resource
+							input#uploadNewSwfInput(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewSwfResource(this.files[0])", style="display:none;")							
+						table.bg-color-green
 							thead
 								tr
-									th Original File Name
-									th OnDisk File Name
-									th Delete
+									th.white.bold.center Original File Name
+									th.white.bold.center OnDisk File Name
+									th.white.bold.center Delete
 							tbody
 								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id'")
-									td {{ swf.fileName }}
-									td 
-										a(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
-									td 
-										a(ng-click="deleteSwf(swf)") 
-											img(src="/images/recycle_bin_full.png", width="32", height="32", style="cursor:pointer;")
+									td.font12.white.center {{ swf.fileName }}
+									td.font12.white.center 
+										a.font12(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+									td.font12.white.center
+										a.font12(ng-click="deleteSwf(swf)") 
+											i.icon-remove.white.center.link
+											//img(src="/images/recycle_bin_full.png", width="32", height="32", style="cursor:pointer;")
 									//- td {{ item.categories | remove:'all' | categories}}
 									//- td {{ item.preview.type }}
 									//- td {{ showContentType(item) }}

@@ -60,10 +60,11 @@ a {
 
 #listWrapper {
 	li {
-	    padding: 5px;
-	    border: 1px solid #999;
-	    background: #eee;
-	    margin: 5px;
+	    //padding-left: 5px;
+	    list-style-type: none;
+	    .fontSize(12);
+	    border: 1px solid #999;	    
+	    margin-top: 5px;
 	    cursor: move;
 	}
 }
@@ -108,6 +109,11 @@ a {
 	}
 }
 
+#uploadNewSwf {
+	width:100%;
+	text-align: center;
+}
+
 .colorPicker {
 	width:24px;
 	height: 24px;
@@ -125,4 +131,32 @@ a {
 
 .colorPicker_3 { // green
 	background-color: #4aa82e;
+}
+
+.font12 {
+	font-size:12px;
+}
+
+.white {
+	color:#fff;
+}
+
+.red {
+	color: #b91d47;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.center {
+	text-align:center;
+}
+
+.link {
+	cursor:pointer;
+}
+
+.fontSize(@px:12px) {
+	font-size:@px;
 }

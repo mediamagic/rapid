@@ -20,7 +20,7 @@ html(ng-app="admin", ng-controller="GlobalCtrl")
 	body.modern-ui
 		.page
 			.nav-bar
-				.nav-bar-inner.padding10
+				.nav-bar-inner.padding10.bg-color-green
 					span.pull-menu(ng-click="showMenu = !showMenu")
 					a(href="#/main")
 						span.element.brand mediamagic
@@ -32,15 +32,15 @@ html(ng-app="admin", ng-controller="GlobalCtrl")
 								span  Home
 						li
 							a.navigation-text(href="#/lists")
-								i.icon-user-2
+								i.icon-list
 								span  List Editor
 						li
 							a.navigation-text(href="#/editor")
-								i.icon-user-2
-								span  Add New Content
+								i.icon-clipboard-2
+								span  Add New Article
 						li
 							a.navigation-text(href="#/swfs") 
-								i.icon-list
+								i.icon-font
 								span  Flash Resources
 						//- li
 						//- 	a.navigation-text(href="#/settings")
