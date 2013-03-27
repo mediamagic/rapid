@@ -49,7 +49,7 @@ module.exports = function(db) {
 		},
 		resort: function(req,res,ext){
 			var data = req.body;
-			db.Articles.resort({}, data, function(err,doc){
+			db.Articles.resort(data, function(err,doc){
 				return res.send(handle(err,doc));
 			})
 		}

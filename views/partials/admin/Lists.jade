@@ -18,8 +18,8 @@
 							option(value="0", disabled) Select Category
 							option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}						
 						ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filter.category]")
-							//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.preview.title }}
-							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filter.category]") {{ item.sidebar.title }}
+							//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.name}}
+							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filter.category]") {{ item.name }}
 						br	
 						button(ng-click="previewNewList()") Preview
 						button(ng-click="saveLists()", ng-disabled="showListsSaveButton") Save	
