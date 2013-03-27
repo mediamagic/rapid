@@ -66,6 +66,7 @@
 								#videoContent(ui-if="editor.data.content.type == 'video'")
 									input(type="text", ng-model="editor.tempContent.content.video.id", placeholder="youtube video id", style="width:300px;")
 									img(ng-src="{{ editor.tempContent.content.video.icon }}", width="32", height="32")
+									//icon-checkmark
 									.br
 									button(ng-click="checkVideo('content')") Check Video
 								#flashContent(ng-show="editor.data.content.type == 'flash'")

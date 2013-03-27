@@ -1,7 +1,7 @@
 'user strict';
 angular.module('admin.controllers', ['ngResource', 'ngCookies', 'ui']);
 
-var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope,$resource,$location,$window,$routeParams,$cookies){
+var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope, $filter, $resource,$location,$window,$routeParams,$cookies){
 	$scope.window = $window
 	, $scope.showMenu =true
 	, $scope.Settings = $resource('/resources/settings', {_csrf: $cookies['csrf.token']}, {update: {method: 'PUT'}})
@@ -15,7 +15,7 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	, $scope.Stats = $scope.resource('/resources/stats/:type', {_csrf: $cookies['csrf.token']})
 	, $scope.Api = $scope.resource('/api/:action/:id', {_csrf: $cookies['csrf.token']});
 	$scope.cookies = $cookies;
-	$scope.Files = $scope.resource('/api/uploads/:type');
+	$scope.Files = $scope.resource('/api/uploads/:type/:id', {_csrf: $cookies['csrf.token']});
 
 	$scope.host = $scope.location.$$protocol + '://' + $scope.location.$$host + ($scope.location.$$port == 80 ? '' : ':' + $scope.location.$$port) + '/';
 
@@ -29,7 +29,7 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 		$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
 
 		$scope.Articles.query({}, function(res) {
-			$scope.content = res;
+			$scope.content = $filter('orderBy')(res, '-_id');
 
 			$scope.category = {};
 			$scope.splitCategories();	
@@ -378,15 +378,14 @@ var MainCtrl = ['$scope', function($scope){
 	// 	$scope.shares = resp;
 	// });
 
-	$scope.toggleStatus = function(id) {
-		for(var item in $scope.content) {
-			if($scope.content[item]._id == id) {
-				$scope.content[item].status = !$scope.content[item].status;
-				return;
-			}			
-		}		
+	$scope.toggleStatus = function(index) {				
+		var item = $scope.content[index];
+		item.status = !item.status;
 
-		//TODO: update database
+		$scope.Articles.update({id:item._id}, { status:item.status }, function(res) { 
+			console.log(res);			
+			$scope.splitCategories();
+		});
 	}
 
 	$scope.itemPreview = function(id) {
@@ -395,10 +394,6 @@ var MainCtrl = ['$scope', function($scope){
 
 	$scope.getDateById = function(id) {
 	    return new Date(parseInt(id.toString().slice(0,8), 16)*1000);
-	}
-
-	$scope.showContentType = function(item) {
-		return item.preview.link.type == 'none' ? 'none' : item.preview.link.type == 'external' ? 'external' : item.content.type;
 	}
 }];
 
@@ -498,14 +493,9 @@ var EditorCtrl = ['$scope', function($scope){
 			xhr.open("POST", "/api/uploads/swfs" , true);
 
 			xhr.onload = function(e) {
-				var flash = {
-								fileName:file.name,
-								hashName:JSON.parse(this.response).hashName
-				}
-				
 				$scope.safeApply(function() {
-					$scope.editor.tempContent[type].flash.data = flash.hashName;			
-					$scope.editor.files.flash.push(flash);
+					$scope.editor.tempContent[type].flash.data = JSON.parse(this.response).hashName;			
+					$scope.editor.files.flash.push(JSON.parse(this.response));
 					$scope.uploadprogress = '';
 				});
 			}
@@ -774,6 +764,7 @@ var EditorCtrl = ['$scope', function($scope){
 }];
 
 var SwfsCtrl = ['$scope', function($scope){
+	$scope.uploading = false;
 
 	// $scope.Files.query({type:'swfs'}, function(res) {
 	// 	$scope.editor.files.flash = res;
@@ -798,11 +789,50 @@ var SwfsCtrl = ['$scope', function($scope){
 		}
 
 		if(confirm(confirmText)) {
-			$scope.Files.delete({type:'swfs', id:swf._id}, function(res) {
-				console.log(res);
-				//$scope.editor.files.flash.splice($scope.editor.files.flash.indexOf(swf), 1);
+			$scope.Files.delete({type:'swfs', id:swf._id}, function(res) {									
+				if(res.error == 0) {					
+					$scope.editor.files.flash.splice($scope.editor.files.flash.indexOf(swf), 1);					
+				}
 			});
 		}
+	}
+
+	$scope.uploadNewSwf = function() {
+		$('#uploadNewSwfInput').trigger('click');
+	}
+
+	$scope.uploadNewSwfResource = function(file) {
+		$scope.uploading = true;
+		var fd = new FormData();
+		fd.append('fileName', file);
+		fd.append('_csrf', $scope.cookies['csrf.token'])
+		
+		var xhr = new XMLHttpRequest();      
+		
+		var imageType = 'application/x-shockwave-flash';
+		if(!file.type.match(imageType))
+			return alert('only flash (SWF) type allowed!');
+
+		xhr.open("POST", "/api/uploads/swfs" , true);
+
+		xhr.onload = function(e) {
+			$scope.safeApply(function() {				
+				$scope.editor.files.flash.push(JSON.parse(this.response));
+				$scope.progressBar = '0';
+				$scope.uploadprogress = '';
+				$scope.uploading = false;
+			});
+		}
+
+		xhr.upload.onprogress = function(e) {
+			$scope.safeApply(function() {
+				 if (e.lengthComputable)
+     				 $scope.progressBar = Math.ceil(((e.loaded / e.total) * 100));
+     				$scope.uploadprogress = Math.ceil(((e.loaded / e.total) * 100)) + '%';
+     		});
+		}
+
+		xhr.send(fd);
 	}
 }];
 
