@@ -36,7 +36,7 @@ var ArticlesSchema = new mongoose.Schema(
 
 module.exports = function(extendStaticMethods, cb){
 
-	ArticlesSchema.statics = extendStaticMethods('Articles', ['list','get','add','edit']);
+	ArticlesSchema.statics = extendStaticMethods('Articles', ['list','get','add','edit','delete']);
 	/*
 	 * Users Model
 	 */

@@ -38,6 +38,12 @@ module.exports = function(db) {
 			db.Articles.edit({_id:id}, data, function(err,doc){
 				return res.send(handle(err,doc));
 			});
+		},
+		del: function(req,res,next){
+			var id = req.article.id;
+			db.Articles.delete({_id:id}, function(err,doc){
+				return res.send(handle(err,doc));
+			})
 		}
 	}
 }
