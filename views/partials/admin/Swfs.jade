@@ -1,9 +1,10 @@
-.page
+.page.secondary
 	.page-header 
 		.page-header-content
 			h1 Flash Resources
-				small &nbsp;
-
+				small &nbsp;				
+			a.back-button.big.page-back(href="#/main")
+.page
 	.page-region
 		.page-region-content
 			.grid
@@ -11,7 +12,7 @@
 					.span4(style="width:100%;")
 						h3.padding5.bg-color-green.progress-bar(style="height:40px;")
 							.bar.bg-color-blue(style="width:{{ progressBar }}%;")
-								.progressPercents.white.bold(style="float:right; padding-right:10px;") {{ uploadprogress }}
+							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ uploadprogress }}
 							.a(style="position:absolute;left:5px;top:15px;")
 								i.icon-font.white
 								span.white Flash Resources

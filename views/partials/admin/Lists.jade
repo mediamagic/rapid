@@ -1,7 +1,7 @@
 .page.secondary
 	.page-header 
 		.page-header-content
-			h1 List Editor
+			h1 Lists Editor
 				small &nbsp;
 			a.back-button.big.page-back(href="#/main")
 .page
@@ -9,22 +9,26 @@
 		.page-region-content
 			.grid
 				.row
-					.span12
+					.span4(style="width:100%;")
+						h3.padding5.bg-color-green.progress-bar(style="height:40px;")							
+							.a(style="position:absolute;left:5px;top:15px;")
+								i.icon-list.white
+								span.white Lists Editor
 						select.bg-color-green.white(ng-model="filterCategory")
-							option(value="0") Select Category
+							option(value="0", disabled) Select Category
 							option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}						
 						ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filterCategory]")
-							//- li.itemInList(ng-repeat="item in category[filterCategory] | orderBy:orderCategories") {{ item.sidebar.title }}
-							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filterCategory]") {{ item.sidebar.title }}
+							//- li.itemInList(ng-repeat="item in category[filterCategory] | orderBy:orderCategories") {{ item.name }}
+							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filterCategory]") {{ item.name }}
 						br	
 						button(ng-click="previewNewList()") Preview
-						button(ng-disabled="showListsSaveButton") Save	
+						button(ng-click="saveLists()", ng-disabled="showListsSaveButton") Save	
 						
 						//- pre(ng-bind="category[filterCategory] | json | orderBy:cat.categories[filterCategory]")
 
 						//- span(ng-repeat="cat in category[filterCategory] | orderBy:orderCategories")
 						span(ng-repeat="cat in category[filterCategory]")
-							.s {{ cat.categories[filterCategory] }} {{ cat.sidebar.title }}
+							.s {{ cat.categories[filterCategory] }} {{ cat.name }}
 						
 						//- h3.padding5.bg-color-red.fg-color-white
 						//- 	i.icon-user-2

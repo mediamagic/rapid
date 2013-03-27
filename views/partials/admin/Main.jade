@@ -9,12 +9,16 @@
 			.grid
 				.row
 					.span4(style="width:100%;")
-						h3.padding5.bg-color-green
+						h3.padding5.bg-color-green(style="height:40px;")
 							i.white.icon-clipboard-2
-							span.white Articles						
+							span.white Articles
+						#newArticleButton
+							a((href="#/editor"))
+								button Create New Article
 						table.bg-color-green
 							thead
 								tr
+									th.white.bold.center name
 									th.white.bold.center title
 									th.white.bold.center description
 									th.white.bold.center categories
@@ -28,6 +32,7 @@
 							tbody
 								//tr(ng-repeat="item in content | orderBy:'-_id'")
 								tr(ng-repeat="item in content")
+									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
 									td.font12.white {{ item.sidebar.description }}
 									td.font12.white.center {{ item.categories | remove:'all' | categories}}
@@ -43,44 +48,5 @@
 									td.font12.center
 										a.font12(href="/admin#/editor/{{item._id}}") edit
 									td.font12.center
-										i.icon-remove.white.center.link										
-
-					//- .span4
-					//- 	h3.padding5.bg-color-red
-					//- 		i.icon-stats-up
-					//- 		span  Cookies
-					//- 	table.bg-color-red
-					//- 		thead
-					//- 			tr
-					//- 				th nominee
-					//- 				th votes
-					//- 		tbody
-					//- 			tr(ng-repeat="user in users")
-					//- 				td {{user.name}}
-					//- 				td {{user.votes}}
-					//- .span4
-					//- 	h3.padding5.bg-color-blue
-					//- 		i.icon-facebook
-					//- 		span  Shares
-					//- 	table.bg-color-blue
-					//- 		thead
-					//- 			tr
-					//- 				th shared name
-					//- 				th total
-					//- 		tbody
-					//- 			tr(ng-repeat="share in shares")
-					//- 				td {{share.ref}}
-					//- 				td {{share.count}}
-					//- .span4
-					//- 	h3.padding5.bg-color-green
-					//- 		i.icon-share-2
-					//- 		span  References
-					//- 	table.bg-color-green
-					//- 		thead
-					//- 			tr
-					//- 				th ref id
-					//- 				th total
-					//- 		tbody
-					//- 			tr(ng-repeat="ref in refs")
-					//- 				td {{ref.ref}}
-					//- 				td {{ref.count}}
+										a.font12(ng-click="deleteArticle($index)")
+											i.icon-remove.white.center.link									

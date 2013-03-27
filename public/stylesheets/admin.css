@@ -6,11 +6,12 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 a{color:#ffe821;}
 #wrapper{background:transparent url(../images/main_bg.png) no-repeat top left;height:700px;margin:0 auto;width:1024px;position:relative;}
 #listWrapper li{list-style-type:none;font-size:12;border:1px solid #999;margin-top:5px;cursor:move;}
-#closedEditorWrapper{position:relative;width:900px;height:415px;}#closedEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
+#closedEditorWrapper{position:relative;width:940px;height:415px;}#closedEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
 #closedEditorWrapper #rightSide{position:absolute;top:0px;right:0px;width:200px;height:415px;border:solid #ccc 1px;}
-#openEditorWrapper{position:relative;width:900px;height:415px;}#openEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
+#openEditorWrapper{position:relative;width:940px;height:415px;}#openEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
 #openEditorWrapper #rightSide{position:absolute;top:0px;right:0px;width:200px;height:415px;border:solid #ccc 1px;}
-#uploadNewSwf{width:100%;text-align:center;}
+#uploadNewSwf{text-align:center;}
+#newArticleButton{width:100%;margin-top:10px;text-align:center;}
 .colorPicker{width:24px;height:24px;cursor:pointer;border:solid #ccc 1px;}
 .colorPicker_1{background-color:#ffffff;}
 .colorPicker_2{background-color:#8c9299;}

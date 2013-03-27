@@ -21,6 +21,7 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 
 	$scope.content = [];
 	$scope.categories = [];
+	$scope.category = {};
 
 	$scope.settingsLoaded = false;
 
@@ -28,16 +29,30 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		$scope.settings = settings
 		$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
 
-		$scope.Articles.query({}, function(res) {
-			$scope.content = $filter('orderBy')(res, '-_id');
-
-			$scope.category = {};
-			$scope.splitCategories();	
-
+		$scope.buildArticles(function() {
 			$scope.settingsLoaded = true;
 			$scope.$broadcast('SETTINGS_LOADED');
-		});		
+		}, null);		
 	});
+
+	$scope.buildArticles = function(cb, content) {
+		
+		if(content) {
+			$scope.content = $filter('orderBy')(content, '-_id');
+			$scope.splitCategories();	
+
+			if(cb)
+				cb();
+		} else {
+			$scope.Articles.query({}, function(res) {
+				$scope.content = $filter('orderBy')(res, '-_id');
+				$scope.splitCategories();	
+
+				if(cb)
+					cb();
+			});	
+		}
+	}
 
 	$scope.safeApply = function(fn) {
 	  var phase = this.$root.$$phase;	  
@@ -222,7 +237,9 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	// 					}					
 	// ]
 
-	$scope.splitCategories = function() {		
+	$scope.splitCategories = function() {	
+		$scope.category = {};	
+
 		for(var cat = 0; cat < $scope.categories.length; cat++) {
 			$scope.category[$scope.categories[cat]] = angular.copy($scope.content);
 
@@ -238,7 +255,8 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	}
 
 	$scope.editor = {
-		data: {
+		defaultData: {
+			name:'',
 			sidebar: {
 						title:'',
 						description: '',
@@ -266,6 +284,9 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 						bgColor:'',										
 			},		
 		},
+		data: {
+
+		},
 		open: {
 			colorPickerClass:'colorPicker_1'			
 		},
@@ -274,7 +295,7 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 			showLinkText: false,
 			showLinkUrl: false			
 		},
-		tempContent: {
+		defaultTempContent: {
 			preview: {
 						text: '',
 						video: { 
@@ -303,6 +324,8 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 						iframe:'',
 						image: []
 					}
+		},
+		tempContent: {
 		},
 		categories: [
 		],
@@ -395,6 +418,20 @@ var MainCtrl = ['$scope', function($scope){
 	$scope.getDateById = function(id) {
 	    return new Date(parseInt(id.toString().slice(0,8), 16)*1000);
 	}
+
+	$scope.deleteArticle = function(index) {		
+		var confirmText = 'are you sure you want to delete this article ?';
+		var item = $scope.content[index];
+
+		if(confirm(confirmText)) {			
+			$scope.Articles.delete({id:item._id}, function(res) {									
+				if(res.error == 0) {					
+					$scope.content.splice($scope.content.indexOf(item), 1);
+					$scope.splitCategories();
+				}
+			});
+		}
+	}
 }];
 
 var ListsCtrl = ['$scope', function($scope){
@@ -432,29 +469,73 @@ var ListsCtrl = ['$scope', function($scope){
 								axis: 'y'
 	};	
 
-	// $scope.orderCategories = function(item) {	
+	// $scope.orderCategories = function(item) {
 	// 	var index = parseInt(item.categories[$scope.filterCategory]);
-	// 	return index;				
+	// 	return index;
 	// }
 	
 	$scope.previewNewList = function() {
 		$scope.showListsSaveButton = false;
 	}
 
+	$scope.saveLists = function() {
+		var newContent = {};
+
+		for(var cat in $scope.category) {
+			var content = $scope.category[cat];
+			
+			for(var i in content) {
+				var item = content[i];
+				var contentId = item._id;
+
+				if(newContent[contentId] == undefined)
+					newContent[contentId] = {};
+
+				if(item.categories[cat] != undefined)
+					newContent[contentId][cat] = item.categories[cat];
+			}
+		}
+		
+		$scope.Articles.update({id:'resort'}, newContent, function(res) { 
+			console.log(res);
+			$scope.buildArticles(function() { 
+				//todo: goto main page or reset list
+				console.log('saved')
+			}, res);
+		});
+	}
+
 	// $scope.$watch("category['family']", function(n, o) {
 	// 	console.log('change')
 	// }, true);
-
 }];
 
-var EditorCtrl = ['$scope', function($scope){
+var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	var id = $scope.route.id;
+	$scope.articleEditMode = false;
+	$scope.articleButtonMode = 'Save';
+
+	// make default objects
+	$scope.editor.categories = [];	
+	$scope.editor.data = angular.copy($scope.editor.defaultData);	
+	$scope.editor.tempContent = angular.copy($scope.editor.defaultTempContent);	
+
+	if(id != undefined) {		
+		$scope.articleEditMode = true;
+		$scope.articleButtonMode = 'Update';		
+	}
 
 	//fix for tinymce that wont let me update the preview content while two ng-model are connected to it
 	$scope.$watch('editor.closed.tempContent', function(n, o) { 		
 		if(n != '' && n != undefined)
 			$scope.editor.data.preview.content = n;
 	});
+
+	$scope.$watch('editor.open.tempContent', function(n, o) { 		
+		if(n != '' && n != undefined)
+			$scope.editor.data.content.content = n;
+	});
+	//
 
 	$scope.uploadprogress = '';
 
@@ -493,9 +574,11 @@ var EditorCtrl = ['$scope', function($scope){
 			xhr.open("POST", "/api/uploads/swfs" , true);
 
 			xhr.onload = function(e) {
+				var flash = JSON.parse(this.response);
+
 				$scope.safeApply(function() {
-					$scope.editor.tempContent[type].flash.data = JSON.parse(this.response).hashName;			
-					$scope.editor.files.flash.push(JSON.parse(this.response));
+					$scope.editor.tempContent[type].flash.data = flash.hashName;			
+					$scope.editor.files.flash.push(flash);
 					$scope.uploadprogress = '';
 				});
 			}
@@ -606,6 +689,10 @@ var EditorCtrl = ['$scope', function($scope){
 				oldCategories[newCategories[cat]] = $scope.category[newCategories[cat]].length;
 			}
 		}
+		
+		if(oldCategories['all'] == undefined)
+			oldCategories.all = $scope.category['all'].length;
+		
 
 		// console.log('NEW cats');
 		// for(var cat in newCategories) {
@@ -626,7 +713,7 @@ var EditorCtrl = ['$scope', function($scope){
 		$scope.safeApply(function() {
 			switch($scope.editor.data.preview.type) {
 				case 'text':
-					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.text;
+					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.text;					
 				break;
 				case 'video':					
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.video.id;					
@@ -646,7 +733,7 @@ var EditorCtrl = ['$scope', function($scope){
 
 			switch($scope.editor.data.content.type) {
 				case 'text':
-					$scope.editor.data.content.content = $scope.editor.tempContent.content.text;
+					$scope.editor.data.content.content = $scope.editor.tempContent.content.text;					
 				break;		
 				case 'video':					
 					$scope.editor.data.content.content = $scope.editor.tempContent.content.video.id;					
@@ -664,6 +751,25 @@ var EditorCtrl = ['$scope', function($scope){
 				break;
 			}
 		});
+		
+		if($scope.articleEditMode) {
+			$scope.Articles.update({id:id}, $scope.editor.data, function(res) { 
+				for(var item in $scope.content) {
+					if($scope.content[item]._id == id) {
+						$scope.content[item] = res;
+						$scope.splitCategories();
+						break;
+					}
+				}
+			});
+		} else {
+			$scope.Articles.save($scope.editor.data, function(res) { 
+				if(res._id != undefined) {
+					$scope.content.unshift(res);
+					$scope.splitCategories();
+				}		
+			});
+		}
 	}
 
 	$scope.$watch("editor.tempContent.preview.flash.data", function(n, o) {				
@@ -682,14 +788,14 @@ var EditorCtrl = ['$scope', function($scope){
 		}
 	}, true);
 
-	$scope.$on('SETTINGS_LOADED', function(event) {					
-		$scope.loadContent();
+	$scope.$on('SETTINGS_LOADED', function(event) {
+		$scope.loadContent();				
 	});
 
 	$scope.loadContent = function() {	
 		//$scope.Files.query({type:'swfs'}, function(res) {
 			//$scope.editor.files.flash = res;
-			if(id != undefined) {
+			if($scope.articleEditMode) {
 				for(var item in $scope.content) {
 					if($scope.content[item]._id == id) {
 						$scope.editor.data = $scope.content[item];
@@ -710,7 +816,7 @@ var EditorCtrl = ['$scope', function($scope){
 			} else {
 				// $scope.editor.data.categories[$scope.categories[0]] = $scope.category[$scope.categories[0]].length;		
 				// $scope.editor.categories.push($scope.categories[0]);
-				// console.log($scope.categories);
+				// console.log($scope.categories);				
 			}
 		//});
 	}
@@ -738,6 +844,28 @@ var EditorCtrl = ['$scope', function($scope){
 				default:
 				break;
 			}
+
+			switch($scope.content[index].content.type) {
+				case 'text':
+					$scope.editor.tempContent.content.text = $scope.content[index].content.content;
+				break;
+				case 'flash':
+					for (var i in $scope.editor.files.flash){
+						if ($scope.editor.data.content.content === $scope.editor.files.flash[i].hashName) {
+							$scope.editor.tempContent.content.flash.data = $scope.editor.files.flash[i].hashName;
+							break;
+						}
+					}
+				break;
+				case 'iframe':
+					$scope.editor.tempContent.content.iframe = $scope.content[index].content.content;
+				break;
+				case 'image':					
+					$scope.editor.tempContent.content.image = $scope.content[index].content.content;
+				break;
+				default:
+				break;
+			}
 		});
 	}
 
@@ -759,7 +887,7 @@ var EditorCtrl = ['$scope', function($scope){
 		});
 	}
 
-	if($scope.settingsLoaded)
+	if($scope.settingsLoaded) 		
 		$scope.loadContent();
 }];
 
@@ -802,6 +930,7 @@ var SwfsCtrl = ['$scope', function($scope){
 	}
 
 	$scope.uploadNewSwfResource = function(file) {
+		console.log('shoud upload now')
 		$scope.uploading = true;
 		var fd = new FormData();
 		fd.append('fileName', file);
@@ -815,9 +944,11 @@ var SwfsCtrl = ['$scope', function($scope){
 
 		xhr.open("POST", "/api/uploads/swfs" , true);
 
-		xhr.onload = function(e) {
+		xhr.onload = function(e) {			
+			var flash = JSON.parse(this.response);
+
 			$scope.safeApply(function() {				
-				$scope.editor.files.flash.push(JSON.parse(this.response));
+				$scope.editor.files.flash.push(flash);
 				$scope.progressBar = '0';
 				$scope.uploadprogress = '';
 				$scope.uploading = false;
