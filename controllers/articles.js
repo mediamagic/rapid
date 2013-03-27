@@ -2,6 +2,8 @@ module.exports = function(db) {
 	function handle(err,doc){
 		if (err)
 			return err;
+		if (doc==1)
+			return {error:0};
 		return doc;
 	}
 	return {
