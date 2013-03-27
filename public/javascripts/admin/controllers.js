@@ -9,7 +9,7 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	, $scope.resource = $resource
 	, $scope.route = $routeParams
 	, $scope.Math = $window.Math
-	, $scope.Articles = $scope.resource('/resources/articles/:id', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}})
+	, $scope.Articles = $scope.resource('/resources/articles/:id', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}, updateList: {method:'PUT', isArray:true} })
 	//, $scope.Users = $scope.resource('/resources/users/:user/:vote', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}})
 	//, $scope.Voters = $scope.resource('/resources/voters/:voter', {_csrf: $cookies['csrf.token']})
 	, $scope.Stats = $scope.resource('/resources/stats/:type', {_csrf: $cookies['csrf.token']})
@@ -32,25 +32,24 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		$scope.buildArticles(function() {
 			$scope.settingsLoaded = true;
 			$scope.$broadcast('SETTINGS_LOADED');
-		}, null);		
+		}, null);
 	});
 
 	$scope.buildArticles = function(cb, content) {
 		
 		if(content) {
 			$scope.content = $filter('orderBy')(content, '-_id');
-			$scope.splitCategories();	
-
+			$scope.splitCategories();
+			$scope.category[$scope.filter.category].sort($scope.compare);
 			if(cb)
 				cb();
 		} else {
 			$scope.Articles.query({}, function(res) {
 				$scope.content = $filter('orderBy')(res, '-_id');
-				$scope.splitCategories();	
-
+				$scope.splitCategories();
 				if(cb)
 					cb();
-			});	
+			});
 		}
 	}
 
@@ -65,7 +64,19 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	  }
 	};
 
-	$scope.filterCategory = 0;
+	$scope.compare = function(a,b) {
+		a = parseInt(a.categories[$scope.filter.category]);
+		b = parseInt(b.categories[$scope.filter.category]);
+		if (a < b)
+			return -1;
+		if (a > b)
+			return 1;
+		return 0;
+	}
+
+	$scope.filter = {
+		category: 0
+	}
 	
 
 	// $scope.content = [
@@ -406,7 +417,7 @@ var MainCtrl = ['$scope', function($scope){
 		item.status = !item.status;
 
 		$scope.Articles.update({id:item._id}, { status:item.status }, function(res) { 
-			console.log(res);			
+			console.log(res);
 			$scope.splitCategories();
 		});
 	}
@@ -435,28 +446,19 @@ var MainCtrl = ['$scope', function($scope){
 }];
 
 var ListsCtrl = ['$scope', function($scope){
+	$scope.filter.category = 0;
 
-	function compare(a,b) {
-		a = parseInt(a.categories[$scope.filterCategory]);
-		b = parseInt(b.categories[$scope.filterCategory]);
-		if (a < b)
-			return -1;
-		if (a > b)
-			return 1;
-		return 0;
-	}
-
-	$scope.$watch('filterCategory', function(n,o){
-		if (n!=o)
-			$scope.category[n].sort(compare);
+	$scope.$watch('filter.category', function(n,o){
+		if (n!=o && n!=0 && n!=undefined)
+			$scope.category[n].sort($scope.compare);
 	});
-
+	
 	$scope.showListsSaveButton = true;
 	$scope.sortableOptions = {
 								update: function(event, ui) {									
-									for(var i = 0; i < $scope.category[$scope.filterCategory].length; i++) {
-										var item = $scope.category[$scope.filterCategory][i];
-										item.categories[$scope.filterCategory] = i;
+									for(var i = 0; i < $scope.category[$scope.filter.category].length; i++) {
+										var item = $scope.category[$scope.filter.category][i];
+										item.categories[$scope.filter.category] = i;
 									}
 								},
 								start: function(event, ui) {
@@ -470,7 +472,7 @@ var ListsCtrl = ['$scope', function($scope){
 	};	
 
 	// $scope.orderCategories = function(item) {
-	// 	var index = parseInt(item.categories[$scope.filterCategory]);
+	// 	var index = parseInt(item.categories[$scope.filter.category]);
 	// 	return index;
 	// }
 	
@@ -496,10 +498,11 @@ var ListsCtrl = ['$scope', function($scope){
 			}
 		}
 		
-		$scope.Articles.update({id:'resort'}, newContent, function(res) { 
+		$scope.Articles.updateList({id:'resort'}, newContent, function(res) { 
 			console.log(res);
 			$scope.buildArticles(function() { 
-				//todo: goto main page or reset list
+				console.log('inside buildArticles callback')
+				console.log($scope.filter.category);
 				console.log('saved')
 			}, res);
 		});

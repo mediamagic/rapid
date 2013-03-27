@@ -14,21 +14,21 @@
 							.a(style="position:absolute;left:5px;top:15px;")
 								i.icon-list.white
 								span.white Lists Editor
-						select.bg-color-green.white(ng-model="filterCategory")
+						select.bg-color-green.white(ng-model="filter.category")
 							option(value="0", disabled) Select Category
 							option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}						
-						ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filterCategory]")
-							//- li.itemInList(ng-repeat="item in category[filterCategory] | orderBy:orderCategories") {{ item.name }}
-							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filterCategory]") {{ item.name }}
+						ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filter.category]")
+							//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.preview.title }}
+							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filter.category]") {{ item.sidebar.title }}
 						br	
 						button(ng-click="previewNewList()") Preview
 						button(ng-click="saveLists()", ng-disabled="showListsSaveButton") Save	
 						
-						//- pre(ng-bind="category[filterCategory] | json | orderBy:cat.categories[filterCategory]")
+						//- pre(ng-bind="category[filter.category] | json | orderBy:cat.categories[filter.category]")
 
-						//- span(ng-repeat="cat in category[filterCategory] | orderBy:orderCategories")
-						span(ng-repeat="cat in category[filterCategory]")
-							.s {{ cat.categories[filterCategory] }} {{ cat.name }}
+						//- span(ng-repeat="cat in category[filter.category] | orderBy:orderCategories")
+						span(ng-repeat="cat in category[filter.category]")
+							.s {{ cat.categories[filter.category] }} {{ cat.name }}
 						
 						//- h3.padding5.bg-color-red.fg-color-white
 						//- 	i.icon-user-2
