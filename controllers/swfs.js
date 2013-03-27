@@ -44,7 +44,8 @@ module.exports = function(db){
 						if(err)
 							return res.send(handle(err,null));
 						var obj = 	{ fileName: doc.fileName
-									, hashName: doc.hashName }
+									, hashName: doc.hashName
+									, _id: doc._id }
 						return res.send(obj);
 					});
 				});
