@@ -15,7 +15,7 @@ module.exports = function(db){
 					req.swf = doc;
 					next();
 				} else {
-					res.send({'error' : 'User Not Found'}, 404);
+					res.send({'error' : 'swf Not Found'}, 404);
 				}
 	  		});
 		},
