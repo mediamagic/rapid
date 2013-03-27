@@ -7,13 +7,39 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 #header #nav ul{position:relative;top:105px;max-width:650px;min-width:450px;padding:0;margin:0 auto;}#header #nav ul li{list-style-type:none;float:right;}
 #wrapper{margin:191px auto 0 auto;max-width:1020px;position:relative;z-index:1;}
 #articles{max-width:940px;min-width:450px;margin:0 auto;}
-.article .preview{margin-bottom:20px;}.article .preview.size1x1{width:220px;height:220px;}
-.article .preview.size1x2{width:220px;height:460px;}
-.article .preview.size2x1{width:460px;height:220px;}
-.article .preview.size2x2{width:460px;height:460px;}
-.article .preview.linked{cursor:pointer;}
-.article .preview.unlinked{cursor:default;}
-.article .preview.disabled{outline:red solid 2px;}
+.article .hover{display:none;}
+.article .disabled{display:none;}
+.article .mask{display:none;}
+.article.preview.size1x1 .preview{width:220px;height:220px;}
+.article.preview.size1x1 .hover{width:220px;height:220px;}
+.article.preview.size1x1 .disabled{width:220px;height:220px;}
+.article.preview.size1x1 .mobile{width:218px;}
+.article.preview.size1x1 .mask{width:220px;height:220px;}
+.article.preview.size1x2 .preview{width:220px;height:460px;}
+.article.preview.size1x2 .hover{width:220px;height:460px;}
+.article.preview.size1x2 .disabled{width:220px;height:460px;}
+.article.preview.size1x2 .mobile{width:218px;}
+.article.preview.size1x2 .mask{width:220px;height:460px;}
+.article.preview.size2x1 .preview{width:460px;height:220px;}
+.article.preview.size2x1 .hover{width:460px;height:220px;}
+.article.preview.size2x1 .disabled{width:460px;height:220px;}
+.article.preview.size2x1 .mobile{width:458px;}
+.article.preview.size2x1 .mask{width:460px;height:220px;}
+.article.preview.size2x2 .preview{width:460px;height:460px;}
+.article.preview.size2x2 .hover{width:460px;height:460px;}
+.article.preview.size2x2 .disabled{width:460px;height:460px;}
+.article.preview.size2x2 .mobile{width:458px;}
+.article.preview.size2x2 .mask{width:460px;height:460px;}
+.article.preview .preview{margin-bottom:20px;}
+.article.preview.disabled .disabled{display:block;position:absolute;top:0;left:0;background:red;}
+.article.preview.enabled .disabled{display:none;}
+.article.preview.linked{cursor:pointer;}.article.preview.linked .hover{position:absolute;top:0;left:0;background:blue;display:none;}
+.article.preview.linked .mobile{position:absolute;bottom:21px;left:1px;background:white;height:48px;}
+.article.preview.linked:hover .hover{display:block;}
+.article.preview.unlinked{cursor:default;}.article.preview.unlinked .hover{display:none;}
+.article.preview.unlinked .mobile{display:none;}
+.article.preview.masked .mask{position:absolute;top:0;left:0;background:yellow;display:block;}
+.article.preview.masked:hover.linked .mask{display:none;}
 .article .content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article .content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
 .isotope-item{z-index:2;}
 .isotope-hidden.isotope-item{pointer-events:none;z-index:1;}

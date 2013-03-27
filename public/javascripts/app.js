@@ -81,19 +81,23 @@ function createPreview(elm, obj){
     elm
         .html(html)
         .css('background', obj.preview.bgColor)
+        .siblings('.bind')
         .bind('click', function(){
             $('.close').click()
             elm
                 .hide()
                 .parent()
+                .removeClass('preview')
                 .append(content.show())
                 .parent()
                 .isotope('reLayout', function(){
-                    console.log($('#item_'+obj.index).offset())
                     $("html, body")
                         .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
+                        $('.article.preview').addClass('masked');
                 });
-        });
+        })
+        .parent()
+        .addClass('preview')
 }
 
 function createContent(obj){
@@ -118,11 +122,16 @@ function createContent(obj){
         .show()
         .children('.close')
         .bind('click', function(){
-            elm.hide().siblings('.preview').show();
+            elm
+                .hide()
+                .siblings('.preview')
+                .show();
             elm
                 .parent()
+                .addClass('preview')
                 .parent()
                 .isotope('reLayout', function(){
+                     $('.article.masked').removeClass('masked');
                 });
         })
     return elm;

@@ -3,8 +3,25 @@
 	@margin: 20px;
 //* MIXINS *//
 .size(@width: 1, @height: 1, @size:220px, @margin:20px) {
-	width: @width*@size + (@margin * (@width - 1));
-	height: @height*@size + (@margin * (@height - 1));
+	.preview {
+		width: @width*@size + (@margin * (@width - 1));
+		height: @height*@size + (@margin * (@height - 1));
+	}
+	.hover {
+		width: @width*@size + (@margin * (@width - 1));
+		height: @height*@size + (@margin * (@height - 1));
+	}
+	.disabled {
+		width: @width*@size + (@margin * (@width - 1));
+		height: @height*@size + (@margin * (@height - 1));
+	}
+	.mobile {
+		width: @width*@size + (@margin * (@width - 1)) - 2;
+	}
+	.mask {
+		width: @width*@size + (@margin * (@width - 1));
+		height: @height*@size + (@margin * (@height - 1));
+	}
 }
 
 //* COLORS *//
@@ -86,9 +103,16 @@ h1,h2,h3,h4,h5,h6 {
 	margin: 0 auto;
 }
 .article {
-	.preview {
-		margin-bottom: 20px;
-		//outline: blue solid 1px;
+	.hover {
+		display: none;
+	}
+	.disabled {
+		display: none;
+	}
+	.mask {
+		display: none;
+	}
+	&.preview {
 		&.size1x1 {
 			.size(1,1);
 		}
@@ -101,16 +125,74 @@ h1,h2,h3,h4,h5,h6 {
 		&.size2x2 {
 			.size(2,2);
 		}
+		.preview  {
+			margin-bottom: 20px;
+			//z-index: 1;
+		}
+		&.disabled {
+			.disabled {
+				display:block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: red;
+				//z-index: 5;
+			}
+		}
+		&.enabled {
+			.disabled {
+				display: none;
+			}
+		}
 		&.linked {
 			cursor: pointer;
+			.hover {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: blue;
+				display: none;
+				//z-index: 10;
+			}
+			.mobile {
+				position: absolute;
+				bottom: 21px;
+				left: 1px;
+				background: white;
+				height: 48px;
+			}
+			&:hover {
+				.hover {
+					display:block;
+				}
+			}
 		}
 		&.unlinked {
 			cursor: default;
+			.hover {
+				display: none;
+			}
+			.mobile {
+				display: none;
+			}
 		}
-		&.disabled {
-			outline: red solid 2px;
-		}
+		&.masked {
+			.mask {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: yellow;
+				display: block;
 
+			}
+			&:hover {
+				&.linked {
+					.mask {
+						display: none;
+					}
+				}
+			}
+		}
 	}
 	.content {
 		position: relative;

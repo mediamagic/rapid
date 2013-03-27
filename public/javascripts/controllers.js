@@ -14,8 +14,10 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	}
 	$scope.Settings.get({}, function(settings)	{ 
 		$scope.settings = settings
-		, $scope.Stats = $scope.resource('/resources/stats/:type', {_csrf: $cookies['csrf.token']})
-		, $scope.Login = $scope.resource('/api/login', {_csrf: $cookies['csrf.token']})
+		, $scope.Stats = $scope.resource(	'/resources/stats/:type' 
+											, { _csrf: $cookies['csrf.token'] })
+		, $scope.Login = $scope.resource(	'/api/login'
+											, { _csrf: $cookies['csrf.token'] })
 	});
 	$scope.filters = { category: 'all' }
 }];
@@ -29,10 +31,8 @@ var MainCtrl = ['$scope', function($scope){
 			, arr 	= []
 			, cat = $scope.filters.category
 		arr.push('size'+item.preview.size);
-		if (item.categories[cat] > $scope.articles.length)
-			arr.push('disabled');
-		(item.preview.link.type == 'none') ? 
-			arr.push('unlinked') : arr.push('linked')
+		arr.push( (item.categories[cat] > $scope.articles.length) ? 'disabled' : 'enabled');
+		arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
 		return arr;
 	}
 
@@ -62,7 +62,9 @@ var LoginCtrl = ['$scope', '$window' , function($scope, $window){
 							, password: $scope.password }
 							, function(resp){
 								if (resp.error === undefined){
-									(prevUrl === undefined) ? $scope.location.path('/admin') : $window.location.href = prevUrl;
+									(prevUrl === undefined) ? 
+									$scope.location.path('/admin') : 
+									$window.location.href = prevUrl;
 								} 
 							});
 	}
