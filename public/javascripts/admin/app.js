@@ -1,5 +1,5 @@
 'use strict'; 
-angular.module('admin', ['ngResource','ngCookies', 'ui']).
+angular.module('admin', ['ngResource','ngCookies', 'ui', 'ui.bootstrap']).
 config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 	$routeProvider.
 		when('/main', {templateUrl: '/views/admin/Main.html', controller: MainCtrl, name:'Main'}).
@@ -67,6 +67,11 @@ filter('contentType', function() {
   return function(item) {     
     return item.preview.link.type == 'none' ? 'none' : item.preview.link.type == 'external' ? 'external' : item.content.type;
   }
+}).filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
 });
 
 angular.module('ui.directives').directive('uiSortable', [

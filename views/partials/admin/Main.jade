@@ -15,6 +15,8 @@
 						#newArticleButton
 							a((href="#/editor"))
 								button Create New Article
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
 						table.bg-color-green
 							thead
 								tr
@@ -30,8 +32,8 @@
 									th.white.bold.center edit
 									th.white.bold.center delete
 							tbody
-								//tr(ng-repeat="item in content | orderBy:'-_id'")
-								tr(ng-repeat="item in content")
+								//tr(ng-repeat="item in content | startFrom:currentPage*pageSize | limitTo:pageSize")
+								tr(ng-repeat="item in content | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total")
 									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
 									td.font12.white {{ item.sidebar.description }}
@@ -41,12 +43,14 @@
 									td.font12.white.center {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
 									td.font12.white.center {{ item.status | status }} 
 										span.font12.white.center (
-										a.font12(ng-click="toggleStatus($index)") {{ !item.status | status }}
+										a.font12(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
 										span )
 									td.font12.center
 										a.font12(ng-click="itemPreview(item._id)") preview
 									td.font12.center
 										a.font12(href="/admin#/editor/{{item._id}}") edit
 									td.font12.center
-										a.font12(ng-click="deleteArticle($index)")
-											i.icon-remove.white.center.link									
+										a.font12(ng-click="deleteArticle(item._id)")
+											i.icon-remove.white.center.link
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")

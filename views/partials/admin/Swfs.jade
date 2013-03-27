@@ -19,6 +19,8 @@
 						#uploadNewSwf							
 							button(ng-click="uploadNewSwf()", ng-disabled="uploading") Upload New SWF Resource
 							input#uploadNewSwfInput(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewSwfResource(this.files[0])", style="display:none;")							
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
 						table.bg-color-green
 							thead
 								tr
@@ -26,24 +28,13 @@
 									th.white.bold.center OnDisk File Name
 									th.white.bold.center Delete
 							tbody
-								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id'")
+								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id' | startFrom:(pagination.swfs.page - 1)*pagination.swfs.total | limitTo:pagination.swfs.total")
 									td.font12.white.center {{ swf.fileName }}
 									td.font12.white.center 
 										a.font12(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
 									td.font12.white.center
 										a.font12(ng-click="deleteSwf(swf)") 
 											i.icon-remove.white.center.link
-											//img(src="/images/recycle_bin_full.png", width="32", height="32", style="cursor:pointer;")
-									//- td {{ item.categories | remove:'all' | categories}}
-									//- td {{ item.preview.type }}
-									//- td {{ showContentType(item) }}
-									//- td {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
-									//- td {{ item.status | status }} 
-									//- 	span (
-									//- 	a(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
-									//- 	span )
-									//- td 
-									//- 	a(ng-click="itemPreview(item._id)") preview
-									//- td 
-									//- 	a(href="/admin#/editor/{{item._id}}") edit
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
 					

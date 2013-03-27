@@ -15,14 +15,30 @@
 								i.icon-clipboard-2.white
 								span.white Article Preview Editor						
 						#closedEditorWrapper
+							#upperForm
+								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
+								input.bg-color-green.white.name(type="text", placeholder="article name", ng-model="editor.data.name", style="width:150px;")																
+								select.bg-color-green.white.type(width="150", style="width:100px;", ng-model="editor.data.preview.type")									
+									option(value="text") text
+									//option(value="video") video
+									option(value="flash") flash
+									option(value="iframe") iframe
+									option(value="image") image
+								select.bg-color-green.white(width="150", style="width:150px;", size="3", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
+								select.bg-color-green.white(width="150", style="width:100px;", ng-model="editor.data.preview.size")									
+									option(value="1x1") 1x1
+									option(value="1x2") 1x2
+									option(value="2x2") 2x2
+									option(value="2x1") 2x1																	
+								select.bg-color-green.white(width="150", style="width:100px;", ng-model="editor.data.preview.link.type")									
+									option(value="none") none
+									option(value="inner") inner
+									option(value="external") external
+								input.bg-color-green.white(type="text", style="width:150px;", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
+								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'")
-									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important")
-								//- #videoPreview(ui-if="editor.data.preview.type == 'video'")
-								//- 	input(type="text", ng-model="editor.tempContent.preview.video.id", placeholder="youtube video id", style="width:300px;")
-								//- 	img(ng-src="{{ editor.tempContent.preview.video.icon }}", width="32", height="32")
-								//- 	.br
-								//- 	button(ng-click="checkVideo('preview')") Check Video
+									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important")								
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
 									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])") 
@@ -38,30 +54,9 @@
 											img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
 											span(ng-click="removeImage('preview', image)", style="cursor:pointer;") X
 											.br 
-											span {{ image.fileName }}							
-							#rightSide
-								input.bg-color-green.white(type="text", placeholder="article name", ng-model="editor.data.name", style="width:150px;")
-								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
-								select.bg-color-green.white(width="150", style="width:150px;", size="5", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
-									//- option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}	
-								select.bg-color-green.white(width="150", style="width:150px;", ng-model="editor.data.preview.type")									
-									option(value="text") text
-									//option(value="video") video
-									option(value="flash") flash
-									option(value="iframe") iframe
-									option(value="image") image
-								select.bg-color-green.white(width="150", style="width:150px;", ng-model="editor.data.preview.size")									
-									option(value="1x1") 1x1
-									option(value="1x2") 1x2
-									option(value="2x2") 2x2
-									option(value="2x1") 2x1																	
-								select.bg-color-green.white(width="150", style="width:150px;", ng-model="editor.data.preview.link.type")									
-									option(value="none") none
-									option(value="inner") inner
-									option(value="external") external
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
-						h3.padding5.bg-color-green(style="position:relative; height:40px;margin-top:10px;")							
+											span {{ image.fileName }}	
+							#rightSide													
+						h3.padding5.bg-color-green(style="position:relative; height:40px;margin-top:10px;", ng-show="editor.data.preview.link.type == 'inner'")							
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
 								span.white Article Content Editor

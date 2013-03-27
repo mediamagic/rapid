@@ -1,5 +1,5 @@
 'user strict';
-angular.module('admin.controllers', ['ngResource', 'ngCookies', 'ui']);
+angular.module('admin.controllers', ['ngResource', 'ngCookies', 'ui', 'ui.bootstrap']);
 
 var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope, $filter, $resource,$location,$window,$routeParams,$cookies){
 	$scope.window = $window
@@ -35,18 +35,37 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		}, null);
 	});
 
+	$scope.pagination = {
+							main: {
+								pages:1,
+					  			page:1,
+								total:10
+							},
+							swfs: {
+								pages:1,
+					  			page:1,
+								total:3
+							}
+	}
+
+	$scope.setPage = function (pageName, page) {
+	    $scope.pagination[pageName].page = page;
+  	};
+
 	$scope.buildArticles = function(cb, content) {
 		
 		if(content) {
 			$scope.content = $filter('orderBy')(content, '-_id');
 			$scope.splitCategories();
 			$scope.category[$scope.filter.category].sort($scope.compare);
+
 			if(cb)
 				cb();
 		} else {
 			$scope.Articles.query({}, function(res) {
 				$scope.content = $filter('orderBy')(res, '-_id');
 				$scope.splitCategories();
+
 				if(cb)
 					cb();
 			});
@@ -76,177 +95,7 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 
 	$scope.filter = {
 		category: 0
-	}
-	
-
-	// $scope.content = [
-	// 					{
-	// 						_id: 111111111111,
-	// 						sidebar: {
-	// 									title:'title1',
-	// 									description: 'description1',
-	// 									readMore: {
-	// 												title:'title',
-	// 												url: 'url'
-	// 									}
-	// 						},							
-	// 						categories: {											
-	// 										business:0
-	// 						},					
-	// 						preview: {
-	// 									type:'text',
-	// 									link:{
-	// 													type:'none',
-	// 													url:'url to the link',
-	// 													text: 'text on mouse over'
-	// 									},
-	// 									content:'this is preview content',
-	// 									size:'1x2',
-	// 									bgColor:'#ffffff'										
-	// 						},
-	// 						content: {
-	// 									type:'text',							
-	// 									content:'this is the content',	
-	// 									bgColor:'#ffffff',										
-	// 						},			
-	// 						dateCreated: new Date(),											
-	// 						status: true
-	// 					},
-	// 					{
-	// 						_id: 22222222222222,
-	// 						sidebar: {
-	// 									title:'title2',
-	// 									description: 'description1',
-	// 									readMore: {
-	// 												title:'title',
-	// 												url: 'url'
-	// 									}
-	// 						},							
-	// 						categories: {
-	// 										family:0,
-	// 										business:1,
-	// 										something:0
-	// 						},					
-	// 						preview: {
-	// 									type:'video',
-	// 									link:{
-	// 													type:'none',
-	// 													url:'url to the link',
-	// 													text: 'text on mouse over'
-	// 									},
-	// 									content:'this is preview content',
-	// 									size:'2x1',
-	// 									bgColor:'#4aa82e'										
-	// 						},
-	// 						content: {
-	// 									type:'video',							
-	// 									content:'this is the content',	
-	// 									bgColor:'#4aa82e',										
-	// 						},			
-	// 						dateCreated: new Date(),											
-	// 						status: false
-	// 					},
-	// 					{
-	// 						_id: 33333333333333,
-	// 						sidebar: {
-	// 									title:'title3',
-	// 									description: 'description1',
-	// 									readMore: {
-	// 												title:'title',
-	// 												url: 'url'
-	// 									}
-	// 						},							
-	// 						categories: {
-	// 										family:1,
-	// 										business:2
-	// 						},					
-	// 						preview: {
-	// 									type:'flash',
-	// 									link:{
-	// 													type:'inner',
-	// 													url:'url to the link',
-	// 													text: 'text on mouse over'
-	// 									},
-	// 									content:'this is preview content',
-	// 									size:'1x1',
-	// 									bgColor:'#ffffff'										
-	// 						},
-	// 						content: {
-	// 									type:'flash',							
-	// 									content:'this is the content',	
-	// 									bgColor:'#ffffff',										
-	// 						},			
-	// 						dateCreated: new Date(),											
-	// 						status: true
-	// 					},
-	// 					{
-	// 						_id: 44444444444444444,
-	// 						sidebar: {
-	// 									title:'title4',
-	// 									description: 'description1',
-	// 									readMore: {
-	// 												title:'title',
-	// 												url: 'url'
-	// 									}
-	// 						},							
-	// 						categories: {
-	// 										family:2,
-	// 										business:3
-
-	// 						},					
-	// 						preview: {
-	// 									type:'iframe',
-	// 									link:{
-	// 													type:'external',
-	// 													url:'url to the link',
-	// 													text: 'text on mouse over'
-	// 									},
-	// 									content:'this is preview content',
-	// 									size:'2x2',
-	// 									bgColor:'#ffffff'										
-	// 						},
-	// 						content: {
-	// 									type:'iframe',							
-	// 									content:'this is the content',	
-	// 									bgColor:'#ffffff',										
-	// 						},			
-	// 						dateCreated: new Date(),											
-	// 						status: true
-	// 					},
-	// 					{
-	// 						_id: 5555555555555555555,
-	// 						sidebar: {
-	// 									title:'title5',
-	// 									description: 'description1',
-	// 									readMore: {
-	// 												title:'title',
-	// 												url: 'url'
-	// 									}
-	// 						},							
-	// 						categories: {
-	// 										family:3,
-	// 										something:1							
-	// 						},					
-	// 						preview: {
-	// 									type:'image',
-	// 									link:{
-	// 													type:'inner',
-	// 													url:'url to the link',
-	// 													text: 'text on mouse over'
-	// 									},
-	// 									content:'this is preview content',
-	// 									size:'1x1',
-	// 									bgColor:'#8c9299'										
-	// 						},
-	// 						content: {
-	// 									type:'image',							
-	// 									content:'this is the content',	
-	// 									bgColor:'#8c9299',										
-	// 						},			
-	// 						dateCreated: new Date(),											
-	// 						status: true
-	// 					}					
-	// ]
+	}	
 
 	$scope.splitCategories = function() {	
 		$scope.category = {};	
@@ -349,17 +198,17 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 			theme : "advanced",
 			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
 
-			width: "700",
-	        height: "400",
+			width: "460",
+	        height: "460",
 			directionality : "rtl",
 
 			//content_css : "custom_content.css"
 
-			// Theme options
-			theme_advanced_buttons1 : "save,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,styleselect,formatselect,fontselect,fontsizeselect",
-			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code,|,insertdate,inserttime,preview,|,forecolor,backcolor",
-			theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,print,|,ltr,rtl,|,fullscreen",
-			theme_advanced_buttons4 : "insertlayer,moveforward,movebackward,absolute,|,styleprops,|,cite,abbr,acronym,del,ins,attribs,|,visualchars,nonbreaking,template,pagebreak,restoredraft,visualblocks",
+			// Theme options			
+			theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
+			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",			
+			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,print,|,ltr,rtl",
+			theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid",
 			theme_advanced_toolbar_location : "top",
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "bottom",
@@ -367,8 +216,18 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		}
 	}	
 
+	$scope.$watch('editor.files.flash.length', function(n,o){
+		if (n!=o && n!=undefined)
+			$scope.pagination.swfs.pages = Math.ceil(n / $scope.pagination.swfs.total);
+	});
+
+	$scope.$watch('content.length', function(n,o){
+		if (n!=o && n!=undefined)
+			$scope.pagination.main.pages = Math.ceil(n / $scope.pagination.main.total);
+	});
+
 	$scope.Files.query({type:'swfs'}, function(res) {
-		$scope.editor.files.flash = res;
+		$scope.editor.files.flash = res;		
 	});
 
 	// function createArticle(i){
@@ -412,14 +271,22 @@ var MainCtrl = ['$scope', function($scope){
 	// 	$scope.shares = resp;
 	// });
 
-	$scope.toggleStatus = function(index) {				
-		var item = $scope.content[index];
-		item.status = !item.status;
+	$scope.toggleStatus = function(id) {				
+		var item = null;
 
-		$scope.Articles.update({id:item._id}, { status:item.status }, function(res) { 
-			console.log(res);
-			$scope.splitCategories();
-		});
+		for(var i in $scope.content) {		
+			if($scope.content[i]._id == id)	{
+				item = $scope.content[i];
+				break;
+			}
+		}
+				
+		if(item) {
+			item.status = !item.status;
+			$scope.Articles.update({id:item._id}, { status:item.status }, function(res) { 				
+				$scope.splitCategories();
+			});
+		}
 	}
 
 	$scope.itemPreview = function(id) {
@@ -430,17 +297,26 @@ var MainCtrl = ['$scope', function($scope){
 	    return new Date(parseInt(id.toString().slice(0,8), 16)*1000);
 	}
 
-	$scope.deleteArticle = function(index) {		
+	$scope.deleteArticle = function(id) {		
 		var confirmText = 'are you sure you want to delete this article ?';
-		var item = $scope.content[index];
+		var item = null;
 
-		if(confirm(confirmText)) {			
-			$scope.Articles.delete({id:item._id}, function(res) {									
-				if(res.error == 0) {					
-					$scope.content.splice($scope.content.indexOf(item), 1);
-					$scope.splitCategories();
-				}
-			});
+		for(var i in $scope.content) {		
+			if($scope.content[i]._id == id)	{
+				item = $scope.content[i];
+				break;
+			}
+		}
+
+		if(item) {
+			if(confirm(confirmText)) {	
+				$scope.Articles.delete({id:item._id}, function(res) {									
+					if(res.error == 0) {					
+						$scope.content.splice($scope.content.indexOf(item), 1);
+						$scope.splitCategories();
+					}
+				});
+			}
 		}
 	}
 }];
@@ -498,12 +374,9 @@ var ListsCtrl = ['$scope', function($scope){
 			}
 		}
 		
-		$scope.Articles.updateList({id:'resort'}, newContent, function(res) { 
-			console.log(res);
+		$scope.Articles.updateList({id:'resort'}, newContent, function(res) { 			
 			$scope.buildArticles(function() { 
-				console.log('inside buildArticles callback')
-				console.log($scope.filter.category);
-				console.log('saved')
+				
 			}, res);
 		});
 	}
