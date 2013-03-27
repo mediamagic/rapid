@@ -27,6 +27,8 @@ var ArticlesSchema = new mongoose.Schema(
 	, categories: 	{ type: Object}
 	, status: 	{ type: Boolean
 				, default: false }
+	, name 		{ type: String
+				, required: true }
 
 });
 
