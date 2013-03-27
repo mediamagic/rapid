@@ -52,16 +52,17 @@ module.exports = function(extendStaticMethods, cb){
 
 	ArticlesSchema.statics.resort = function(data, cb){
 		var functions = {}
+			, _this = this;
 		for (var i in data){
 			var id = i
 				, cat = data[i]
-				, func = createReq(id, cat, this.model('Articles'));
+				, func = createReq(id, cat, _this.model('Articles'));
 			functions[id] = func;
 		}
 		async.parallel(functions, function(err,results){
 			if (err)
 				return cb(err);
-			this.model('Articles').find({},{},{},function(err,doc){
+			_this.model('Articles').find({},{},{},function(err,doc){
 				if (err)
 					return cb(err)
 				return cb(doc);
