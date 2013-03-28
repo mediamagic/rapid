@@ -156,9 +156,20 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 			showLinkUrl: false,
 			colorInput:'#ffffff'
 		},
+		previewDisplay: {
+							width:220,
+							height:220,
+							margin:130,
+							content: {
+								text:'',
+								flash:'',
+								iframe:'',
+								image:''
+							}
+		},
 		defaultTempContent: {
 			preview: {
-						text: '',
+						text: '<p dir="rtl"></p>',
 						video: { 
 									id:'',
 									icon:'images/disabled.png',
@@ -172,7 +183,7 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 						image: []
 					},
 			content: {					
-						text: '',
+						text: '<p dir="rtl"></p>',
 						video: { 
 									id:'',
 									icon:'images/disabled.png',
@@ -200,22 +211,31 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
 
 			width: "460",
-	        height: "460",
-			directionality : "rtl",
+	  		height: "572",
+			//directionality : "rtl",
+
+			theme_advanced_fonts:"Arial=arial,Tahoma=tahoma",
 
 			//content_css : "custom_content.css"
 
 			// Theme options			
 			theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
 			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",			
-			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,print,|,ltr,rtl",
+			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,ltr,rtl",
 			theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid",
+			//theme_advanced_toolbar_location : "external",
 			theme_advanced_toolbar_location : "top",
 			theme_advanced_toolbar_align : "left",
-			theme_advanced_statusbar_location : "bottom",
+			theme_advanced_statusbar_location : "none",
 			theme_advanced_resizing : false
+
+			//onchange_callback:'$scope.tinymceChange'
 		}
 	}	
+
+	// $scope.tinymceChange = function(elem) {
+	// 	console.log('c')
+	// }
 
 	// change input color for preview mode in editor
 	$scope.$watch('editor.data.preview.bgColor', function(n,o){
@@ -226,8 +246,44 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 				} else {
 					$scope.editor.closed.colorInput = '#ffffff';
 				}
+
+				$scope.buildFlash('preview');
 			});
 		}
+	});
+	//
+
+	// change the size of preview display by size
+	$scope.$watch('editor.data.preview.size', function(n,o){
+		if (n!=o && n!=undefined) {
+			switch(n) {
+				case '1x1':
+					$scope.editor.previewDisplay.width = 220;
+					$scope.editor.previewDisplay.height = 220;
+					$scope.editor.previewDisplay.margin = 130;
+				break;
+				case '1x2':
+					$scope.editor.previewDisplay.width = 220;
+					$scope.editor.previewDisplay.height = 460;
+					$scope.editor.previewDisplay.margin = 10;
+				break;
+				case '2x2':
+					$scope.editor.previewDisplay.width = 460;
+					$scope.editor.previewDisplay.height = 460;
+					$scope.editor.previewDisplay.margin = 10;
+				break;
+				case '2x1':
+					$scope.editor.previewDisplay.width = 460;
+					$scope.editor.previewDisplay.height = 220;
+					$scope.editor.previewDisplay.margin = 130;
+				break;
+				default:
+				break;
+			}
+
+			if($scope.editor.data.preview.type == 'flash' && $scope.editor.tempContent.preview.flash.url.length > 0)
+				$scope.buildFlash('preview');	
+		}		
 	});
 	//
 
@@ -244,6 +300,133 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	$scope.Files.query({type:'swfs'}, function(res) {
 		$scope.editor.files.flash = res;		
 	});
+
+	$scope.buildFlash = function(type) {
+		if(type == 'preview') {
+			var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" id="previewFlash">' +
+						'<param name="movie" value="' + $scope.editor.tempContent.preview.flash.url +'" />' + 
+						'<param name="quality" value="high" />' +
+						'<param name="bgcolor" value="' + $scope.editor.data.preview.bgColor + '" />' +
+						'<embed src="' + $scope.editor.tempContent.preview.flash.url +'" quality="high" bgcolor="' + $scope.editor.data.preview.bgColor + '" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
+						'</embed>' +
+						'</object>';
+			$scope.editor.previewDisplay.content.flash = swf;
+		} else if(type == 'content') {
+
+		}
+	}
+
+	$scope.triggerClick = function(div) {		
+		$('#' + div).trigger('click');
+	}
+
+	$scope.uploading = false;
+	$scope.progressBar = '0';
+	$scope.uploadprogress = '';
+
+	// $scope.uploadNewSwfResource = function(file) {
+		
+	// 	$scope.uploading = true;
+	// 	var fd = new FormData();
+	// 	fd.append('fileName', file);
+	// 	fd.append('_csrf', $scope.cookies['csrf.token'])
+		
+	// 	var xhr = new XMLHttpRequest();      
+		
+	// 	var imageType = 'application/x-shockwave-flash';
+	// 	if(!file.type.match(imageType))
+	// 		return alert('only flash (SWF) type allowed!');
+
+	// 	xhr.open("POST", "/api/uploads/swfs" , true);
+
+	// 	xhr.onload = function(e) {			
+	// 		var flash = JSON.parse(this.response);
+
+	// 		$scope.safeApply(function() {				
+	// 			$scope.editor.files.flash.push(flash);
+	// 			$scope.progressBar = '0';
+	// 			$scope.uploadprogress = '';
+	// 			$scope.uploading = false;
+	// 		});
+	// 	}
+
+	// 	xhr.upload.onprogress = function(e) {			
+	// 		$scope.safeApply(function() {
+	// 			if (e.lengthComputable) {
+ //     				$scope.progressBar = Math.ceil(((e.loaded / e.total) * 100));
+ //     				$scope.uploadprogress = $scope.progressBar + '%';     				
+ //     			}
+ //     		});
+	// 	}
+
+	// 	xhr.send(fd);
+	// }
+
+	$scope.uploadNewResource = function(type, fileType, file) {
+
+		$scope.uploading = true;
+
+		var fd = new FormData();
+		fd.append('fileName', file);
+		fd.append('_csrf', $scope.cookies['csrf.token'])
+		
+		var xhr = new XMLHttpRequest();        
+
+		if(fileType == 'image') {
+			var mimeType = /image.*/;				
+			if(!file.type.match(mimeType))
+				return alert('only image type allowed!');
+
+			xhr.open("POST", "/api/uploads/images" , true);
+
+			xhr.onload = function(e) {							
+				var image = {
+					fileName:file.name,
+					hashName:JSON.parse(this.response).hashName
+					//hashName: $scope.host + 'images/imgs/' + JSON.parse(this.response).hashName
+				}
+
+				$scope.safeApply(function() {
+					$scope.editor.tempContent[type].image.push(image);
+					$scope.progressBar = '0';
+					$scope.uploadprogress = '';
+					$scope.uploading = false;
+				});
+			}			
+		} else if(fileType == 'flash') {
+			var mimeType = 'application/x-shockwave-flash';
+			if(!file.type.match(mimeType))
+				return alert('only flash (SWF) type allowed!');
+
+			xhr.open("POST", "/api/uploads/swfs" , true);
+
+			xhr.onload = function(e) {
+				var flash = JSON.parse(this.response);
+
+				$scope.safeApply(function() {				
+					$scope.editor.files.flash.push(flash);
+					$scope.progressBar = '0';
+					$scope.uploadprogress = '';
+					$scope.uploading = false;
+				});
+			}
+		}	
+
+		xhr.upload.onprogress = function(e) {
+			$scope.safeApply(function() {
+				if (e.lengthComputable) {
+     				$scope.progressBar = Math.ceil(((e.loaded / e.total) * 100));
+     				$scope.uploadprogress = $scope.progressBar + '%';     				
+     			}
+     		});
+		}
+
+		xhr.send(fd);
+	}
+
+	$scope.showSelectedSwf = function(type, swf) {
+		$scope.editor.tempContent.preview.flash.data = swf.hashName;
+	}
 
 	// function createArticle(i){
 	// 	 article = { sidebar:  { title:  'title ' + i
@@ -428,67 +611,94 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	});
 	//
 
-	$scope.uploadprogress = '';
+	// // changing the preview display content LIVE
+	// $scope.$watch('editor.data.preview.display', function(n, o) { 		
+	// 	if(n != '' && n != undefined) {
+	// 		//$scope.editor.data.preview.type
+	// 		console.log(n)
+	// 	}			
+	// });
+	// //
+	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 		
+		if(n != '' && n != undefined) {
+			$scope.editor.previewDisplay.content.text = n;
+			//$('#previewDisplay').html(n);
+		}			
+	});	
 
-	$scope.handleFile = function(type, fileType, file) {
+	$scope.$watch('editor.data.preview.type', function(n, o) { 		
+		if(n != '' && n != undefined) {
+			console.log('changing preview type to ' + n)
+		}			
+	});	
 
-		var fd = new FormData();
-		fd.append('fileName', file);
-		fd.append('_csrf', $scope.cookies['csrf.token'])
+	// $scope.handleFile = function(type, fileType, file) {
+
+	// 	var fd = new FormData();
+	// 	fd.append('fileName', file);
+	// 	fd.append('_csrf', $scope.cookies['csrf.token'])
 		
-		var xhr = new XMLHttpRequest();        
+	// 	var xhr = new XMLHttpRequest();        
 
-		if(fileType == 'image') {
-			var imageType = /image.*/;				
-			if(!file.type.match(imageType))
-				return alert('only image type allowed!');
+	// 	if(fileType == 'image') {
+	// 		var imageType = /image.*/;				
+	// 		if(!file.type.match(imageType))
+	// 			return alert('only image type allowed!');
 
-			xhr.open("POST", "/api/uploads/images" , true);
+	// 		xhr.open("POST", "/api/uploads/images" , true);
 
-			xhr.onload = function(e) {							
-				var image = {
-					fileName:file.name,
-					hashName:JSON.parse(this.response).hashName
-					//hashName: $scope.host + 'images/imgs/' + JSON.parse(this.response).hashName
-				}
+	// 		xhr.onload = function(e) {							
+	// 			var image = {
+	// 				fileName:file.name,
+	// 				hashName:JSON.parse(this.response).hashName
+	// 				//hashName: $scope.host + 'images/imgs/' + JSON.parse(this.response).hashName
+	// 			}
 
-				$scope.safeApply(function() {
-					$scope.editor.tempContent[type].image.push(image);
-					$scope.uploadprogress = '';
-				});
-			}			
-		} else if(fileType == 'flash') {
-			var imageType = 'application/x-shockwave-flash';
-			if(!file.type.match(imageType))
-				return alert('only flash (SWF) type allowed!');
+	// 			$scope.safeApply(function() {
+	// 				$scope.editor.tempContent[type].image.push(image);
+	// 				$scope.uploadprogress = '';
+	// 			});
+	// 		}			
+	// 	} else if(fileType == 'flash') {
+	// 		var imageType = 'application/x-shockwave-flash';
+	// 		if(!file.type.match(imageType))
+	// 			return alert('only flash (SWF) type allowed!');
 
-			xhr.open("POST", "/api/uploads/swfs" , true);
+	// 		xhr.open("POST", "/api/uploads/swfs" , true);
 
-			xhr.onload = function(e) {
-				var flash = JSON.parse(this.response);
+	// 		xhr.onload = function(e) {
+	// 			var flash = JSON.parse(this.response);
 
-				$scope.safeApply(function() {
-					$scope.editor.tempContent[type].flash.data = flash.hashName;			
-					$scope.editor.files.flash.push(flash);
-					$scope.uploadprogress = '';
-				});
-			}
-		}	
+	// 			$scope.safeApply(function() {
+	// 				$scope.editor.tempContent[type].flash.data = flash.hashName;			
+	// 				$scope.editor.files.flash.push(flash);
+	// 				$scope.uploadprogress = '';
+	// 			});
+	// 		}
+	// 	}	
 
-		xhr.upload.onprogress = function(e) {
-			$scope.safeApply(function() {
-				 if (e.lengthComputable)
-     				 $scope.uploadprogress = Math.ceil(((e.loaded / e.total) * 100)) + '%';
-     		});
-		}
+	// 	xhr.upload.onprogress = function(e) {
+	// 		$scope.safeApply(function() {
+	// 			 if (e.lengthComputable)
+ //     				 $scope.uploadprogress = Math.ceil(((e.loaded / e.total) * 100)) + '%';
+ //     		});
+	// 	}
 
-		xhr.send(fd);
-	}
+	// 	xhr.send(fd);
+	// }
 
 	$scope.removeImage = function(type, image) {
 		if(confirm('are you sure you want to remove this image ?')) {			
-			var imageIndex = $scope.editor.tempContent[type].image.indexOf(image);
-			$scope.editor.tempContent[type].image.splice(imageIndex, 1);
+			var id = image.hashName.split('.')[0];
+
+			if(id != undefined) {
+				$scope.Files.delete({type:'imgs', id:id}, function(res) {									
+					if(res.error == 0) {					
+						var imageIndex = $scope.editor.tempContent[type].image.indexOf(image);
+						$scope.editor.tempContent[type].image.splice(imageIndex, 1);
+					}
+				});
+			}
 		} else { 
 			return; 
 		}
@@ -664,12 +874,14 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	}
 
 	$scope.$watch("editor.tempContent.preview.flash.data", function(n, o) {				
-		if(n != undefined) {
+		if(n!= o && n != undefined) {
 			$scope.safeApply(function() {
 				$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + n;
+
+				$scope.buildFlash('preview');				
 			});
 		}
-	}, true);
+	}, true);	
 
 	$scope.$watch("editor.tempContent.content.flash.data", function(n, o) {				
 		if(n != undefined) {
@@ -678,6 +890,20 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 			});
 		}
 	}, true);
+
+	$scope.updateIframePreview = function() {
+		if($scope.editor.tempContent.preview.iframe.indexOf('//') != 0 && $scope.editor.tempContent.preview.iframe.indexOf('http'))
+			$scope.editor.tempContent.preview.iframe = 'http://' + $scope.editor.tempContent.preview.iframe;
+		
+		$scope.editor.previewDisplay.content.iframe = '<iframe scrolling="no" src="' + $scope.editor.tempContent.preview.iframe + '" frameborder="0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '"></iframe>';
+	}
+
+	$scope.checkLinked = function() {
+		if($scope.editor.data.preview.link.type == 'none')
+			return "unlinked";
+
+		return "linked";
+	}
 
 	$scope.$on('SETTINGS_LOADED', function(event) {
 		$scope.loadContent();				
@@ -695,10 +921,10 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					}
 				}
 				
-				$scope.safeApply(function() {	
-					$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
-					$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
-				});		
+				// $scope.safeApply(function() {	
+				// 	$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
+				// 	$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
+				// });		
 
 				for(var cat in $scope.editor.data.categories) {
 					$scope.editor.categories.push(cat);
@@ -783,8 +1009,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 }];
 
 var SwfsCtrl = ['$scope', function($scope){
-	$scope.uploading = false;
-
+	
 	// $scope.Files.query({type:'swfs'}, function(res) {
 	// 	$scope.editor.files.flash = res;
 	// });
@@ -816,46 +1041,9 @@ var SwfsCtrl = ['$scope', function($scope){
 		}
 	}
 
-	$scope.uploadNewSwf = function() {
-		$('#uploadNewSwfInput').trigger('click');
-	}
-
-	$scope.uploadNewSwfResource = function(file) {
-		console.log('shoud upload now')
-		$scope.uploading = true;
-		var fd = new FormData();
-		fd.append('fileName', file);
-		fd.append('_csrf', $scope.cookies['csrf.token'])
-		
-		var xhr = new XMLHttpRequest();      
-		
-		var imageType = 'application/x-shockwave-flash';
-		if(!file.type.match(imageType))
-			return alert('only flash (SWF) type allowed!');
-
-		xhr.open("POST", "/api/uploads/swfs" , true);
-
-		xhr.onload = function(e) {			
-			var flash = JSON.parse(this.response);
-
-			$scope.safeApply(function() {				
-				$scope.editor.files.flash.push(flash);
-				$scope.progressBar = '0';
-				$scope.uploadprogress = '';
-				$scope.uploading = false;
-			});
-		}
-
-		xhr.upload.onprogress = function(e) {
-			$scope.safeApply(function() {
-				 if (e.lengthComputable)
-     				 $scope.progressBar = Math.ceil(((e.loaded / e.total) * 100));
-     				$scope.uploadprogress = Math.ceil(((e.loaded / e.total) * 100)) + '%';
-     		});
-		}
-
-		xhr.send(fd);
-	}
+	// $scope.uploadNewSwf = function(div) {		
+	// 	$('#' + div).trigger('click');
+	// }
 }];
 
 // var SettingsCtrl = ['$scope', function($scope){

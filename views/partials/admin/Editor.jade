@@ -10,7 +10,9 @@
 			.grid
 				.row
 					.span4(style="width:100%;")
-						h3.padding5.bg-color-green(style="position:relative;height:40px;")							
+						h3.padding5.bg-color-green.progress-bar(style="position:relative;height:40px;")							
+							.bar.bg-color-blue(style="width:{{ progressBar }}%;")
+							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ uploadprogress }}
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
 								span.white Article Preview Editor						
@@ -42,24 +44,54 @@
 								input.bg-color-green.white.linkUrl(type="text", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
+									//textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
-									input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
-									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])") 
-									span {{ uploadprogress }}
-									select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+									//- input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
+									//- input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])")
+									//span {{ uploadprogress }}
+									button(style="position:relative;margin:0 auto; margin-top:20px;margin-bottom:20px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="uploading") Upload New SWF Resource
+									input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
+									//br
+									//select(width="250", style="position:relative; margin:0 auto; width:250px;display:block;", size="25", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+									ul#previewSwfs.listview
+										li.previewSwf(ng-repeat="swf in editor.files.flash", ng-click="showSelectedSwf('preview', swf)")
+											h2.icon.icon-font
+											.data
+												{{ swf.fileName }}
+												br
+												a(href="{{ host }}/images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
 								#iframePreview(ng-show="editor.data.preview.type == 'iframe'")
-									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="width:300px;")
-								#imagePreview(ng-show="editor.data.preview.type == 'image'")									
-									input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('preview', 'image', this.files[0])") 
-									span {{ uploadprogress }}
-									#previewImages(ui-sortable="{ axis:'x'}", ng-model="editor.tempContent.preview.image")
-										.previewImage(ng-repeat="image in editor.tempContent.preview.image", style="position:relative; float:left; width:100px; height:140px; margin:10px; overflow:hidden; border:solid red 1px")
-											img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
-											span(ng-click="removeImage('preview', image)", style="cursor:pointer;") X
-											.br 
-											span {{ image.fileName }}	
-							#rightSide													
+									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="position:relative; margin:0 auto; margin-top:20px; width:80%; display:block;")
+									button(style="position:relative;margin:0 auto; margin-top:20px;display:block;", ng-click="updateIframePreview()", ng-disabled="editor.tempContent.preview.iframe.length < 10") Update IFrame
+								#imagePreview(ng-show="editor.data.preview.type == 'image'")
+									button(style="position:relative;margin:0 auto; margin-top:20px;margin-bottom:20px;display:block;", ng-click="triggerClick('uploadNewImageInput_preview')", ng-disabled="uploading") Upload New Image
+									input#uploadNewImageInput_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadNewResource('preview', 'image', this.files[0])", style="display:none;")
+									//input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('preview', 'image', this.files[0])") 
+									//span {{ uploadprogress }}
+									//- #previewImages(ui-sortable="{ axis:'x'}", ng-model="editor.tempContent.preview.image")
+									//- 	.previewImage(ng-repeat="image in editor.tempContent.preview.image", style="position:relative; float:left; width:100px; height:140px; margin:10px; overflow:hidden; border:solid red 1px")
+									//- 		img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
+									//- 		span(ng-click="removeImage('preview', image)", style="cursor:pointer;") X
+									//- 		.br 
+									//- 		span {{ image.fileName }}
+									ul#previewImages.listview(ui-sortable="{ axis:'y'}", ng-model="editor.tempContent.preview.image")
+										li.previewImage(ng-repeat="image in editor.tempContent.preview.image")
+											img.icon(ng-src="{{ host }}images/imgs/{{image.hashName}}")
+											.data
+												.removeImage.icon-remove(ng-click="removeImage('preview', image)")
+												.br 
+												span {{ image.fileName }}
+												br
+												a(href="{{ host }}/images/imgs/{{ image.hashName }}", target="_blank") {{ image.hashName }}
+							#rightSide								
+								#previewDisplay(ng-class="checkLinked()", style="width:{{editor.previewDisplay.width}}px;height:{{editor.previewDisplay.height}}px;margin-top:{{editor.previewDisplay.margin}}px;background-color:{{ editor.data.preview.bgColor }};")
+									.original(style="width:{{editor.previewDisplay.width}}px;height:{{editor.previewDisplay.height}}px;", ng-bind-html-unsafe="editor.previewDisplay.content[editor.data.preview.type]")
+									.hover(style="width:{{editor.previewDisplay.width}}px;height:{{editor.previewDisplay.height}}px;")
+										.content
+											.text {{ editor.data.preview.link.text }}
+											br
+											button לחצו כאן									
 						h3.padding5.bg-color-green(style="position:relative; height:40px;margin-top:10px;", ng-show="editor.data.preview.link.type == 'inner'")							
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
