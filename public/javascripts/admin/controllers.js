@@ -136,12 +136,12 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 						},
 						content:'',
 						size:'1x1',
-						bgColor:''										
+						bgColor:'#ffffff'										
 			},
 			content: {
 						type:'text',							
 						content:'',	
-						bgColor:'',										
+						bgColor:'#ffffff',										
 			},		
 		},
 		data: {
@@ -153,7 +153,8 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		closed: {
 			colorPickerClass:'colorPicker_1',
 			showLinkText: false,
-			showLinkUrl: false			
+			showLinkUrl: false,
+			colorInput:'#ffffff'
 		},
 		defaultTempContent: {
 			preview: {
@@ -215,6 +216,20 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 			theme_advanced_resizing : false
 		}
 	}	
+
+	// change input color for preview mode in editor
+	$scope.$watch('editor.data.preview.bgColor', function(n,o){
+		if (n!=o && n!=undefined) {
+			$scope.safeApply(function() {
+				if(n == '#ffffff') {
+					$scope.editor.closed.colorInput = '#000000';
+				} else {
+					$scope.editor.closed.colorInput = '#ffffff';
+				}
+			});
+		}
+	});
+	//
 
 	$scope.$watch('editor.files.flash.length', function(n,o){
 		if (n!=o && n!=undefined)
@@ -525,28 +540,28 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// 	}
 	// }, true);
 
-	var colorPicker = ['#ffffff', '#8c9299', '#4aa82e'];
-	$scope.toggleColor = function(status) {		
-		var currentColor = 0;
+	// var colorPicker = ['#ffffff', '#8c9299', '#4aa82e'];
+	// $scope.toggleColor = function(status) {		
+	// 	var currentColor = 0;
 
-		currentColor = $scope.editor[status].colorPickerClass.split('_')[1];
+	// 	currentColor = $scope.editor[status].colorPickerClass.split('_')[1];
 
-		if(currentColor >= 1 && currentColor <3) {
-			currentColor++;
-		} else {
-			currentColor = 1;
-		}
+	// 	if(currentColor >= 1 && currentColor <3) {
+	// 		currentColor++;
+	// 	} else {
+	// 		currentColor = 1;
+	// 	}
 
-		if(status === 'open') {
-			$scope.editor.data.content.bgColor = colorPicker[currentColor - 1];
-		} else if (status === 'closed') {
-			$scope.editor.data.preview.bgColor = colorPicker[currentColor - 1];
-		}
+	// 	if(status === 'open') {
+	// 		$scope.editor.data.content.bgColor = colorPicker[currentColor - 1];
+	// 	} else if (status === 'closed') {
+	// 		$scope.editor.data.preview.bgColor = colorPicker[currentColor - 1];
+	// 	}
 
-		$scope.safeApply(function() {	
-			$scope.editor[status].colorPickerClass = 'colorPicker_' + currentColor;			
-		});
-	}
+	// 	$scope.safeApply(function() {	
+	// 		$scope.editor[status].colorPickerClass = 'colorPicker_' + currentColor;			
+	// 	});
+	// }
 
 	$scope.saveContent = function() {
 		var newCategories = $scope.editor.categories;

@@ -6,19 +6,22 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 a{color:#ffe821;}
 #wrapper{background:transparent url(../images/main_bg.png) no-repeat top left;height:700px;margin:0 auto;width:1024px;position:relative;}
 #listWrapper li{list-style-type:none;font-size:12;border:1px solid #999;margin-top:5px;cursor:move;}
-#closedEditorWrapper{position:relative;width:940px;height:600px;border:solid red 1px;}#closedEditorWrapper #upperForm{position:relative;width:100%;height:100px;border:solid blue 1px;}#closedEditorWrapper #upperForm .colorPicker{position:absolute;top:20px;left:20px;}
-#closedEditorWrapper #upperForm .name{position:absolute;top:20px;left:100px;}
-#closedEditorWrapper #upperForm .type{position:absolute;top:50px;left:100px;}
-#closedEditorWrapper #leftSide{position:relative;float:left;width:700px;}
-#closedEditorWrapper #rightSide{position:relative;float:right;width:200px;height:415px;border:solid #ccc 1px;}
+#closedEditorWrapper{position:relative;width:940px;height:600px;outline:solid red 1px;}#closedEditorWrapper #upperForm{position:relative;width:480px;height:107px;border-bottom:solid #ccc 1px;border-left:solid #ccc 1px;float:right;}#closedEditorWrapper #upperForm .colorPicker{position:absolute;top:20px;left:20px;}
+#closedEditorWrapper #upperForm .name{position:absolute;top:5px;left:10px;width:225px;}
+#closedEditorWrapper #upperForm .type{position:absolute;top:30px;left:135px;width:100px;}
+#closedEditorWrapper #upperForm .size{position:absolute;top:55px;left:135px;width:100px;}
+#closedEditorWrapper #upperForm .linkType{position:absolute;top:80px;left:135px;width:100px;}
+#closedEditorWrapper #upperForm .linkUrl{position:absolute;top:80px;left:240px;width:235px;}
+#closedEditorWrapper #upperForm .linkTitle{position:absolute;top:55px;left:240px;width:235px;}
+#closedEditorWrapper #upperForm .color{position:absolute;top:30px;left:240px;width:100px;}
+#closedEditorWrapper #upperForm .categories{position:absolute;top:30px;left:10px;width:120px;}
+#closedEditorWrapper #leftSide{position:relative;float:left;width:460px;}
+#closedEditorWrapper #rightSide{position:relative;float:right;width:480px;height:415px;border-left:solid #ccc 1px;border-bottom:solid #ccc 1px;}
 #openEditorWrapper{position:relative;width:940px;height:415px;}#openEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
 #openEditorWrapper #rightSide{position:absolute;top:0px;right:0px;width:200px;height:415px;border:solid #ccc 1px;}
 #uploadNewSwf{text-align:center;}
 #newArticleButton{width:100%;margin-top:10px;text-align:center;}
 .colorPicker{width:60px;height:60px;cursor:pointer;border:solid #ccc 1px;}
-.colorPicker_1{background-color:#ffffff;}
-.colorPicker_2{background-color:#8c9299;}
-.colorPicker_3{background-color:#4aa82e;}
 .font12{font-size:12px;}
 .white{color:#fff;}
 .red{color:#b91d47;}

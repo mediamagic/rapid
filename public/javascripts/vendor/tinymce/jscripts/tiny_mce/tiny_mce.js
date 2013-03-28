@@ -6284,6 +6284,7 @@ tinymce.dom.TreeWalker = function(a, c) {
                             id: b.blocker,
                             style: "position:absolute;",
                             frameBorder: 0,
+                            allowTransparency:"allowTransparency",
                             src: 'javascript:""'
                         });
                         e.setStyle(g, "opacity", 0)

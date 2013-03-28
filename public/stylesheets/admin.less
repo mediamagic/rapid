@@ -73,12 +73,14 @@ a {
 	position: relative;
 	width: 940px;
 	height: 600px;
-	border:solid red 1px;
+	outline:solid red 1px;
 	#upperForm {
 		position: relative;
-		width:100%;
-		height: 100px;
-		border: solid blue 1px;
+		width:480px;
+		height: 107px;
+		border-bottom: solid #ccc 1px;
+		border-left: solid #ccc 1px;
+		float:right;
 		.colorPicker {
 			position: absolute;
 			top:20px;
@@ -86,26 +88,65 @@ a {
 		}
 		.name {
 			position: absolute;
-			top:20px;
-			left: 100px;	
+			top:5px;
+			left: 10px;	
+			width:225px;
 		}
 		.type {
 			position: absolute;
-			top:50px;
-			left: 100px;	
+			top:30px;
+			left: 135px;	
+			width: 100px;
+		}
+		.size {
+			position: absolute;
+			top:55px;
+			left: 135px;	
+			width: 100px;
+		}		
+		.linkType {
+			position: absolute;
+			top:80px;
+			left: 135px;	
+			width: 100px;
+		}
+		.linkUrl {
+			position: absolute;
+			top:80px;
+			left: 240px;	
+			width: 235px;
+		}
+		.linkTitle {
+			position: absolute;
+			top:55px;
+			left: 240px;	
+			width: 235px;
+		}
+		.color {
+			position: absolute;
+			top:30px;
+			left: 240px;	
+			width: 100px;
+		}
+		.categories {
+			position: absolute;
+			top:30px;
+			left: 10px;
+			width:120px;
 		}
 	}
 	#leftSide {
 		position: relative;
 		float:left;
-		width:700px;				
+		width:460px;				
 	}
 	#rightSide {
 		position: relative;
 		float:right;
-		width:200px;
+		width:480px;
 		height: 415px;
-		border: solid #ccc 1px;
+		border-left: solid #ccc 1px;
+		border-bottom: solid #ccc 1px;
 	}
 }
 
@@ -146,7 +187,7 @@ a {
 	border: solid #ccc 1px;
 }
 
-.colorPicker_1 { // white
+/*.colorPicker_1 { // white
 	background-color: #ffffff;
 }
 
@@ -156,7 +197,7 @@ a {
 
 .colorPicker_3 { // green
 	background-color: #4aa82e;
-}
+}*/
 
 .font12 {
 	font-size:12px;

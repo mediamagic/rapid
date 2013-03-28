@@ -16,29 +16,33 @@
 								span.white Article Preview Editor						
 						#closedEditorWrapper
 							#upperForm
-								.colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
-								input.bg-color-green.white.name(type="text", placeholder="article name", ng-model="editor.data.name", style="width:150px;")																
-								select.bg-color-green.white.type(width="150", style="width:100px;", ng-model="editor.data.preview.type")									
+								//- .colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
+								input.bg-color-green.white.name(type="text", placeholder="article name", ng-model="editor.data.name")																
+								select.bg-color-green.white.type(ng-model="editor.data.preview.type")									
 									option(value="text") text
 									//option(value="video") video
 									option(value="flash") flash
 									option(value="iframe") iframe
 									option(value="image") image
-								select.bg-color-green.white(width="150", style="width:150px;", size="3", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
-								select.bg-color-green.white(width="150", style="width:100px;", ng-model="editor.data.preview.size")									
+								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
+								select.bg-color-green.white.size(ng-model="editor.data.preview.size")									
 									option(value="1x1") 1x1
 									option(value="1x2") 1x2
 									option(value="2x2") 2x2
 									option(value="2x1") 2x1																	
-								select.bg-color-green.white(width="150", style="width:100px;", ng-model="editor.data.preview.link.type")									
+								select.bg-color-green.white.linkType(ng-model="editor.data.preview.link.type")									
 									option(value="none") none
 									option(value="inner") inner
 									option(value="external") external
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
+								select.color(style="background-color:{{ editor.data.preview.bgColor }};color:{{ editor.closed.colorInput }};", ng-model="editor.data.preview.bgColor")									
+									option(style="background-color:#ffffff;color:#000;", value="#ffffff") white
+									option(style="background-color:#8c9299;;color:#fff;", value="#8c9299") grey
+									option(style="background-color:#4aa82e;;color:#fff;", value="#4aa82e") green
+								input.bg-color-green.white.linkTitle(type="text", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
+								input.bg-color-green.white.linkUrl(type="text", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
 							#leftSide
-								#textPreview(ui-if="editor.data.preview.type == 'text'")
-									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important")								
+								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
+									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
 									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])") 
