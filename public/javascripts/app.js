@@ -38,16 +38,37 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
   }
 })
 
-.directive('isoItem', function() {
+.directive('isoItem', ['$compile', function(compile) {
     return {
-        priority: 0,
+        priority: 100,
         restrict: 'A',
         link: function(scope, elm, attr) {
             var itemIndex   = scope.$index
                 , article   = scope.articles[itemIndex]
                 , preview   = elm.children('.preview')
-            article.index = scope.$index;
-            createPreview(preview, article);
+            article.index = itemIndex;
+            var element = createPreview(preview, article);
+            compile(element.contents())(scope);
+        }
+    }
+}])
+
+.directive('isoGallery', function(){
+    return {
+        priority: 0,
+        restrict: 'A',
+        link: function(scope, elm, attr) {
+            setTimeout(function(){
+                var options = JSON.parse(elm.attr('iso-gallery'));
+                elm.slidesjs({
+                    width: parseInt(options.width),
+                    height: parseInt(options.height),
+                    navigation: {active: false},
+                    play: {
+                        auto: true
+                    }
+                })
+            },100);
         }
     }
 })
@@ -72,6 +93,20 @@ function createPreview(elm, obj){
         case 'iframe':
             break;
         case 'image':
+            var w   = $('<div></div>')
+                , c = obj.preview.content
+                , d = obj.preview.size.split('x')
+                , dim = { width:  d[0]*220 + ((d[0]-1)*20)
+                        , height: d[1]*220 + ((d[1]-1)*20) }
+            if (c.length > 1)
+                w.attr('iso-gallery', JSON.stringify(dim))
+            for(var i=0;i<c.length;i++){
+                var img = $('<img />');
+                img
+                    .attr('src', c[i])
+                    .appendTo(w);
+            }
+            html = w;
             break;
         case 'text':
         default:
@@ -99,6 +134,7 @@ function createPreview(elm, obj){
         })
         .parent()
         .addClass('preview')
+    return elm;
 }
 
 function createContent(obj){

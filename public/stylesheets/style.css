@@ -34,7 +34,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .article.preview .preview{margin-bottom:20px;}.article.preview .preview p{padding:0;margin:0;}
 .article.preview.disabled .disabled{display:block;position:absolute;top:0;left:0;background:white;opacity:0.5;}
 .article.preview.enabled .disabled{display:none;}
-.article.preview.linked{cursor:pointer;}.article.preview.linked .hover{position:absolute;top:0;left:0;background:black;opacity:0.5;display:none;}
+.article.preview.linked{cursor:pointer;}.article.preview.linked .hover{position:absolute;top:0;left:0;background:black;opacity:0.8;display:none;z-index:2000;}.article.preview.linked .hover .hovercontent{color:white;height:100%;width:100%;opacity:1;}
 .article.preview.linked .mobile{position:absolute;bottom:20px;left:0px;height:48px;border:#4aa82e solid 1px;background:#ffffff url(../images/mobile_link.png) top left no-repeat;}.article.preview.linked .mobile .text{height:28px;position:absolute;right:0;color:#4aa82e;direction:rtl;line-height:28px;padding:10px;}
 .article.preview.linked:hover .hover{display:block;}
 .article.preview.unlinked{cursor:default;}.article.preview.unlinked .hover{display:none !important;}
@@ -45,6 +45,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .article.content .content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article.content .content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
 .article.content .mobile{display:none !important;}
 .article.content .hover{display:none !important;}
+ul.slidesjs-pagination{direction:rtl;position:absolute;bottom:30px;right:10px;margin:0;padding:0;z-index:100;}ul.slidesjs-pagination li{list-style-type:none;display:inline-block;width:10px;height:10px;margin:0 0 0 3px;}ul.slidesjs-pagination li a{display:block;width:10px;height:0px;background:transparent url(../images/sprites.png) no-repeat 0px 0px;overflow:hidden;padding-top:10px;}ul.slidesjs-pagination li a.active{background:transparent url(../images/sprites.png) no-repeat -14px 0px;}
 .isotope-item{z-index:2;}
 .isotope-hidden.isotope-item{pointer-events:none;z-index:1;}
 .isotope,.isotope .isotope-item{-webkit-transition-duration:0.8s;-moz-transition-duration:0.8s;-ms-transition-duration:0.8s;-o-transition-duration:0.8s;transition-duration:0.8s;}

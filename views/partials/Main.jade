@@ -3,7 +3,8 @@
 		.article(ng-repeat="article in articles", rel="{{article.categories}}", iso-item, id="item_{{$index}}", ng-class="getCategory($index)")
 			.disabled
 			.mask
-			.hover.hidden-phone.hidden-tablet.bind {{article.preview.link.text}}
+			.hover.hidden-phone.hidden-tablet.bind
+				.hovercontent {{article.preview.link.text}}
 			.mobile.hidden-desktop.bind 
 				.text mobile only
 			.preview(class="size{{article.preview.size}}")
