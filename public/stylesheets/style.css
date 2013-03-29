@@ -8,7 +8,6 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 #header #nav{max-width:940px;min-width:450px;min-height:171px;margin:0 auto;background:transparent url(../images/nav_logo.png) no-repeat top right;padding:0;}#header #nav #title{display:block;font-size:25px;color:white;position:relative;top:100px;font-weight:bold;text-align:center;}
 #header #nav ul{position:relative;top:105px;max-width:650px;min-width:450px;padding:0;margin:0 auto;}#header #nav ul li{list-style-type:none;float:right;}
 #wrapper{margin:191px auto 0 auto;max-width:1020px;position:relative;z-index:1;padding-bottom:48px;}
-#footer{position:relative;margin-top:-48px;height:48px;}
 #articles{max-width:940px;min-width:450px;margin:0 auto;}
 .article .hover{display:none;}
 .article .disabled{display:none;}
@@ -49,6 +48,9 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .article.content .content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article.content .content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
 .article.content .mobile{display:none !important;}
 .article.content .hover{display:none !important;}
+#footer{position:relative;margin-top:-48px;height:48px;}#footer .footer{width:940px;margin:0 auto;}#footer .footer .links{height:48px;}#footer .footer .links ul{background:transparent url(../images/brand.png) no-repeat left center;clear:both;margin:10px auto 0;padding:0;display:block;height:48px;width:940px;text-align:center;direction:rtl;line-height:48px;}#footer .footer .links ul li{display:inline-block;margin:0 0 0 10px;height:19px;padding:3px 20px 3px 0;line-height:19px;direction:rtl;background:transparent url(../images/footer_bullet.png) no-repeat center right;}#footer .footer .links ul li:last-child a{border:none;}
+#footer .footer .links ul li a{color:black;text-decoration:none;display:block;height:19px;line-height:19px;border-left:black solid 1px;padding:0 0 0 10px;cursor:pointer;}#footer .footer .links ul li a:hover{color:#ccc;}
+#footer .footer .links ul li a:visited{color:black;}
 ul.slidesjs-pagination{direction:rtl;position:absolute;bottom:30px;right:10px;margin:0;padding:0;z-index:100;}ul.slidesjs-pagination li{list-style-type:none;display:inline-block;width:10px;height:10px;margin:0 0 0 3px;}ul.slidesjs-pagination li a{display:block;width:10px;height:0px;background:transparent url(../images/sprites.png) no-repeat 0px 0px;overflow:hidden;padding-top:10px;}ul.slidesjs-pagination li a.active{background:transparent url(../images/sprites.png) no-repeat -14px 0px;}
 .isotope-item{z-index:2;}
 .isotope-hidden.isotope-item{pointer-events:none;z-index:1;}
