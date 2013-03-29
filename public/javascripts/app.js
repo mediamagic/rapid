@@ -90,7 +90,7 @@ function createPreview(elm, obj){
         , d = obj.preview.size.split('x')
         , dim = { width:  d[0]*220 + ((d[0]-1)*20)
                 , height: d[1]*220 + ((d[1]-1)*20) }
-        , content = (obj.preview.link != 'none') ? createContent(obj) : ''
+        , content = (obj.preview.link.type != 'none') ? createContent(obj) : ''
     switch(obj.preview.type) {
         case 'flash':
             var w = $('<div></div>')
@@ -135,19 +135,24 @@ function createPreview(elm, obj){
         .css('background', obj.preview.bgColor)
         .siblings('.bind')
         .bind('click', function(){
-            $('.close').click()
-            elm
-                .hide()
-                .parent()
-                .removeClass('preview')
-                .addClass('content')
-                .append(content.show())
-                .parent()
-                .isotope('reLayout', function(){
-                    $("html, body")
-                        .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
-                });
-                $('.article.preview').addClass('masked');
+            if (obj.preview.link.type == 'inner') {
+                $('.close').click()
+                elm
+                    .hide()
+                    .parent()
+                    .removeClass('preview')
+                    .addClass('content')
+                    .append(content.show())
+                    .parent()
+                    .isotope('reLayout', function(){
+                        $("html, body")
+                            .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
+                    });
+                    $('.article.preview').addClass('masked');
+            } else {
+                var win=window.open(obj.preview.link.url, '_blank');
+                win.focus();
+            }
         })
         .parent()
         .addClass('preview')
