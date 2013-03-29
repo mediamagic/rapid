@@ -120,7 +120,7 @@ function createPreview(elm, obj){
             for(var i=0;i<c.length;i++){
                 var img = $('<img />');
                 img
-                    .attr('src', '/images/imgs/'+c[i])
+                    .attr('src', '/images/imgs/'+c[i].hashName)
                     .appendTo(w);
             }
             html = w;
