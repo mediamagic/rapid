@@ -1,7 +1,8 @@
 html{height:100%;}
-body{background:transparent;font:14px "Lucida Grande",Helvetica,Arial,sans-serif;margin:0;padding:0;height:100%;}
+body{background:transparent;font:14px "alfi regular";margin:0;padding:0;height:100%;}
 .footer,.push{height:48px;}
 #footer{background:url(../images/footer_bg.png) repeat-x;}
+*{font:14px "alfi regular";}
 h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .clr{clear:both;}
 #header{position:fixed;top:0;min-height:171px;width:100%;z-index:2;background:white;outline:black solid 1px;background:transparent url(../images/nav_bg.png) repeat-x;}
@@ -58,3 +59,4 @@ ul.slidesjs-pagination{direction:rtl;position:absolute;bottom:30px;right:10px;ma
 .isotope{-webkit-transition-property:height, width;-moz-transition-property:height, width;-ms-transition-property:height, width;-o-transition-property:height, width;transition-property:height, width;}
 .isotope .isotope-item{-webkit-transition-property:-webkit-transform,opacity;-moz-transition-property:-moz-transform,opacity;-ms-transition-property:-ms-transform,opacity;-o-transition-property:-o-transform,opacity;transition-property:transform, opacity;}
 .isotope.no-transition,.isotope.no-transition .isotope-item,.isotope .isotope-item.no-transition{-webkit-transition-duration:0s;-moz-transition-duration:0s;-ms-transition-duration:0s;-o-transition-duration:0s;transition-duration:0s;}
+@font-face{font-family:'alfi regular';src:url('../fonts/alfiregularwebfont.eot');src:local('alfi regular'),url('../fonts/alfiregularwebfont.ttf') format('truetype'),url('../fonts/alfiregularwebfont.svg#font') format('svg');}@font-face{font-family:'alfi bold';src:url('../fonts/alfiboldwebfont.eot');src:local('alfi bold'),url('../fonts/alfiboldwebfont.ttf') format('truetype'),url('../fonts/alfiboldwebfont.svg#font') format('svg');}
