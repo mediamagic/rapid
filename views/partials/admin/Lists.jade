@@ -14,12 +14,30 @@
 							.a(style="position:absolute;left:5px;top:15px;")
 								i.icon-list.white
 								span.white Lists Editor
-						select.bg-color-green.white(ng-model="filter.category")
-							option(value="0", disabled) Select Category
-							option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}						
-						ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filter.category]")
-							//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.name}}
-							li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filter.category]") {{ item.name }}
+							select.bg-color-green.white(ng-model="filter.category", style="position:absolute; top:15px; right:5px;")
+								option(value="0", disabled) Select Category
+								option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}
+						#listsPreviewWrapper(ui-if="categoriesLoaded")							
+							#listsIsotop(ui-isotope, options='{"itemSelector":".listItem", "animationEngine":"best-available", "masonry": { "columnWidth": 150, "gutterWidth": 5} }')
+								.listItem(ng-repeat="item in category[filter.category]", rel="{{item.categories}}", id="item_{{item._id}}", ng-class="getCategory($index)")
+									.name {{ item.name }}
+									.iconWrapper
+										h1.icon(ng-class="getListsItemIcon(item)")
+
+								.clear
+						//- ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filter.category]")
+						//- 	//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.name}}
+						//- 	li.itemInList.bg-color-green.white(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}", style="width:200px;", ng-repeat="item in category[filter.category]") {{ item.name }}
+
+						ul#listWrapper.listview(ui-sortable="sortableOptions", ng-model="category[filter.category]")
+							li.itemInList.bg-color-green(ng-repeat="item in category[filter.category]")
+								.move(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}")
+								h2.icon.white(ng-class="getListsItemIcon(item)")
+								.data
+									span {{ item.name }}
+									br
+									span(style="color:#000;") {{ item.sidebar.title }}
+
 						br	
 						button(ng-click="previewNewList()") Preview
 						button(ng-click="saveLists()", ng-disabled="showListsSaveButton") Save	
