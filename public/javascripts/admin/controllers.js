@@ -1,7 +1,6 @@
 'user strict';
 angular.module('admin.controllers', ['ngResource', 'ngCookies', 'ui', 'ui.bootstrap']);
-
-var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope, $filter, $resource,$location,$window,$routeParams,$cookies){
+var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope, $compile, $filter, $resource,$location,$window,$routeParams,$cookies){
 	$scope.window = $window
 	, $scope.showMenu =true
 	, $scope.Settings = $resource('/resources/settings', {_csrf: $cookies['csrf.token']}, {update: {method: 'PUT'}})
@@ -24,6 +23,11 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 	$scope.category = {};
 
 	$scope.settingsLoaded = false;
+	$scope.categoriesLoaded = false;
+
+	$scope.filter = {
+		category: 0
+	}
 
 	$scope.Settings.get({}, function(settings){
 		$scope.settings = settings
@@ -91,10 +95,6 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		if (a > b)
 			return 1;
 		return 0;
-	}
-
-	$scope.filter = {
-		category: 0
 	}	
 
 	$scope.splitCategories = function() {	
@@ -110,8 +110,10 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 					newArr.push(arr[i]);
 			}	
 
-			$scope.category[$scope.categories[cat]] = newArr;
+			$scope.category[$scope.categories[cat]] = newArr;			
 		}
+
+		$scope.categoriesLoaded = true;
 	}
 
 	$scope.editor = {
@@ -283,6 +285,9 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 
 			if($scope.editor.data.preview.type == 'flash' && $scope.editor.tempContent.preview.flash.url.length > 0)
 				$scope.buildFlash('preview');	
+
+			if($scope.editor.data.preview.type == 'image' && $scope.editor.tempContent.preview.image.length > 0)
+				$scope.buildGallery('preview');	
 		}		
 	});
 	//
@@ -314,6 +319,23 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 		} else if(type == 'content') {
 
 		}
+	}
+
+	$scope.buildGallery = function(type) {
+		var wrapper = angular.element('<div></div>');
+		if($scope.editor.tempContent.preview.image.length > 1) 
+			wrapper.attr('iso-gallery', '{ "width":' + $scope.editor.previewDisplay.width + ', "height":' + $scope.editor.previewDisplay.height + ' }');
+		
+		for(var image in $scope.editor.tempContent.preview.image) {
+			var img = angular.element('<img />');
+			img.attr('src', $scope.host + '/images/imgs/' + $scope.editor.tempContent.preview.image[image].hashName);
+			img.attr('width', $scope.editor.previewDisplay.width);
+			img.attr('height', $scope.editor.previewDisplay.height);
+			img.appendTo(wrapper);
+		}
+					
+		$scope.editor.previewDisplay.content.image = wrapper;			
+		$compile($scope.editor.previewDisplay.content.image)($scope);	
 	}
 
 	$scope.triggerClick = function(div) {		
@@ -411,6 +433,14 @@ var GlobalCtrl = ['$scope', '$filter', '$resource', '$location', '$window', '$ro
 				});
 			}
 		}	
+
+		xhr.onerror = function(e) {
+			$scope.safeApply(function() {									
+				$scope.progressBar = '0';
+				$scope.uploadprogress = '';
+				$scope.uploading = false;
+			});
+		}
 
 		xhr.upload.onprogress = function(e) {
 			$scope.safeApply(function() {
@@ -552,6 +582,7 @@ var ListsCtrl = ['$scope', function($scope){
 	
 	$scope.previewNewList = function() {
 		$scope.showListsSaveButton = false;
+		//$('#listsIsotop').isotope('reloadItems');
 	}
 
 	$scope.saveLists = function() {
@@ -582,6 +613,36 @@ var ListsCtrl = ['$scope', function($scope){
 	// $scope.$watch("category['family']", function(n, o) {
 	// 	console.log('change')
 	// }, true);
+
+	$scope.getListsItemIcon = function(item) {
+		var classes = [];
+		switch(item.preview.type) {
+			case 'text':
+				classes.push('icon-paragraph-right');
+			break;
+			case 'iframe':
+				classes.push('icon-new-tab');
+			break;
+			case 'flash':
+				classes.push('icon-font');
+			break;			
+			case 'image':
+				classes.push('icon-pictures');
+			break;
+		}
+
+		return classes;
+	}
+
+	$scope.getCategory = function(index){
+		var item 	= $scope.category[$scope.filter.category][index]
+			, arr 	= []
+			, cat = $scope.filter.category
+		arr.push('size'+item.preview.size);
+		arr.push( (item.categories[cat] > $scope.category[$scope.filter.category].length) ? 'disabled' : 'enabled');
+		arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
+		return arr;
+	}
 }];
 
 var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
@@ -620,14 +681,19 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// });
 	// //
 	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 		
-		if(n != '' && n != undefined) {
+		if(n != o && n != '' && n != undefined) {
 			$scope.editor.previewDisplay.content.text = n;
 			//$('#previewDisplay').html(n);
 		}			
-	});	
+	});
+
+	$scope.$watch('editor.tempContent.preview.image', function(n, o) { 		
+		if(n != o && n != '' && n != undefined)			
+			$scope.buildGallery('preview');							
+	}, true);	
 
 	$scope.$watch('editor.data.preview.type', function(n, o) { 		
-		if(n != '' && n != undefined) {
+		if(n != o && n != '' && n != undefined) {
 			console.log('changing preview type to ' + n)
 		}			
 	});	
@@ -773,7 +839,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// 	});
 	// }
 
+	$scope.savingArticle = false;
+
 	$scope.saveContent = function() {
+		$scope.savingArticle = true;
+
 		var newCategories = $scope.editor.categories;
 		var oldCategories = $scope.editor.data.categories;
 
@@ -859,6 +929,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					if($scope.content[item]._id == id) {
 						$scope.content[item] = res;
 						$scope.splitCategories();
+						$scope.savingArticle = false;
 						break;
 					}
 				}
@@ -868,6 +939,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				if(res._id != undefined) {
 					$scope.content.unshift(res);
 					$scope.splitCategories();
+					$scope.savingArticle = false;
 				}		
 			});
 		}

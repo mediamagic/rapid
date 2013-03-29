@@ -55,7 +55,7 @@
 									//br
 									//select(width="250", style="position:relative; margin:0 auto; width:250px;display:block;", size="25", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
 									ul#previewSwfs.listview
-										li.previewSwf(ng-repeat="swf in editor.files.flash", ng-click="showSelectedSwf('preview', swf)")
+										li.previewSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.preview.flash.data == swf.hashName}", ng-click="showSelectedSwf('preview', swf)")
 											h2.icon.icon-font
 											.data
 												{{ swf.fileName }}
@@ -76,9 +76,10 @@
 									//- 		.br 
 									//- 		span {{ image.fileName }}
 									ul#previewImages.listview(ui-sortable="{ axis:'y'}", ng-model="editor.tempContent.preview.image")
-										li.previewImage(ng-repeat="image in editor.tempContent.preview.image")
+										li.previewImage.bg-color-green(ng-repeat="image in editor.tempContent.preview.image")
 											img.icon(ng-src="{{ host }}images/imgs/{{image.hashName}}")
 											.data
+												.move(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}")
 												.removeImage.icon-remove(ng-click="removeImage('preview', image)")
 												.br 
 												span {{ image.fileName }}
@@ -134,7 +135,7 @@
 								textarea.bg-color-green.white(rows="5", cols="80", width="150", style="width:150px !important", placeholder="description", ng-model="editor.data.sidebar.description")
 								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.sidebar.readMore.url")
 								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url title", ng-model="editor.data.sidebar.readMore.title")	
-					button(ng-click="saveContent()") {{ articleButtonMode }}
+					button(ng-click="saveContent()", ng-disabled="savingArticle") {{ articleButtonMode }}
 					pre(ng-bind="editor.data | json")
 					//pre(ng-bind="editor.categories | json")
 					//pre(ng-bind="editor.tempContent.preview.image | json")

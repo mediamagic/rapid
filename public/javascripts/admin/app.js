@@ -72,7 +72,76 @@ filter('contentType', function() {
         start = +start; //parse to int
         return input.slice(start);
     }
+}).directive('isoGallery', function(){
+    return {
+        priority: 0,
+        restrict: 'A',
+        link: function(scope, elm, attr) {          
+            setTimeout(function(){
+                var options = JSON.parse(elm.attr('iso-gallery'));
+                elm.slidesjs({
+                    width: parseInt(options.width),
+                    height: parseInt(options.height),
+                    navigation: {active: false},
+                    play: {
+                        auto: true
+                    }
+                })
+            },100);
+        }
+    }
+}).directive('uiIsotope', function() {
+ return {
+    priority: 0,
+    restrict: 'A',    
+    link: function(scope, elm, attr) {        
+      
+      var opts = JSON.parse(attr.options)
+      opts.getSortData = {};           
+      
+      scope.$watch('category[filter.category]',function(n,o){           
+        if (n!=o && n != undefined && scope.filter.category != 0) {
+            createIsotope(opts, scope.filter.category, elm, function() {
+              elm.isotope('reloadItems').isotope({sortBy:n});
+            });
+            
+        }
+      }, true);
+      // scope.$watch('content',function(n,o){        
+      //   if (n!=o && n != undefined)
+      //     elm.isotope('reloadItems');
+      // });
+      scope.$watch('filter.category', function(n,o){ 
+        if (n!=o && n != undefined) {
+            createIsotope(opts, n, elm, null);       
+        }
+      });
+    }
+  }
 });
+
+var createIsotope = function(opts, category, elm, cb) {
+  opts.getSortData[category] = createOrderFn(category);
+            
+  setTimeout(function(){
+    // if(elm.hasClass('isotope'))
+    //    elm.isotope('destroy');
+    if(elm.hasClass('isotope')) {
+      elm
+        .isotope('reloadItems')      
+        .isotope({sortBy:category}); 
+    } else {
+      elm      
+        .isotope(opts)
+        .isotope('reloadItems')      
+        .isotope({sortBy:category});  
+    }
+    
+
+    if(cb)
+      cb();
+  },100);
+}
 
 angular.module('ui.directives').directive('uiSortable', [
 'ui.config', function(uiConfig) {
@@ -179,3 +248,13 @@ angular.module('ui.directives').directive('uiSortable', [
 //     }
 //   };
 // }]);
+
+function createOrderFn(cat){
+  var c = cat;
+  return function(elm){      
+  //console.log($(elm).attr('rel'))  
+    var rel   = $(elm).attr('rel')
+      , tmp =  JSON.parse(rel)
+    return parseInt(tmp[c]);
+  }
+}
