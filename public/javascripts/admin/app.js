@@ -93,32 +93,65 @@ filter('contentType', function() {
 }).directive('uiIsotope', function() {
  return {
     priority: 0,
-    restrict: 'A',    
-    link: function(scope, elm, attr) {        
-      
+    restrict: 'A',
+    link: function(scope, elm, attr) {
+
       var opts = JSON.parse(attr.options)
-      opts.getSortData = {};           
-      
-      scope.$watch('category[filter.category]',function(n,o){           
-        if (n!=o && n != undefined && scope.filter.category != 0) {
-            createIsotope(opts, scope.filter.category, elm, function() {
-              elm.isotope('reloadItems').isotope({sortBy:n});
-            });
-            
-        }
-      }, true);
-      // scope.$watch('content',function(n,o){        
-      //   if (n!=o && n != undefined)
-      //     elm.isotope('reloadItems');
-      // });
-      scope.$watch('filter.category', function(n,o){ 
+      opts.getSortData = {}
+      for (var cat in scope.settings.categories) {
+        var c   = scope.settings.categories[cat]
+        opts.getSortData[c] = createOrderFn(c);
+      }
+      setTimeout(function(){
+        elm
+                .isotope(opts)
+                .isotope('reloadItems')
+                .isotope({sortBy:'all'});
+      },100)
+      scope.$watch('isotopeContent',function(n,o){
+        console.log(n)
         if (n!=o && n != undefined) {
-            createIsotope(opts, n, elm, null);       
+          elm.isotope('reloadItems')
+          .isotope({sortBy:scope.filter.category});
         }
-      });
+      }, true)
+      scope.$watch('filter.category', function(n,o){
+        console.log(n)
+        if (n!=o && n != undefined) 
+          elm.isotope({sortBy:n});
+      }, true)
     }
   }
-});
+ });
+//.directive('uiIsotope', function() {
+//  return {
+//     priority: 0,
+//     restrict: 'A',    
+//     link: function(scope, elm, attr) {        
+      
+//       var opts = JSON.parse(attr.options)
+//       opts.getSortData = {};           
+      
+//       scope.$watch('category[filter.category]',function(n,o){           
+//         if (n!=o && n != undefined && scope.filter.category != 0) {
+//             createIsotope(opts, scope.filter.category, elm, function() {
+//               elm.isotope('reloadItems').isotope({sortBy:n});
+//             });
+            
+//         }
+//       }, true);
+//       // scope.$watch('content',function(n,o){        
+//       //   if (n!=o && n != undefined)
+//       //     elm.isotope('reloadItems');
+//       // });
+//       scope.$watch('filter.category', function(n,o){ 
+//         if (n!=o && n != undefined) {
+//             createIsotope(opts, n, elm, null);       
+//         }
+//       });
+//     }
+//   }
+// });
 
 var createIsotope = function(opts, category, elm, cb) {
   opts.getSortData[category] = createOrderFn(category);

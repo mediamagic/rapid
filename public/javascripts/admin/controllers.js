@@ -19,6 +19,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	$scope.host = $scope.location.$$protocol + '://' + $scope.location.$$host + ($scope.location.$$port == 80 ? '' : ':' + $scope.location.$$port) + '/';
 
 	$scope.content = [];
+	$scope.isotopeContent = [];	
 	$scope.categories = [];
 	$scope.category = {};
 
@@ -33,7 +34,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		$scope.settings = settings
 		$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
 
-		$scope.buildArticles(function() {
+		$scope.buildArticles(function() {			
 			$scope.settingsLoaded = true;
 			$scope.$broadcast('SETTINGS_LOADED');
 		}, null);
@@ -60,6 +61,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		
 		if(content) {
 			$scope.content = $filter('orderBy')(content, '-_id');
+			$scope.isotopeContent = angular.copy($scope.content);
 			$scope.splitCategories();
 			$scope.category[$scope.filter.category].sort($scope.compare);
 
@@ -68,6 +70,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		} else {
 			$scope.Articles.query({}, function(res) {
 				$scope.content = $filter('orderBy')(res, '-_id');
+				$scope.isotopeContent = angular.copy($scope.content);
 				$scope.splitCategories();
 
 				if(cb)
@@ -603,11 +606,28 @@ var ListsCtrl = ['$scope', function($scope){
 			}
 		}
 		
-		$scope.Articles.updateList({id:'resort'}, newContent, function(res) { 			
-			$scope.buildArticles(function() { 
+		// $scope.Articles.updateList({id:'resort'}, newContent, function(res) { 			
+		// 	$scope.buildArticles(function() { 
 				
-			}, res);
-		});
+		// 	}, res);
+		// });
+		
+		for(var id in newContent) {
+			var index = getIndexIfObjWithOwnAttr($scope.content, '_id', id);
+			$scope.isotopeContent[index].categories = newContent[id];
+			console.log($scope.isotopeContent[index].categories);
+			console.log(newContent[id]);
+			break;
+		}		
+	}
+
+	var getIndexIfObjWithOwnAttr = function(array, attr, value) {
+	    for(var i = 0; i < array.length; i++) {
+	        if(array[i].hasOwnProperty(attr) && array[i][attr] === value) {
+	            return i;
+	        }
+	    }
+	    return -1;
 	}
 
 	// $scope.$watch("category['family']", function(n, o) {
@@ -634,12 +654,22 @@ var ListsCtrl = ['$scope', function($scope){
 		return classes;
 	}
 
+	// $scope.getCategory = function(index){
+	// 	var item 	= $scope.category[$scope.filter.category][index]
+	// 		, arr 	= []
+	// 		, cat = $scope.filter.category
+	// 	arr.push('size'+item.preview.size);
+	// 	arr.push( (item.categories[cat] > $scope.category[$scope.filter.category].length) ? 'disabled' : 'enabled');
+	// 	arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
+	// 	return arr;
+	// }
+
 	$scope.getCategory = function(index){
-		var item 	= $scope.category[$scope.filter.category][index]
+		var item 	= $scope.isotopeContent[index]
 			, arr 	= []
 			, cat = $scope.filter.category
 		arr.push('size'+item.preview.size);
-		arr.push( (item.categories[cat] > $scope.category[$scope.filter.category].length) ? 'disabled' : 'enabled');
+		arr.push( (item.categories[cat] > $scope.isotopeContent.length) ? 'disabled' : 'enabled');
 		arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
 		return arr;
 	}

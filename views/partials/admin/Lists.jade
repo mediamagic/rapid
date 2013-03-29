@@ -19,11 +19,11 @@
 								option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}
 						#listsPreviewWrapper(ui-if="categoriesLoaded")							
 							#listsIsotop(ui-isotope, options='{"itemSelector":".listItem", "animationEngine":"best-available", "masonry": { "columnWidth": 150, "gutterWidth": 5} }')
-								.listItem(ng-repeat="item in category[filter.category]", rel="{{item.categories}}", id="item_{{item._id}}", ng-class="getCategory($index)")
-									.name {{ item.name }}
+								//.listItem(ng-repeat="item in category[filter.category]", rel="{{item.categories}}", id="item_{{item._id}}", ng-class="getCategory($index)")
+								.listItem(ng-repeat="item in isotopeContent", rel="{{item.categories}}", id="item_{{item._id}}", ng-class="getCategory($index)")
+									.name {{ item.name }}									
 									.iconWrapper
 										h1.icon(ng-class="getListsItemIcon(item)")
-
 								.clear
 						//- ul#listWrapper(ui-sortable="sortableOptions", ng-model="category[filter.category]")
 						//- 	//- li.itemInList(ng-repeat="item in category[filter.category] | orderBy:orderCategories") {{ item.name}}

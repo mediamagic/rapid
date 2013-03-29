@@ -30,10 +30,7 @@ a{color:#ffe821;}
 #listsPreviewWrapper #listsIsotop .listItem.size2x1{width:305px;height:150px;}
 #listsPreviewWrapper #listsIsotop .listItem.size2x2{width:305px;height:305px;}
 #listsPreviewWrapper #listsIsotop .listItem .name{position:absolute;width:100%;text-align:center;}
-#listsPreviewWrapper #listsIsotop .listItem .iconWrapper{position:absolute;top:50%;text-align:center;display:table-cell;vertical-align:middle;width:100%;border:solid red 1px;}#listsPreviewWrapper #listsIsotop .listItem .iconWrapper .icon{position:relative;top:-50%;}#listsPreviewWrapper #listsIsotop .listItem .iconWrapper .icon.size1x1{width:150px;height:150px;}
-#listsPreviewWrapper #listsIsotop .listItem .iconWrapper .icon.size1x2{width:150px;height:305px;}
-#listsPreviewWrapper #listsIsotop .listItem .iconWrapper .icon.size2x1{width:305px;height:150px;}
-#listsPreviewWrapper #listsIsotop .listItem .iconWrapper .icon.size2x2{width:305px;height:305px;}
+#listsPreviewWrapper #listsIsotop .listItem .iconWrapper{position:relative;text-align:center;display:table-cell;vertical-align:middle;width:100%;}
 #openEditorWrapper{position:relative;width:940px;height:415px;}#openEditorWrapper #leftSide{position:absolute;top:0px;left:0px;width:700px;}
 #openEditorWrapper #rightSide{position:absolute;top:0px;right:0px;width:200px;height:415px;border:solid #ccc 1px;}
 #uploadNewSwf{text-align:center;}
