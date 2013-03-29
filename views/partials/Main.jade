@@ -4,8 +4,11 @@
 			.disabled
 			.mask
 			.hover.hidden-phone.hidden-tablet.bind
-				.hovercontent {{article.preview.link.text}}
+				.hovercontent 
+					.text {{article.preview.link.text}}
+					button לחצו כאן
 			.mobile.hidden-desktop.bind 
 				.text mobile only
 			.preview(class="size{{article.preview.size}}")
 	.clr
+.push

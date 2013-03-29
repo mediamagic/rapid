@@ -66,7 +66,7 @@
     //   console.log(err);
     //   }
     // });
-    console.log('development mode');
+    // console.log('development mode');
   });
 
   app.configure('production', function(){

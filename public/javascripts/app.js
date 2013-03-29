@@ -65,7 +65,8 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                     height: parseInt(options.height),
                     navigation: {active: false},
                     play: {
-                        auto: true
+                        auto: true,
+                        restartDelay: 1000
                     }
                 })
             },100);
@@ -85,25 +86,41 @@ function createOrderFn(cat){
 }
 
 function createPreview(elm, obj){
-    var content = createContent(obj)
-        , html  = '';
+    var html  = ''
+        , d = obj.preview.size.split('x')
+        , dim = { width:  d[0]*220 + ((d[0]-1)*20)
+                , height: d[1]*220 + ((d[1]-1)*20) }
+        , content = (obj.preview.link != 'none') ? createContent(obj) : ''
     switch(obj.preview.type) {
         case 'flash':
+            var w = $('<div></div>')
+            w.flash({ swf: '/images/swfs/'+obj.preview.content
+                    , width: dim.width
+                    , height: dim.height
+                    , wmode: 'transparent'
+                    , allowFullScreen: false })
+            html = w;
             break;
         case 'iframe':
+            var w       = $('<iframe></iframe>')
+                , src   = obj.preview.content
+                , attrs =   { scrolling: 'no'
+                            , frameborder: 0
+                            , width: dim.width
+                            , height: dim.height
+                            , src: src }
+            w.attr(attrs);
+            html = w;
             break;
         case 'image':
             var w   = $('<div></div>')
                 , c = obj.preview.content
-                , d = obj.preview.size.split('x')
-                , dim = { width:  d[0]*220 + ((d[0]-1)*20)
-                        , height: d[1]*220 + ((d[1]-1)*20) }
             if (c.length > 1)
                 w.attr('iso-gallery', JSON.stringify(dim))
             for(var i=0;i<c.length;i++){
                 var img = $('<img />');
                 img
-                    .attr('src', c[i])
+                    .attr('src', '/images/imgs/'+c[i])
                     .appendTo(w);
             }
             html = w;
