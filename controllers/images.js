@@ -49,9 +49,14 @@ module.exports = function(db){
 		},
 		delete: function(req,res,next){
 			var id = req.image.id;
-			db.Images.delete({_id:id}, function(err,doc){
-				fs.unlinkSync(global.root + "public/images/imgs/"+req.image.hashName);
-				return res.send(handle(err,doc));
+			db.Articles.find({$or: [{ 'preview.content.hashName': req.image.hashName}, { 'content.content.hashName': req.image.hashName}]}, function(err,doc){
+				if (doc.length > 0)
+					res.send(handle(err,{error:0, message: 'simulated removing file'}))
+				else
+					db.Images.delete({_id:id}, function(err,doc){
+						fs.unlinkSync(global.root + "public/images/imgs/"+req.image.hashName);
+						return res.send(handle(err,{error:0, message: 'actually removed file'}));
+					})
 			})
 		}
 	}
