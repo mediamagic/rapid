@@ -44,13 +44,6 @@ body {
 	padding: 0;
 	height: 100%;
 }
-.footer, .push {
-	height: @push;
-}
-
-#footer {
-	background: url(../images/footer_bg.png) repeat-x;
-}
 * {
 	font: 14px "alfi regular";
 }
@@ -60,6 +53,39 @@ h1,h2,h3,h4,h5,h6 {
 }
 .clr {
 	clear:both;
+}
+
+// input[type="radio"]{
+// 	display: none;
+// }
+input[type="radio"] {
+	display: none;
+	+label{
+		.icon {
+			display: inline-block;
+			background:url('http://refundfx.com.au/uploads/image/checkbox_empty.png') no-repeat center center;
+			width: 30px;
+			height: 30px;
+			vertical-align: middle;
+		}
+		padding:0 20px 0 0;
+		display: inline-block;
+		appearance:none;
+		-moz-appearance:none;
+		-webkit-appearance:none;
+		-ms-appearance: none;
+		-o-appearance: none;
+	}
+	&:checked {
+		+label {
+			.icon {
+				background:url('http://refundfx.com.au/uploads/image/checkbox_full.png') no-repeat center center;
+				width: 30px;
+				height: 30px;
+				vertical-align: middle;
+			}
+		}
+	}
 }
 
 #header {
@@ -109,6 +135,8 @@ h1,h2,h3,h4,h5,h6 {
 	position: relative;
 	z-index: 1;
 	padding-bottom: @push;
+	min-height: 100%;
+	height: 100% !important;
 }
 
 
@@ -218,6 +246,11 @@ h1,h2,h3,h4,h5,h6 {
 				}
 			}
 			&:hover {
+				&.mobile-hidden, &.tablet-hidden{
+					.hover {
+						display: none;
+					}
+				}
 				.hover {
 					display: table;
 				}
@@ -286,13 +319,20 @@ h1,h2,h3,h4,h5,h6 {
 	}
 }
 
+.footer, .push {
+	height: @push;
+}
+
+#footer {
+	background: url(../images/footer_bg.png) repeat-x;
+}
 
 #footer {
 	position: relative;
 	margin-top: -@push;
 	height: @push;
 	.footer {
-		width: 940px;
+		max-width: 940px;
 		margin: 0 auto;
 		.links {
 			height: 48px;
@@ -303,7 +343,7 @@ h1,h2,h3,h4,h5,h6 {
 				padding: 0;
 				display: block;
 				height: 48px;
-				width: 940px;
+				max-width: 940px;
 				text-align: center;
 				direction: rtl;
 				line-height: 48px;
@@ -345,3 +385,4 @@ h1,h2,h3,h4,h5,h6 {
 @import "sliderjs.less";
 @import "isotope.less";
 @import "fonts.less";
+@import "mobile.less";
