@@ -2,11 +2,15 @@
 
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
-.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-	$routeProvider.
-		when('/main', {templateUrl: '/views/Main.html', controller: MainCtrl, name:'Main'}).
-		when('/login', {templateUrl: '/views/Login.html', controller: LoginCtrl, name: 'Login'}).
-		otherwise({redirectTo: '/main'});
+.config(['$routeProvider'
+        , '$locationProvider'
+        , function($routeProvider, $locationProvider) {
+	$routeProvider
+		.when('/main',  { templateUrl: '/views/Main.html'
+                        , controller: MainCtrl, name:'Main' })
+		.when('/login', { templateUrl: '/views/Login.html'
+                        , controller: LoginCtrl, name: 'Login' })
+		. otherwise(    { redirectTo: '/main' })
 }])
 
 .directive('uiIsotope', function() {
@@ -92,7 +96,8 @@ function createPreview(elm, obj){
         , d = obj.preview.size.split('x')
         , dim = { width:  d[0]*220 + ((d[0]-1)*20)
                 , height: d[1]*220 + ((d[1]-1)*20) }
-        , content = (obj.preview.link.type != 'none') ? createContent(obj) : ''
+        , content = (obj.preview.link.type != 'none') 
+            ? createContent(obj) : ''
     switch(obj.preview.type) {
         case 'flash':
             var w = $('<div></div>')
