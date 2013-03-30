@@ -21,15 +21,26 @@ filter('status', function() {
 	}
 }).
 filter('categories', function() {
-	return function(categories) { 		
+	return function(categories, fn) { 		
 		var arr = [];
 
 		for(var cat in categories){			
-			arr.push(cat);
+			//arr.push(cat);
+      arr.push(fn(cat))
 		}
 		
 		return arr.join(',');
 	}
+}).filter('getCategoryName', function() {
+  return function(categories, cat, fn) {     
+    var arr = [];
+
+    for(var cat in categories){                 
+      arr.push(fn(categories[cat]))
+    }
+    
+    return arr;
+  }
 }).filter('category', function() {
 	return function(items, category) { 		
 		var arr = [];
@@ -99,8 +110,8 @@ filter('contentType', function() {
 
       var opts = JSON.parse(attr.options)
       opts.getSortData = {}
-      for (var cat in scope.settings.categories) {
-        var c   = scope.settings.categories[cat]
+      for (var cat in scope.categories) {
+        var c   = scope.categories[cat]
         opts.getSortData[c] = createOrderFn(c);
       }
       setTimeout(function(){

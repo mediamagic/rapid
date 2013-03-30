@@ -25,13 +25,13 @@
 									th.white.bold.center(style="width:100px;") Save
 									th.white.bold.center(style="width:100px;") Delete
 							tbody
-								tr(ng-repeat="(key,value) in categoriesObject")
+								tr(ng-repeat="(key,value) in settings.categories | remove:'all'")
 									td.font12.white.center
 										input.center.fullWidth.bg-color-green.white.noBorder.placeHolderWhite(type="text", placeholder="{{ value }}", onkeyup="angular.element(this).scope().changeName('{{ key }}', this.value)")
 									td.font12.white.center
-										a.font12(ng-click="saveCategory(key)", ng-show="!checkIfValidCategory(categoriesObjectTemp[key])") 
+										a.font12(ng-click="updateCategory(key)", ng-show="!checkIfValidCategory(categoriesObject[key])") 
 											i.icon-box-add.white.center.link
 									td.font12.white.center
-										a.font12(ng-click="") 
+										a.font12(ng-click="deleteCategory(key)") 
 											i.icon-remove.white.center.link
 					

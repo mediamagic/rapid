@@ -37,7 +37,7 @@
 									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
 									td.font12.white {{ item.sidebar.description }}
-									td.font12.white.center {{ item.categories | remove:'all' | categories}}
+									td.font12.white.center {{ item.categories | remove:'all' | categories:getCategoryName}}
 									td.font12.white.center {{ item.preview.type }}									
 									td.font12.white.center {{ item | contentType }}
 									td.font12.white.center {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}
