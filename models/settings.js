@@ -10,7 +10,7 @@ var settingsSchema = new mongoose.Schema({
 		shareText: String,
 		shareReference: Number
 	},
-	categories: {}
+	categories: mongoose.Schema.Types.Mixed
 });
 module.exports = function(extendStaticMethods, callback) {
 	/*
