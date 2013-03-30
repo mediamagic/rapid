@@ -152,7 +152,9 @@
     app.put ('/resources/articles/resort', ensureAuthenticated, Articles.resort);
     app.put ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.update);
     app.del ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.del);
-    app.put ('/resources/settings/categories', ensureAuthenticated, Settings.updateCategories);
+    app.put ('/resources/settings/categories/:key', ensureAuthenticated, Settings.updateCategories);
+    app.del ('/resources/settings/categories/:key', ensureAuthenticated, Settings.deleteCategory);
+    app.post('/resources/settings/categories', ensureAuthenticated, Settings.createCategory);
     app.get ('/resources/settings', Settings.index);
     app.put ('/resources/settings', ensureAuthenticated, Settings.update);
     app.post('/resources/stats/:type', Stats.create);
