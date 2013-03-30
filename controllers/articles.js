@@ -65,10 +65,10 @@ module.exports = function(db) {
 				db.Articles.delete({_id:id}, function(err,doc){
 					if (unlinkArr.length > 0)
 						db.Images.remove({hashName: { $in: searchArr }}, function(err,docs){
-							return res.send(handle(err,docs));
+							return res.send(handle(err,{error: 0, type: 'removed article and images'}));
 						})
 					else
-						return res.send(handle(err,doc));
+						return res.send(handle(err,{error: 0, type: 'removed article no images'}));
 				})
 			})
 		},
