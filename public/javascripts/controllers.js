@@ -41,10 +41,9 @@ var MainCtrl = ['$scope', function($scope){
 			, l = resp.length +1;
 		for (var cat in resp){
 			var itm = resp[cat];
-			for (var i = 0;i<cats.length;i++){
-				var c = cats[i];
-				if (itm.categories[c] == undefined) {
-					itm.categories[c] = l;
+			for (var i in cats){
+				if (itm.categories[i] == undefined) {
+					itm.categories[i] = l;
 					l++
 				}
 			}

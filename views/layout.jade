@@ -30,9 +30,9 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 				#nav
 					span#title The New ŠKODA Rapid
 					ul
-						li(ng-repeat="category in settings.categories")
-							label(for="nav_{{$index}}") {{category}}
-							input(type="radio", name="category", ng-model="filters.category", value="{{category}}", id="nav_{{$index}}")
+						li(ng-repeat="(key,val) in settings.categories")
+							label(for="nav_{{$index}}") {{val}}
+							input(type="radio", name="category", ng-model="filters.category", value="{{key}}", id="nav_{{$index}}")
 						.clr
 			#wrapper(ng-view)
 		#footer

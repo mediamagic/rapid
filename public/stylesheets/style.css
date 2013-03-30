@@ -46,7 +46,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .article.preview.masked .mask{position:absolute;top:0;left:0;background:white;opacity:0.8;display:block;z-index:2000;}
 .article.preview.masked:hover.linked .mask{display:none;}
 .article.preview.masked:hover.linked .hover{display:table !important;}
-.article.content .content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article.content .content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
+.article.content>.content{position:relative;width:938px;min-height:582px;border:solid 1px #8c9299;margin-bottom:20px;margin-top:20px;}.article.content>.content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
 .article.content .mobile{display:none !important;}
 .article.content .hover{display:none !important;}
 #footer{position:relative;margin-top:-48px;height:48px;}#footer .footer{width:940px;margin:0 auto;}#footer .footer .links{height:48px;}#footer .footer .links ul{background:transparent url(../images/brand.png) no-repeat left center;clear:both;margin:10px auto 0;padding:0;display:block;height:48px;width:940px;text-align:center;direction:rtl;line-height:48px;}#footer .footer .links ul li{display:inline-block;margin:0 0 0 10px;height:19px;padding:3px 20px 3px 0;line-height:19px;direction:rtl;background:transparent url(../images/footer_bullet.png) no-repeat center right;}#footer .footer .links ul li:last-child a{border:none;}
