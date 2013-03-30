@@ -27,7 +27,7 @@ module.exports = function(db){
 				var itm = JSON.parse(JSON.stringify(doc.categories));
 				itm[key] = name;
 				doc.categories = itm;
-				doc.markModifed('categories'); 
+				doc.markModified('categories'); 
 				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send(itm);
