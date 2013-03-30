@@ -36,7 +36,7 @@ module.exports = function(db){
 			var  key = 'cat_' + (new Date().getTime()).toString(36)
 				, name = req.body.name;
 			db.Settings.findOne({}, function(err,doc){
-				var itm = doc.categories;
+				var itm = JSON.parse(JSON.stringify(doc.categories));
 				itm[key] = name;
 				doc.categories = itm;
 				doc.save(function(err,doc){
