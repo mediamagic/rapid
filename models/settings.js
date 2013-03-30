@@ -10,7 +10,7 @@ var settingsSchema = new mongoose.Schema({
 		shareText: String,
 		shareReference: Number
 	},
-	categories: []
+	categories: {}
 });
 module.exports = function(extendStaticMethods, callback) {
 	/*
@@ -18,12 +18,15 @@ module.exports = function(extendStaticMethods, callback) {
 	 */
 	settingsSchema.statics = extendStaticMethods('Settings', ['list', 'edit']);
 	settingsSchema.statics.populate = function(data,cb){
+
 		this.model('Settings').find({}, function(err,doc){
 			if (err)
 				return cb(err)
 			if (typeof(doc) == 'null' || typeof(doc) == 'undefined' || doc.length == 0) {
-				var Settings = db.model('Settings', settingsSchema);
-				var tmp = new Settings(data);
+				var data = 	{ title: 'Skoda Rapid'
+							, categories: { all:'הכל' } }
+					, Settings = db.model('Settings', settingsSchema)
+					, tmp = new Settings(data);
 				tmp.save(function(err,doc){
 					if (err)
 						return cb(err)
@@ -35,10 +38,14 @@ module.exports = function(extendStaticMethods, callback) {
 		});
 	}
 	settingsSchema.statics.list = function(params, cb){
-		this.model('Settings').findOne(params,{},{sort:{dateCreated: 1}}).lean().exec(function(err,doc){
-			if (err)
-				return cb(err);
-			return cb(null,doc);
+		this
+			.model('Settings')
+			.findOne(params,{},{sort:{dateCreated: 1}})
+			.lean()
+			.exec(function(err,doc){
+				if (err)
+					return cb(err);
+				return cb(null,doc);
 		});
 	}
 	/*
@@ -54,11 +61,12 @@ module.exports = function(extendStaticMethods, callback) {
 		if(err)
 			return err;
 		if (c == 0) {
-			Settings.populate({title: 'Skoda Rapid'}, function(err, doc){
-				if(err)
-					return err;
-				return callback(Settings);
-			});
+			Settings
+				.populate({title: 'Skoda Rapid'}, function(err, doc){
+					if(err)
+						return err;
+					return callback(Settings);
+				});
 		} else {
 			return callback(Settings);
 		}
