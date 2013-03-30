@@ -19,9 +19,13 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	$scope.host = $scope.location.$$protocol + '://' + $scope.location.$$host + ($scope.location.$$port == 80 ? '' : ':' + $scope.location.$$port) + '/';
 
 	$scope.content = [];
-	$scope.isotopeContent = [];	
+	$scope.isotopeContent = {
+		original: [],
+		copy: []
+	}	
 	$scope.categories = [];
 	$scope.category = {};
+	$scope.categoryCopy = {};
 
 	$scope.settingsLoaded = false;
 	$scope.categoriesLoaded = false;
@@ -60,23 +64,50 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	$scope.buildArticles = function(cb, content) {
 		
 		if(content) {
-			$scope.content = $filter('orderBy')(content, '-_id');
-			$scope.isotopeContent = angular.copy($scope.content);
+			$scope.content = content;
+			$scope.createIsotopeContent();
+			$scope.content = $filter('orderBy')($scope.content, '-_id');
 			$scope.splitCategories();
 			$scope.category[$scope.filter.category].sort($scope.compare);
+			$scope.categoryCopy = angular.copy($scope.category);
 
 			if(cb)
 				cb();
 		} else {
 			$scope.Articles.query({}, function(res) {
-				$scope.content = $filter('orderBy')(res, '-_id');
-				$scope.isotopeContent = angular.copy($scope.content);
+				$scope.content = res;
+				$scope.createIsotopeContent();
+				$scope.content = $filter('orderBy')($scope.content, '-_id');
 				$scope.splitCategories();
+				$scope.categoryCopy = angular.copy($scope.category);
 
 				if(cb)
 					cb();
 			});
 		}
+	}
+
+	$scope.createIsotopeContent = function() {
+		$scope.isotopeContent.original = angular.copy($scope.content);
+		$scope.isotopeContent.original = $scope.reorderIsotopeContent($scope.isotopeContent.original);
+		$scope.isotopeContent.copy = angular.copy($scope.isotopeContent.original);
+	}
+
+	$scope.reorderIsotopeContent = function(content) {	
+		var cats = $scope.settings.categories
+			, l = content.length +1;
+		for (var cat in content){
+			var itm = content[cat];
+			for (var i = 0;i<cats.length;i++){
+				var c = cats[i];
+				if (itm.categories[c] == undefined) {
+					itm.categories[c] = l;
+					l++;
+				}
+			}
+		}
+
+		return content;
 	}
 
 	$scope.safeApply = function(fn) {
@@ -115,7 +146,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 			$scope.category[$scope.categories[cat]] = newArr;			
 		}
-
+		
 		$scope.categoriesLoaded = true;
 	}
 
@@ -161,7 +192,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			showLinkUrl: false,
 			colorInput:'#ffffff'
 		},
-		previewDisplay: {
+		previewDisplayDefault: {
 							width:220,
 							height:220,
 							margin:130,
@@ -171,6 +202,9 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 								iframe:'',
 								image:''
 							}
+		},
+		previewDisplay: {							
+						
 		},
 		defaultTempContent: {
 			preview: {
@@ -489,6 +523,11 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	// 	  }
 	// 	 })
 	// 	}
+
+	$scope.$on('UPDATE_CATEGORY', function(event, cats, isoContent) {
+		$scope.category = angular.copy(cats);
+		$scope.isotopeContent.original = angular.copy(isoContent);		
+	});
 }];
 
 var MainCtrl = ['$scope', function($scope){
@@ -553,27 +592,68 @@ var MainCtrl = ['$scope', function($scope){
 }];
 
 var ListsCtrl = ['$scope', function($scope){
-	$scope.filter.category = 0;
-
-	$scope.$watch('filter.category', function(n,o){
-		if (n!=o && n!=0 && n!=undefined)
-			$scope.category[n].sort($scope.compare);
-	});
+	$scope.filter.category = 0;	
 	
-	$scope.showListsSaveButton = true;
+	if($scope.settingsLoaded) {		
+		$scope.categoryCopy = angular.copy($scope.category);
+		$scope.isotopeContent.copy = angular.copy($scope.isotopeContent.original);
+	}
+	
+	$scope.$watch('filter.category', function(n,o){				
+		if (n!=o && n!=0 && n!=undefined && $scope.settingsLoaded) 			
+			$scope.categoryCopy[n].sort($scope.compare);
+			//$scope.category[n].sort($scope.compare);		
+	}, true);
+	
+	$scope.disableListsSaveButton = true;
+
 	$scope.sortableOptions = {
-								update: function(event, ui) {									
-									for(var i = 0; i < $scope.category[$scope.filter.category].length; i++) {
-										var item = $scope.category[$scope.filter.category][i];
+								update: function(event, ui) {											
+									// for(var i = 0; i < $scope.category[$scope.filter.category].length; i++) {
+									// 	var item = $scope.category[$scope.filter.category][i];
+									// 	item.categories[$scope.filter.category] = i;
+									// }
+
+									for(var i = 0; i < $scope.categoryCopy[$scope.filter.category].length; i++) {
+										var item = $scope.categoryCopy[$scope.filter.category][i];
 										item.categories[$scope.filter.category] = i;
 									}
+
+									var newContent = {};
+									for(var cat in $scope.categoryCopy) {
+										var content = $scope.categoryCopy[cat];
+										
+										for(var i in content) {
+											var item = content[i];
+											var contentId = item._id;
+
+											if(newContent[contentId] == undefined)
+												newContent[contentId] = {};
+
+											if(item.categories[cat] != undefined)
+												newContent[contentId][cat] = item.categories[cat];
+										}
+									}
+									var tempIsotopeContent = angular.copy($scope.isotopeContent.copy);
+									for(var id in newContent) {
+										var index = getIndexIfObjWithOwnAttr($scope.isotopeContent.copy, '_id', id);
+										tempIsotopeContent[index].categories = newContent[id];						
+									}					
+									$scope.isotopeContent.copy = $scope.reorderIsotopeContent(tempIsotopeContent);									
+
+									$scope.safeApply(function() {	
+							        	$scope.disableListsSaveButton = false;	
+							        });	
 								},
 								start: function(event, ui) {
-							        //ui.item.startPos = ui.item.index();							        
+							        //ui.item.startPos = ui.item.index();	
+							        $scope.safeApply(function() {	
+							        	$scope.disableListsSaveButton = true;	
+							        });								        
 							    },
 							    stop: function(event, ui) {								    	
 							        // console.log("Start position: " + ui.item.startPos);
-							        // console.log("New position: " + ui.item.index());							        
+							        // console.log("New position: " + ui.item.index());							        							        
 							    },
 								axis: 'y'
 	};	
@@ -582,17 +662,31 @@ var ListsCtrl = ['$scope', function($scope){
 	// 	var index = parseInt(item.categories[$scope.filter.category]);
 	// 	return index;
 	// }
-	
-	$scope.previewNewList = function() {
-		$scope.showListsSaveButton = false;
-		//$('#listsIsotop').isotope('reloadItems');
-	}
 
 	$scope.saveLists = function() {
+		$scope.safeApply(function() {	
+	    	$scope.disableListsSaveButton = true;	
+	    });	
+
 		var newContent = {};
 
-		for(var cat in $scope.category) {
-			var content = $scope.category[cat];
+		// for(var cat in $scope.category) {
+		// 	var content = $scope.category[cat];
+			
+		// 	for(var i in content) {
+		// 		var item = content[i];
+		// 		var contentId = item._id;
+
+		// 		if(newContent[contentId] == undefined)
+		// 			newContent[contentId] = {};
+
+		// 		if(item.categories[cat] != undefined)
+		// 			newContent[contentId][cat] = item.categories[cat];
+		// 	}
+		// }
+
+		for(var cat in $scope.categoryCopy) {
+			var content = $scope.categoryCopy[cat];
 			
 			for(var i in content) {
 				var item = content[i];
@@ -606,19 +700,18 @@ var ListsCtrl = ['$scope', function($scope){
 			}
 		}
 		
-		// $scope.Articles.updateList({id:'resort'}, newContent, function(res) { 			
-		// 	$scope.buildArticles(function() { 
-				
-		// 	}, res);
-		// });
+		$scope.Articles.updateList({id:'resort'}, newContent, function(res) {
+			$scope.buildArticles(function() { 
+				$scope.$emit('UPDATE_CATEGORY', $scope.categoryCopy, $scope.isotopeContent.copy); // updating scope.category at Global scope with the new order of category
+				$scope.location.path('/main');				
+			}, res);
+		});		
 		
-		for(var id in newContent) {
-			var index = getIndexIfObjWithOwnAttr($scope.content, '_id', id);
-			$scope.isotopeContent[index].categories = newContent[id];
-			console.log($scope.isotopeContent[index].categories);
-			console.log(newContent[id]);
-			break;
-		}		
+
+		// for(var id in newContent) {
+		// 	var index = getIndexIfObjWithOwnAttr($scope.content, '_id', id);
+		// 	$scope.isotopeContent[index].categories = newContent[id];						
+		// }		
 	}
 
 	var getIndexIfObjWithOwnAttr = function(array, attr, value) {
@@ -665,13 +758,20 @@ var ListsCtrl = ['$scope', function($scope){
 	// }
 
 	$scope.getCategory = function(index){
-		var item 	= $scope.isotopeContent[index]
+		var item 	= $scope.isotopeContent.copy[index]
 			, arr 	= []
 			, cat = $scope.filter.category
 		arr.push('size'+item.preview.size);
-		arr.push( (item.categories[cat] > $scope.isotopeContent.length) ? 'disabled' : 'enabled');
-		arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
+		arr.push( (item.categories[cat] > $scope.isotopeContent.copy.length) ? 'disabled' : 'enabled');
+		// arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
 		return arr;
+	}
+
+	$scope.isotopeValid = function() {
+		if($scope.categoriesLoaded && $scope.filter.category != 0)
+			return true;
+
+		return false;
 	}
 }];
 
@@ -682,8 +782,9 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 
 	// make default objects
 	$scope.editor.categories = [];	
-	$scope.editor.data = angular.copy($scope.editor.defaultData);	
+	$scope.editor.data = angular.copy($scope.editor.defaultData);
 	$scope.editor.tempContent = angular.copy($scope.editor.defaultTempContent);	
+	$scope.editor.previewDisplay = angular.copy($scope.editor.previewDisplayDefault);
 
 	if(id != undefined) {		
 		$scope.articleEditMode = true;
@@ -1148,6 +1249,68 @@ var SwfsCtrl = ['$scope', function($scope){
 	// }
 }];
 
+var CategoriesCtrl = ['$scope', function($scope){
+	
+	$scope.categoryName = '';
+
+	$scope.minimumLength = 2;
+
+	// TEMP
+	$scope.categoriesObject = {		
+		family:'משפחה',
+		business:'עסקים',
+		category:'קטגוריה'
+	}
+
+	$scope.categoriesObjectTemp = {};
+	
+
+	$scope.createNewCategory = function() {
+		if($scope.categoryName.length > $scope.minimumLength) {
+			$scope.categoriesObject[Math.random(333)] = $scope.categoryName;
+			$scope.categoryName = '';
+		}
+	}	
+
+	// $scope.$watch('categoryName', function(n, o) {
+	// 	if(n != o) {
+	// 		for(var cat in $scope.categoriesObject) {
+	// 			if($scope.categoriesObject[cat] == $scope.categoryName) {
+	// 				$scope.safeApply(function() {
+
+	// 				});
+	// 				break;
+	// 			}
+	// 		}
+	// 	}
+	// }, true);
+
+	$scope.checkIfValidCategory = function(category) {				
+		if(category && category.length > $scope.minimumLength) {
+			for(var cat in $scope.categoriesObject) {
+				if($scope.categoriesObject[cat] == category) {					
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		return true;
+	}
+
+	$scope.changeName = function(key, value) {
+		$scope.safeApply(function() {	
+			$scope.categoriesObjectTemp[key] = value;
+		});
+	}
+
+	$scope.saveCategory = function(key) {
+		$scope.categoriesObject[key] = $scope.categoriesObjectTemp[key];
+		$scope.categoriesObjectTemp[key] = '';
+	}
+
+}];
 // var SettingsCtrl = ['$scope', function($scope){
 // 	$scope.Settings.get({}, function(settings){
 // 		$scope.settings = settings;

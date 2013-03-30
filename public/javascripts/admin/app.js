@@ -7,6 +7,7 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
 		when('/editor', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
 		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
     when('/swfs', {templateUrl: '/views/admin/swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
+    when('/categories', {templateUrl: '/views/admin/categories.html', controller: CategoriesCtrl, name:'Categories Manager'}).
 		//when('/settings', {templateUrl: '/views/admin/Settings.html', controller: SettingsCtrl, name:'settings'}).		
 		//when('/voters', {templateUrl: '/views/admin/Voters.html', controller: VotersCtrl, name:'Statistics'}).
 		otherwise({redirectTo: '/main'});
@@ -106,19 +107,21 @@ filter('contentType', function() {
         elm
                 .isotope(opts)
                 .isotope('reloadItems')
-                .isotope({sortBy:'all'});
+                .isotope({sortBy:scope.filter.category});                
       },100)
-      scope.$watch('isotopeContent',function(n,o){
-        console.log(n)
+      scope.$watch('isotopeContent.copy',function(n,o){
         if (n!=o && n != undefined) {
-          elm.isotope('reloadItems')
-          .isotope({sortBy:scope.filter.category});
+          //console.log('iso content changed')            
+          setTimeout(function(){                    
+            elm.isotope('reloadItems').isotope({sortBy:scope.filter.category});          
+          },1);
         }
       }, true)
-      scope.$watch('filter.category', function(n,o){
-        console.log(n)
-        if (n!=o && n != undefined) 
-          elm.isotope({sortBy:n});
+      scope.$watch('filter.category', function(n,o){        
+        //console.log(n)
+        if (n!=o && n != undefined && scope.filter.category != 0) {          
+          elm.isotope({sortBy:n});          
+        }
       }, true)
     }
   }
@@ -153,28 +156,28 @@ filter('contentType', function() {
 //   }
 // });
 
-var createIsotope = function(opts, category, elm, cb) {
-  opts.getSortData[category] = createOrderFn(category);
+// var createIsotope = function(opts, category, elm, cb) {
+//   opts.getSortData[category] = createOrderFn(category);
             
-  setTimeout(function(){
-    // if(elm.hasClass('isotope'))
-    //    elm.isotope('destroy');
-    if(elm.hasClass('isotope')) {
-      elm
-        .isotope('reloadItems')      
-        .isotope({sortBy:category}); 
-    } else {
-      elm      
-        .isotope(opts)
-        .isotope('reloadItems')      
-        .isotope({sortBy:category});  
-    }
+//   setTimeout(function(){
+//     // if(elm.hasClass('isotope'))
+//     //    elm.isotope('destroy');
+//     if(elm.hasClass('isotope')) {
+//       elm
+//         .isotope('reloadItems')      
+//         .isotope({sortBy:category}); 
+//     } else {
+//       elm      
+//         .isotope(opts)
+//         .isotope('reloadItems')      
+//         .isotope({sortBy:category});  
+//     }
     
 
-    if(cb)
-      cb();
-  },100);
-}
+//     if(cb)
+//       cb();
+//   },100);
+// }
 
 angular.module('ui.directives').directive('uiSortable', [
 'ui.config', function(uiConfig) {

@@ -1,0 +1,37 @@
+.page.secondary
+	.page-header 
+		.page-header-content
+			h1 Categories Manager
+				small &nbsp;				
+			a.back-button.big.page-back(href="#/main")
+.page
+	.page-region
+		.page-region-content
+			.grid
+				.row
+					.span4(style="width:100%;")
+						h3.padding5.bg-color-green(style="height:40px;")							
+							.a(style="position:absolute;left:5px;top:15px;")
+								i.icon-copy.white
+								span.white Categories Manager
+						#saveCategory
+							input.bg-color-green.white(type="text", placeholder="Category name", ng-model="categoryName")
+							br
+							button(ng-click="createNewCategory()", ng-disabled="checkIfValidCategory(categoryName)") Create New Category						
+						table.bg-color-green
+							thead
+								tr
+									th.white.bold.center Category Name									
+									th.white.bold.center(style="width:100px;") Save
+									th.white.bold.center(style="width:100px;") Delete
+							tbody
+								tr(ng-repeat="(key,value) in categoriesObject")
+									td.font12.white.center
+										input.center.fullWidth.bg-color-green.white.noBorder.placeHolderWhite(type="text", placeholder="{{ value }}", onkeyup="angular.element(this).scope().changeName('{{ key }}', this.value)")
+									td.font12.white.center
+										a.font12(ng-click="saveCategory(key)", ng-show="!checkIfValidCategory(categoriesObjectTemp[key])") 
+											i.icon-box-add.white.center.link
+									td.font12.white.center
+										a.font12(ng-click="") 
+											i.icon-remove.white.center.link
+					
