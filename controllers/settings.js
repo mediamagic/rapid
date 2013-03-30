@@ -14,11 +14,22 @@ module.exports = function(db){
 			});
 		},
 		update: function(req,res,next){
-			var id = req.params.id;
-			var data = req.body;
+			var id = req.params.id
+				, data = req.body;
 			db.Settings.edit({}, data, function(err,doc){
 				return res.send(handle(err,doc));
 			});
+		},
+		updateCategories: function(req,res,next){
+			var id = req.params.id
+				, data = req.body;
+			db.Settings.findOne({}, function(err,doc){
+				var itm = doc.categories;
+				itm.set({categories:data})
+				itm.save(function(err,doc){
+					return res.send(handle(err,doc));
+				});
+			})
 		}
 	}
 }

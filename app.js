@@ -29,7 +29,10 @@
     app.use(express.compress());
     app.use(express.favicon(__dirname + '/public/favicon.ico'));
     app.use(express.cookieParser()); 
-    app.use(express.session(  { secret: "U^Z;$,^j6DZj<GGd", store: new mcache, cookies: {secure: false, maxAge: 86400000}}));
+    app.use(express.session(  { secret: "U^Z;$,^j6DZj<GGd"
+                              , store: new mcache
+                              , cookies:  { secure: false
+                                          , maxAge: 86400000 } }));
     app.use(express.bodyParser({ keepExtensions: true}));
     app.use(express.methodOverride());
     app.use(express.csrf());
@@ -148,6 +151,7 @@
     app.put ('/resources/articles/resort', ensureAuthenticated, Articles.resort);
     app.put ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.update);
     app.del ('/resources/articles/:id', ensureAuthenticated, Articles.load, Articles.del);
+    app.put ('/resources/settings/categories', ensureAuthenticated, Settings.updateCategories);
     app.get ('/resources/settings', Settings.index);
     app.put ('/resources/settings', ensureAuthenticated, Settings.update);
     app.post('/resources/stats/:type', Stats.create);
