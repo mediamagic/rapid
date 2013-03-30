@@ -63,9 +63,12 @@ module.exports = function(db) {
 					searchArr.push(unlinkArr[i].hashName);
 				}
 				db.Articles.delete({_id:id}, function(err,doc){
-					db.Images.remove({hashName: { $in: searchArr }}, function(err,docs){
-						return res.send(handle(err,docs));
-					})
+					if (unlinkArr.length > 0)
+						db.Images.remove({hashName: { $in: searchArr }}, function(err,docs){
+							return res.send(handle(err,docs));
+						})
+					else
+						return res.send(handle(err,doc));
 				})
 			})
 		},
