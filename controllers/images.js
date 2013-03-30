@@ -5,9 +5,16 @@ module.exports = function(db){
 		return doc;
 	}
 	return {
-		/*
-		 * Statistics Operations
-		 */
+		load: function(req, res, next) {
+			db.Images.get({_id:req.params.id},function(err,doc){
+				if (doc) {
+					req.image = doc;
+					next();
+				} else {
+					res.send({'error' : 'Image Not Found'}, 404);
+				}
+	  		});
+		},
 		index: function(req,res,next){
 			db.Images.list({}, function(err,doc){
 				return res.send(handle(err,doc));
@@ -39,6 +46,13 @@ module.exports = function(db){
 					});
 				});
 			});
+		},
+		delete: function(req,res,next){
+			var id = req.image.id;
+			db.Images.delete({_id:id}, function(err,doc){
+				fs.unlinkSync(global.root + "public/images/imgs/"+req.image.hashName);
+				return res.send(handle(err,doc));
+			})
 		}
 	}
 }

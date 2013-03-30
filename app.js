@@ -140,6 +140,7 @@
 
     app.get ('/api/uploads/images', ensureAuthenticated, Images.index);
     app.post('/api/uploads/images', ensureAuthenticated, Images.create);
+    app.del ('/api/uploads/images', ensureAuthenticated, Images.load, Images.delete);
     app.get ('/api/uploads/swfs', ensureAuthenticated, Swfs.index);
     app.post('/api/uploads/swfs', ensureAuthenticated, Swfs.create);
     app.del ('/api/uploads/swfs/:id', ensureAuthenticated, Swfs.load, Swfs.del);
