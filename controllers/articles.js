@@ -1,3 +1,6 @@
+var fs = require('fs');
+
+
 module.exports = function(db) {
 	function handle(err,doc){
 		if (err)
@@ -43,8 +46,27 @@ module.exports = function(db) {
 		},
 		del: function(req,res,next){
 			var id = req.article.id;
-			db.Articles.delete({_id:id}, function(err,doc){
-				return res.send(handle(err,doc));
+			db.Articles.findOne({_id:id}, function(err,doc){
+				var preview = doc.preview
+					, content = doc.content
+					, unlinkArr = []
+					, searchArr = []
+				if (preview.type === 'image'){
+					unlinkArr = unlinkArr.concat(preview.content);
+				}
+
+				if (content.type === 'image'){
+					unlinkArr = unlinkArr.concat(content.content);
+				}
+				for (var i=0;i<unlinkArr.length;i++){
+				 	fs.unlinkSync(global.root + "public/images/imgs/"+unlinkArr[i].hashName);
+					searchArr.push(unlinkArr[i].hashName);
+				}
+				db.Articles.delete({_id:id}, function(err,doc){
+					db.Images.remove({hashName: { $in: searchArr }}, function(err,docs){
+						return res.send(handle(err,docs));
+					})
+				})
 			})
 		},
 		resort: function(req,res,ext){
