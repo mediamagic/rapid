@@ -24,8 +24,9 @@ module.exports = function(db){
 			var key = req.params.key
 				, name = req.body.name
 			db.Settings.findOne({}, function(err,doc){
-				var itm = doc.categories;
+				var itm = JSON.parse(JSON.stringify(doc.categories));
 				itm[key] = name;
+				doc.categories = itm;
 				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send(itm);
@@ -48,8 +49,9 @@ module.exports = function(db){
 		deleteCategory: function(req,res,next){
 			var key = req.params.key
 			db.Settings.findOne({}, function(err,doc){
-				var itm = doc.categories;
+				var itm = JSON.parse(JSON.stringify(doc.categories));
 				delete itm[key];
+				doc.categories = itm;
 				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send({key:key});
