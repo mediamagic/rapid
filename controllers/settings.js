@@ -26,7 +26,7 @@ module.exports = function(db){
 			db.Settings.findOne({}, function(err,doc){
 				var itm = doc.categories;
 				itm[key] = name;
-				itm.save(function(err,doc){
+				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send(itm);
 				});
@@ -38,8 +38,8 @@ module.exports = function(db){
 			db.Settings.findOne({}, function(err,doc){
 				var itm = doc.categories;
 				itm[key] = name;
-				itm.set({categories:itm})
-				itm.save(function(err,doc){
+				doc.set({categories:itm})
+				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send({key: key});
 				});
@@ -50,7 +50,7 @@ module.exports = function(db){
 			db.Settings.findOne({}, function(err,doc){
 				var itm = doc.categories;
 				delete itm[key];
-				itm.save(function(err,doc){
+				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send({key:key});
 				});
