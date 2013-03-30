@@ -33,7 +33,7 @@ module.exports = function(db){
 			})
 		},
 		createCategory: function(req,res,next){
-			var  key = 'cat_' + (new Date().getTime).toString(36)
+			var  key = 'cat_' + (new Date().getTime()).toString(36)
 				, name = req.body.name;
 			db.Settings.findOne({}, function(err,doc){
 				var itm = doc.categories;
