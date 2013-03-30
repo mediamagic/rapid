@@ -2,11 +2,15 @@
 
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
-.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-	$routeProvider.
-		when('/main', {templateUrl: '/views/Main.html', controller: MainCtrl, name:'Main'}).
-		when('/login', {templateUrl: '/views/Login.html', controller: LoginCtrl, name: 'Login'}).
-		otherwise({redirectTo: '/main'});
+.config(['$routeProvider'
+        , '$locationProvider'
+        , function($routeProvider, $locationProvider) {
+	$routeProvider
+		.when('/main',  { templateUrl: '/views/Main.html'
+                        , controller: MainCtrl, name:'Main' })
+		.when('/login', { templateUrl: '/views/Login.html'
+                        , controller: LoginCtrl, name: 'Login' })
+		. otherwise(    { redirectTo: '/main' })
 }])
 
 .directive('uiIsotope', function() {
@@ -18,7 +22,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     	var opts = JSON.parse(attr.options)
     	opts.getSortData = {}
     	for (var cat in scope.settings.categories) {
-    		var c 	= scope.settings.categories[cat]
+    		var c 	= cat
     		opts.getSortData[c] = createOrderFn(c);
     	}
     	setTimeout(function(){
@@ -39,6 +43,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 })
 
 .directive('isoItem', ['$compile', function(compile) {
+    var staticForm = createForm();
     return {
         priority: 100,
         restrict: 'A',
@@ -47,6 +52,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                 , article   = scope.articles[itemIndex]
                 , preview   = elm.children('.preview')
             article.index = itemIndex;
+            article.form = staticForm;
             var element = createPreview(preview, article);
             compile(element.contents())(scope);
         }
@@ -90,7 +96,8 @@ function createPreview(elm, obj){
         , d = obj.preview.size.split('x')
         , dim = { width:  d[0]*220 + ((d[0]-1)*20)
                 , height: d[1]*220 + ((d[1]-1)*20) }
-        , content = (obj.preview.link != 'none') ? createContent(obj) : ''
+        , content = (obj.preview.link.type != 'none') 
+            ? createContent(obj) : ''
     switch(obj.preview.type) {
         case 'flash':
             var w = $('<div></div>')
@@ -135,19 +142,26 @@ function createPreview(elm, obj){
         .css('background', obj.preview.bgColor)
         .siblings('.bind')
         .bind('click', function(){
-            $('.close').click()
-            elm
-                .hide()
-                .parent()
-                .removeClass('preview')
-                .addClass('content')
-                .append(content.show())
-                .parent()
-                .isotope('reLayout', function(){
-                    $("html, body")
-                        .animate({ scrollTop: $('#item_'+obj.index).offset().top - 190});
-                });
-                $('.article.preview').addClass('masked');
+            if (obj.preview.link.type == 'inner') {
+                $('.close').click()
+                elm
+                    .hide()
+                    .parent()
+                    .removeClass('preview')
+                    .addClass('content')
+                    .append(content.show())
+                    .parent()
+                    .isotope('reLayout', function(){
+                        var scrollItem = $('#item_'+obj.index).offset()
+                            , anim = { scrollTop: scrollItem.top - 190}
+                        $("html, body")
+                            .animate(anim);
+                    });
+                    $('.article.preview').addClass('masked');
+            } else {
+                var win=window.open(obj.preview.link.url, '_blank');
+                win.focus();
+            }
         })
         .parent()
         .addClass('preview')
@@ -155,9 +169,22 @@ function createPreview(elm, obj){
 }
 
 function createContent(obj){
-    var elm = $('<div class="content"><div class="close">x סגור</div></div>')
+    var elm = $('<div class="content"></div>')
         , content = obj.content
-        , html  = '';
+        , html  = ''
+        , sideBar = createSidebar(obj.sidebar)
+        , closeElm = $('<div></div>')
+        , contentBar = $('<div></div>')
+    closeElm
+        .addClass('close')
+        .html('x סגור')
+
+    elm
+        .append(closeElm)
+        .append(sideBar)
+        .append(contentBar)
+        .append(obj.form.clone())
+    console.log(obj.form);
     switch(content.type) {
         case 'flash':
             break;
@@ -170,8 +197,8 @@ function createContent(obj){
             html = content.content;
             break;
     }
-    elm.
-        append(html)
+    $(html).appendTo(contentBar);
+    elm
         .css('background', obj.content.bgColor)
         .show()
         .children('.close')
@@ -187,7 +214,77 @@ function createContent(obj){
                 .parent()
                 .isotope('reLayout', function(){
                 });
-                $('.article.masked').removeClass('masked');
+                $('.article.masked')
+                    .removeClass('masked');
         })
     return elm;
+}
+
+
+function createSidebar(obj){
+    var sidebar     = $('<div></div>')
+        , title     = $('<div></div>')
+        , content   = $('<div></div>')
+        , link      = $('<a></a>')
+    title
+        .addClass('title')
+        .html(obj.title)
+        .appendTo(sidebar)
+    content
+        .addClass('content')
+        .html(obj.description)
+        .appendTo(sidebar)
+    var attrs = { href: obj.readMore.url
+                , target: '_blank' }
+    link
+        .addClass('link')
+        .html(obj.readMore.title)
+        .attr(attrs)
+        .appendTo(sidebar)
+    return sidebar
+}
+
+function createForm(){
+    var elm     = $('<div></div>')
+        , form  = $('<form></form>')
+        , input = $('<input />')
+        , names =   { firstname:{ type: 'text'
+                                , placeholder: 'first name' 
+                                , required: ''
+                                , name: 'firstname' }
+                    , lastname: { type: 'text'
+                                , placeholder: 'last name' 
+                                , required: ''
+                                , name: 'lastname' } 
+                    , phone:    { type: 'phone'
+                                , placeholder: 'phone' 
+                                , required: ''
+                                , name: 'phone' }
+                    , email:    { type: 'email'
+                                , placeholder: 'email' 
+                                , required: ''
+                                , name: 'email' }
+                    , priv:     { type: 'radio'
+                                , placeholder: 'first name' 
+                                , name: 'type'
+                                , value: 'private' }
+                    , business: { type: 'radio'
+                                , placeholder: 'first name' 
+                                , name: 'type'
+                                , value: 'business' }
+                    , submit:   { type: 'submit'
+                                , value: 'submit' } }
+
+    for (var i in names){
+        var inputelm    = input.clone();
+        inputelm
+            .attr(names[i])
+            .appendTo(form)
+    }
+    form
+        .appendTo(elm);
+    elm
+        .addClass('form')
+
+    return elm
 }
