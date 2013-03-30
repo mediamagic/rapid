@@ -3,7 +3,8 @@ angular.module('admin.controllers', ['ngResource', 'ngCookies', 'ui', 'ui.bootst
 var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$window', '$routeParams','$cookies', function($scope, $compile, $filter, $resource,$location,$window,$routeParams,$cookies){
 	$scope.window = $window
 	, $scope.showMenu =true
-	, $scope.Settings = $resource('/resources/settings', {_csrf: $cookies['csrf.token']}, {update: {method: 'PUT'}})
+	, $scope.Settings = $resource('/resources/settings/:type', {_csrf: $cookies['csrf.token']}, {update: {method: 'PUT'}})
+	, $scope.Categories = $resource('/resources/settings/categories/:key', {_csrf: $cookies['csrf.token']}, {update: {method: 'PUT'}})
 	, $scope.location = $location
 	, $scope.resource = $resource
 	, $scope.route = $routeParams
@@ -36,7 +37,9 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 	$scope.Settings.get({}, function(settings){
 		$scope.settings = settings
-		$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
+		
+		$scope.updateCategories();
+		//$scope.categories = $scope.settings.categories;// ['family', 'business', 'something', 'someothercat'];	
 
 		$scope.buildArticles(function() {			
 			$scope.settingsLoaded = true;
@@ -55,6 +58,16 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 					  			page:1,
 								total:3
 							}
+	}
+
+	$scope.updateCategories = function() {
+		$scope.categories = [];
+		for(var cat in $scope.settings.categories)
+			$scope.categories.push(cat);
+	}
+
+	$scope.getCategoryName = function(key) {
+		return $scope.settings.categories[key];
 	}
 
 	$scope.setPage = function (pageName, page) {
@@ -94,7 +107,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	}
 
 	$scope.reorderIsotopeContent = function(content) {	
-		var cats = $scope.settings.categories
+		var cats = $scope.categories
 			, l = content.length +1;
 		for (var cat in content){
 			var itm = content[cat];
@@ -1059,6 +1072,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				for(var item in $scope.content) {
 					if($scope.content[item]._id == id) {
 						$scope.content[item] = res;
+						$scope.createIsotopeContent();
 						$scope.splitCategories();
 						$scope.savingArticle = false;
 						break;
@@ -1069,6 +1083,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 			$scope.Articles.save($scope.editor.data, function(res) { 
 				if(res._id != undefined) {
 					$scope.content.unshift(res);
+					$scope.createIsotopeContent();
 					$scope.splitCategories();
 					$scope.savingArticle = false;
 				}		
@@ -1121,6 +1136,9 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 						$scope.editor.data = $scope.content[item];
 						$scope.loadTempContent(item);
 						break;
+					} else {
+						$scope.location.path('/main');
+						return;
 					}
 				}
 				
@@ -1129,7 +1147,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				// 	$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
 				// });		
 
-				for(var cat in $scope.editor.data.categories) {
+				for(var cat in $scope.editor.data.categories) {					
 					$scope.editor.categories.push(cat);
 				}
 
@@ -1254,21 +1272,20 @@ var CategoriesCtrl = ['$scope', function($scope){
 	$scope.categoryName = '';
 
 	$scope.minimumLength = 2;
-
-	// TEMP
-	$scope.categoriesObject = {		
-		family:'משפחה',
-		business:'עסקים',
-		category:'קטגוריה'
-	}
-
-	$scope.categoriesObjectTemp = {};
+	$scope.categoriesObject = {};
 	
 
 	$scope.createNewCategory = function() {
 		if($scope.categoryName.length > $scope.minimumLength) {
-			$scope.categoriesObject[Math.random(333)] = $scope.categoryName;
-			$scope.categoryName = '';
+			
+			$scope.Categories.save({ name: $scope.categoryName}, function(res) {
+				$scope.safeApply(function() {
+					$scope.settings.categories[res.key] = $scope.categoryName;
+					$scope.updateCategories();
+					$scope.categoriesObject[res.key] = $scope.categoryName;
+					$scope.categoryName = '';
+				});
+			});
 		}
 	}	
 
@@ -1287,8 +1304,8 @@ var CategoriesCtrl = ['$scope', function($scope){
 
 	$scope.checkIfValidCategory = function(category) {				
 		if(category && category.length > $scope.minimumLength) {
-			for(var cat in $scope.categoriesObject) {
-				if($scope.categoriesObject[cat] == category) {					
+			for(var cat in $scope.settings.categories) {
+				if($scope.settings.categories[cat] == category) {					
 					return true;
 				}
 			}
@@ -1301,13 +1318,32 @@ var CategoriesCtrl = ['$scope', function($scope){
 
 	$scope.changeName = function(key, value) {
 		$scope.safeApply(function() {	
-			$scope.categoriesObjectTemp[key] = value;
+			$scope.categoriesObject[key] = value;
 		});
 	}
 
-	$scope.saveCategory = function(key) {
-		$scope.categoriesObject[key] = $scope.categoriesObjectTemp[key];
-		$scope.categoriesObjectTemp[key] = '';
+	$scope.updateCategory = function(key) {		
+		$scope.Categories.update({ key:key }, { name: $scope.categoriesObject[key]}, function(res) {
+			$scope.safeApply(function() {
+				$scope.settings.categories[key] = $scope.categoriesObject[key];
+				$scope.updateCategories();
+				$scope.categoriesObject[key] = '';
+			});
+		});
+	}
+
+	$scope.deleteCategory = function(key) {
+		// check if 1 or more articles are using this category at let the user know!!!
+
+		if(confirm('are you sure you want to remove category ' + $scope.categoriesObject[key])) {
+			$scope.Categories.delete({ key:key }, function(res) {
+				$scope.safeApply(function() {
+					delete $scope.categoriesObject[key];
+					delete $scope.settings.categories[key];
+					$scope.updateCategories();
+				});
+			});
+		}
 	}
 
 }];

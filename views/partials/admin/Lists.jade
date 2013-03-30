@@ -17,7 +17,7 @@
 							button(ng-click="saveLists()", ng-disabled="disableListsSaveButton", style="left:420px;") Save
 							select.bg-color-green.white(ng-model="filter.category", style="position:absolute; top:15px; right:5px;")
 								option(value="0", disabled) Select Category
-								option(ng-repeat="cat in categories", value="{{ cat }}") {{ cat }}
+								option(ng-repeat="cat in categories", value="{{ cat }}") {{ settings.categories[cat] }}
 						//- #listsPreviewWrapper(ui-if="categoriesLoaded")
 						#listsPreviewWrapper(ui-if="isotopeValid()")
 							#listsIsotope(ui-isotope, options='{"itemSelector":".listItem", "animationEngine":"best-available", "masonry": { "columnWidth": 150, "gutterWidth": 5} }')

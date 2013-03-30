@@ -26,7 +26,9 @@
 									option(value="flash") flash
 									option(value="iframe") iframe
 									option(value="image") image
-								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in categories | remove:'all'")
+								//select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="editor.categories", ng-options="cat for cat in settings.categories | remove:'all' | getCategoryName:cat:getCategoryName")
+								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="editor.categories")
+									option(ng-repeat="(cat, value) in settings.categories | remove:'all'", value="{{cat}}") {{ value}}
 								select.bg-color-green.white.size(ng-model="editor.data.preview.size")									
 									option(value="1x1") 1x1
 									option(value="1x2") 1x2
