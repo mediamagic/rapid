@@ -38,7 +38,7 @@ module.exports = function(db){
 			db.Settings.findOne({}, function(err,doc){
 				var itm = doc.categories;
 				itm[key] = name;
-				doc.set({categories:itm})
+				doc.categories = itm;
 				doc.save(function(err,doc){
 					if (err) return res.send(err);
 					return res.send({key: key});
