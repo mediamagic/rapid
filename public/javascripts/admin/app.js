@@ -21,26 +21,16 @@ filter('status', function() {
 	}
 }).
 filter('categories', function() {
-	return function(categories, fn) { 		
+	return function(categories) { 		
 		var arr = [];
-
+    
 		for(var cat in categories){			
-			//arr.push(cat);
-      arr.push(fn(cat))
+			if(this.settings.categories[cat])
+        arr.push(this.getCategoryName(cat))
 		}
 		
 		return arr.join(',');
 	}
-}).filter('getCategoryName', function() {
-  return function(categories, cat, fn) {     
-    var arr = [];
-
-    for(var cat in categories){                 
-      arr.push(fn(categories[cat]))
-    }
-    
-    return arr;
-  }
 }).filter('category', function() {
 	return function(items, category) { 		
 		var arr = [];
@@ -84,7 +74,53 @@ filter('contentType', function() {
         start = +start; //parse to int
         return input.slice(start);
     }
-}).directive('isoGallery', function(){
+}).filter('articlesFilter', function() {
+    return function(articles) {
+        var input = [];
+        var filters = this.filters;        
+
+        for(var i in articles) {
+          var article = articles[i];          
+
+          var valid = {
+                        text:false,
+                        preview:false,
+                        content:false,
+                        status:false,
+                        categories:false
+          }
+
+          var regex = new RegExp(filters.text, "gi");          
+
+          if(filters.text.length == 0 || article.name.match(regex) || article.sidebar.title.match(regex) || article.sidebar.description.match(regex))
+            valid.text = true;
+
+          if(filters.preview == 0 || filters.preview == article.preview.type) 
+            valid.preview = true;
+
+          if(filters.content == 0 || (article.preview.link.type == "inner" && filters.content == article.content.type))
+            valid.content = true;
+
+          if(filters.status == 0 || filters.status == article.status.toString())
+            valid.status = true;
+
+          for(var cat in filters.categories) {                        
+              if(article.categories[filters.categories[cat]] >= 0) {
+                valid.categories = true;
+                break;
+              }            
+          }
+          
+          if(valid.text && valid.preview && valid.content && valid.categories && valid.status)
+            input.push(article)
+        }
+
+        this.pagination.main.pages = Math.ceil(input.length / this.pagination.main.total);
+
+        return input;
+    }
+}).
+directive('isoGallery', function(){
     return {
         priority: 0,
         restrict: 'A',

@@ -302,61 +302,74 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 				$scope.buildFlash('preview');
 			});
 		}
-	});
+	}, true);
 	//
 
 	// change the size of preview display by size
 	$scope.$watch('editor.data.preview.size', function(n,o){
+	console.log('editor preview size changed')		
 		if (n!=o && n!=undefined) {
-			switch(n) {
-				case '1x1':
-					$scope.editor.previewDisplay.width = 220;
-					$scope.editor.previewDisplay.height = 220;
-					$scope.editor.previewDisplay.margin = 130;
-				break;
-				case '1x2':
-					$scope.editor.previewDisplay.width = 220;
-					$scope.editor.previewDisplay.height = 460;
-					$scope.editor.previewDisplay.margin = 10;
-				break;
-				case '2x2':
-					$scope.editor.previewDisplay.width = 460;
-					$scope.editor.previewDisplay.height = 460;
-					$scope.editor.previewDisplay.margin = 10;
-				break;
-				case '2x1':
-					$scope.editor.previewDisplay.width = 460;
-					$scope.editor.previewDisplay.height = 220;
-					$scope.editor.previewDisplay.margin = 130;
-				break;
-				default:
-				break;
-			}
-
-			if($scope.editor.data.preview.type == 'flash' && $scope.editor.tempContent.preview.flash.url.length > 0)
-				$scope.buildFlash('preview');	
-
-			if($scope.editor.data.preview.type == 'image' && $scope.editor.tempContent.preview.image.length > 0)
-				$scope.buildGallery('preview');	
+			$scope.updatePreviewDisplaySize(n);
+			$scope.rebuildGalleryOrFlash('preview');
 		}		
-	});
+	}, true);
 	//
+
+	$scope.updatePreviewDisplaySize = function(size) {
+		switch(size) {
+			case '1x1':
+				$scope.editor.previewDisplay.width = 220;
+				$scope.editor.previewDisplay.height = 220;
+				$scope.editor.previewDisplay.margin = 130;
+			break;
+			case '1x2':
+				$scope.editor.previewDisplay.width = 220;
+				$scope.editor.previewDisplay.height = 460;
+				$scope.editor.previewDisplay.margin = 10;
+			break;
+			case '2x2':
+				$scope.editor.previewDisplay.width = 460;
+				$scope.editor.previewDisplay.height = 460;
+				$scope.editor.previewDisplay.margin = 10;
+			break;
+			case '2x1':
+				$scope.editor.previewDisplay.width = 460;
+				$scope.editor.previewDisplay.height = 220;
+				$scope.editor.previewDisplay.margin = 130;
+			break;
+			default:
+			break;
+		}
+	}
+
+	$scope.rebuildGalleryOrFlash = function(type) {
+		
+		if($scope.editor.data[type].type == 'flash' && $scope.editor.tempContent[type].flash.url.length > 0)
+				$scope.buildFlash(type);	
+
+		if($scope.editor.data[type].type == 'image' && $scope.editor.tempContent[type].image.length > 0)
+			$scope.buildGallery(type);
+	}
 
 	$scope.$watch('editor.files.flash.length', function(n,o){
 		if (n!=o && n!=undefined)
 			$scope.pagination.swfs.pages = Math.ceil(n / $scope.pagination.swfs.total);
-	});
+	}, true);
 
 	$scope.$watch('content.length', function(n,o){
 		if (n!=o && n!=undefined)
 			$scope.pagination.main.pages = Math.ceil(n / $scope.pagination.main.total);
-	});
+	}, true);
+
+	// $scope.$watch('content', function(n,o){
+	// 	console.log(n)
+	// }, true);
 
 	$scope.Files.query({type:'swfs'}, function(res) {
 		$scope.editor.files.flash = res;		
 	});
 
-	$scope.buildFlash = function(type) {
+	$scope.buildFlash = function(type) {		
 		if(type == 'preview') {
 			var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" id="previewFlash">' +
 						'<param name="movie" value="' + $scope.editor.tempContent.preview.flash.url +'" />' + 
@@ -553,6 +566,28 @@ var MainCtrl = ['$scope', function($scope){
 	// $scope.Stats.query({type: 'share'}, function(resp){
 	// 	$scope.shares = resp;
 	// });
+
+	// $scope.contentQuery = [];
+
+	// $scope.$watch('contentQuery', function(n,o){
+	// 	console.log(n);
+	// });
+
+	$scope.filters = {
+		text:'',
+		preview:0,
+		content:0,
+		status:0,
+		categories: ['all']
+	}
+
+	$scope.$watch('filters.categories', function(n,o){
+		if(n != o) {
+			// make sure all is always selected if nothing else selected
+			if(n.length == 0 && n.indexOf('all') === -1)
+				n.push('all')
+		}		
+	}, true);
 
 	$scope.toggleStatus = function(id) {				
 		var item = null;
@@ -808,12 +843,12 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.$watch('editor.closed.tempContent', function(n, o) { 		
 		if(n != '' && n != undefined)
 			$scope.editor.data.preview.content = n;
-	});
+	}, true);
 
 	$scope.$watch('editor.open.tempContent', function(n, o) { 		
 		if(n != '' && n != undefined)
 			$scope.editor.data.content.content = n;
-	});
+	}, true);
 	//
 
 	// // changing the preview display content LIVE
@@ -825,11 +860,17 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// });
 	// //
 	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 		
-		if(n != o && n != '' && n != undefined) {
-			$scope.editor.previewDisplay.content.text = n;
+		if(n != '' && n != undefined) {			
+			$scope.safeApply(function() {	
+				$scope.editor.previewDisplay.content.text = n;
+			});			
 			//$('#previewDisplay').html(n);
 		}			
-	});
+	},true);
+
+	// $scope.$watch('editor.tempContent.preview.iframe', function(n, o) { 		
+	// 	$scope.updateIframePreview();
+	// });
 
 	$scope.$watch('editor.tempContent.preview.image', function(n, o) { 		
 		if(n != o && n != '' && n != undefined)			
@@ -840,7 +881,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		if(n != o && n != '' && n != undefined) {
 			console.log('changing preview type to ' + n)
 		}			
-	});	
+	}, true);	
 
 	// $scope.handleFile = function(type, fileType, file) {
 
@@ -902,7 +943,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 			var id = image.hashName.split('.')[0];
 
 			if(id != undefined) {
-				$scope.Files.delete({type:'imgs', id:id}, function(res) {									
+				$scope.Files.delete({type:'images', id:id}, function(res) {									
 					if(res.error == 0) {					
 						var imageIndex = $scope.editor.tempContent[type].image.indexOf(image);
 						$scope.editor.tempContent[type].image.splice(imageIndex, 1);
@@ -988,19 +1029,24 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.saveContent = function() {
 		$scope.savingArticle = true;
 
+		$scope.splitCategories();
+
 		var newCategories = $scope.editor.categories;
 		var oldCategories = $scope.editor.data.categories;
 
 		// clean categories that was removed
 		for(var cat in oldCategories) {
-			if(newCategories.indexOf(cat) == -1 && cat != 'all') {
+			if(newCategories.indexOf(cat) == -1 && cat != 'all') {				
 				delete oldCategories[cat]
 			}			
+
+			if(!$scope.settings.categories[cat])
+				delete oldCategories[cat];
 		}
 
 		// add new categories
 		for(var cat in newCategories) {
-			if(oldCategories[newCategories[cat]] == undefined) {
+			if(oldCategories[newCategories[cat]] == undefined && $scope.settings.categories[newCategories[cat]]) {				
 				oldCategories[newCategories[cat]] = $scope.category[newCategories[cat]].length;
 			}
 		}
@@ -1131,15 +1177,19 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		//$scope.Files.query({type:'swfs'}, function(res) {
 			//$scope.editor.files.flash = res;
 			if($scope.articleEditMode) {
+				var exists = false;
 				for(var item in $scope.content) {
-					if($scope.content[item]._id == id) {
-						$scope.editor.data = $scope.content[item];
+					if($scope.content[item]._id == id) {						
+						$scope.editor.data = angular.copy($scope.content[item]);
 						$scope.loadTempContent(item);
+						exists = true;
 						break;
-					} else {
-						$scope.location.path('/main');
-						return;
 					}
+				}
+
+				if(!exists) { // if id not exists in content, that article is not longer exists so we redirect the user back to home
+					$scope.location.path('/main');
+					return;
 				}
 				
 				// $scope.safeApply(function() {	
@@ -1147,10 +1197,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				// 	$scope.editor.closed.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.preview.bgColor) + 1);
 				// });		
 
-				for(var cat in $scope.editor.data.categories) {					
+				for(var cat in $scope.editor.data.categories) {							
 					$scope.editor.categories.push(cat);
-				}
+				}				
 
+				$scope.updatePreviewDisplaySize($scope.editor.data.preview.size);				
 			} else {
 				// $scope.editor.data.categories[$scope.categories[0]] = $scope.category[$scope.categories[0]].length;		
 				// $scope.editor.categories.push($scope.categories[0]);
@@ -1162,22 +1213,26 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.loadTempContent = function(index) {
 		$scope.safeApply(function() {
 			switch($scope.content[index].preview.type) {
-				case 'text':
-					$scope.editor.tempContent.preview.text = $scope.content[index].preview.content;
+				case 'text':				
+					$scope.editor.tempContent.preview.text = angular.copy($scope.content[index].preview.content);
 				break;
 				case 'flash':
 					for (var i in $scope.editor.files.flash){
 						if ($scope.editor.data.preview.content === $scope.editor.files.flash[i].hashName) {
-							$scope.editor.tempContent.preview.flash.data = $scope.editor.files.flash[i].hashName;
+							$scope.editor.tempContent.preview.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
+							$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
+							$scope.rebuildGalleryOrFlash('preview');
 							break;
 						}
 					}
 				break;
 				case 'iframe':
-					$scope.editor.tempContent.preview.iframe = $scope.content[index].preview.content;
+					$scope.editor.tempContent.preview.iframe = angular.copy($scope.content[index].preview.content);
+					$scope.updateIframePreview();
 				break;
-				case 'image':					
-					$scope.editor.tempContent.preview.image = $scope.content[index].preview.content;
+				case 'image':
+					$scope.editor.tempContent.preview.image = angular.copy($scope.content[index].preview.content);
+					$scope.rebuildGalleryOrFlash('preview');
 				break;
 				default:
 				break;
@@ -1185,21 +1240,22 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 
 			switch($scope.content[index].content.type) {
 				case 'text':
-					$scope.editor.tempContent.content.text = $scope.content[index].content.content;
+					$scope.editor.tempContent.content.text = angular.copy($scope.content[index].content.content);
 				break;
 				case 'flash':
 					for (var i in $scope.editor.files.flash){
 						if ($scope.editor.data.content.content === $scope.editor.files.flash[i].hashName) {
-							$scope.editor.tempContent.content.flash.data = $scope.editor.files.flash[i].hashName;
+							$scope.editor.tempContent.content.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
+							$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.content.flash.data;
 							break;
 						}
 					}
 				break;
 				case 'iframe':
-					$scope.editor.tempContent.content.iframe = $scope.content[index].content.content;
+					$scope.editor.tempContent.content.iframe = angular.copy($scope.content[index].content.content);
 				break;
 				case 'image':					
-					$scope.editor.tempContent.content.image = $scope.content[index].content.content;
+					$scope.editor.tempContent.content.image = angular.copy($scope.content[index].content.content);
 				break;
 				default:
 				break;
@@ -1225,7 +1281,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		});
 	}
 
-	if($scope.settingsLoaded) 		
+	if($scope.settingsLoaded)
 		$scope.loadContent();
 }];
 
@@ -1273,7 +1329,13 @@ var CategoriesCtrl = ['$scope', function($scope){
 
 	$scope.minimumLength = 2;
 	$scope.categoriesObject = {};
-	
+
+	$scope.$on('SETTINGS_LOADED', function(event) {
+		$scope.categoriesObject = angular.copy($scope.settings.categories);
+	});
+
+	if($scope.settingsLoaded)
+		$scope.categoriesObject = angular.copy($scope.settings.categories);	
 
 	$scope.createNewCategory = function() {
 		if($scope.categoryName.length > $scope.minimumLength) {
@@ -1325,17 +1387,30 @@ var CategoriesCtrl = ['$scope', function($scope){
 	$scope.updateCategory = function(key) {		
 		$scope.Categories.update({ key:key }, { name: $scope.categoriesObject[key]}, function(res) {
 			$scope.safeApply(function() {
-				$scope.settings.categories[key] = $scope.categoriesObject[key];
+				$scope.settings.categories[key] = angular.copy($scope.categoriesObject[key]);
 				$scope.updateCategories();
-				$scope.categoriesObject[key] = '';
+				//$scope.categoriesObject[key] = '';
 			});
 		});
 	}
 
 	$scope.deleteCategory = function(key) {
-		// check if 1 or more articles are using this category at let the user know!!!
+		console.log($scope.categoriesObject)
+		var confirmText = 'are you sure you want to remove category ' + $scope.categoriesObject[key];
 
-		if(confirm('are you sure you want to remove category ' + $scope.categoriesObject[key])) {
+		// check if 1 or more articles are using this category at let the user know!!!
+		var exists = false;
+		for(var i in $scope.content) {
+			var	item = angular.copy($scope.content[i]);
+
+			if(item.categories[key] >= 0) {
+				exists = true;
+				confirmText = 'one or more articles are using this categoty, ' + confirmText;
+				break;
+			}
+		}
+
+		if(confirm(confirmText)) {
 			$scope.Categories.delete({ key:key }, function(res) {
 				$scope.safeApply(function() {
 					delete $scope.categoriesObject[key];

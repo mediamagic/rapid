@@ -12,11 +12,40 @@
 						h3.padding5.bg-color-green(style="height:40px;")
 							i.white.icon-clipboard-2
 							span.white Articles
-						#newArticleButton
+						#mainFilters
 							a((href="#/editor"))
-								button Create New Article
+									button Create New Article
+							.freeText
+								span Select By Name/Title/Description
+								input(type="text", placeholder="search article", ng-model="filters.text", style="margin-bottom:5px; width:250px")								
+							.previewType
+								span Select By Preview Type:
+								select.bg-color-green.white(ng-model="filters.preview")
+									option(value="0") all
+									option(value="text") text
+									option(value="iframe") iframe
+									option(value="flash") flash
+									option(value="image") image
+							.contentType
+								span Select By Content Type:
+								select.bg-color-green.white(ng-model="filters.content")
+									option(value="0") all
+									option(value="text") text
+									option(value="iframe") iframe
+									option(value="video") video
+									option(value="flash") flash
+									option(value="image") image
+							.status
+								span Select By Status:
+								select.bg-color-green.white(ng-model="filters.status")
+									option(value="0") both
+									option(value="true") enabled
+									option(value="false") disabled
+							.categories
+								span Select By Categories:
+								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="filters.categories", ng-options="key as value for (key,value) in settings.categories")
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
 						table.bg-color-green
 							thead
 								tr
@@ -33,11 +62,11 @@
 									th.white.bold.center delete
 							tbody
 								//tr(ng-repeat="item in content | startFrom:currentPage*pageSize | limitTo:pageSize")
-								tr(ng-repeat="item in content | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total")
+								tr(ng-repeat="item in content | articlesFilter | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total")
 									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
 									td.font12.white {{ item.sidebar.description }}
-									td.font12.white.center {{ item.categories | remove:'all' | categories:getCategoryName}}
+									td.font12.white.center {{ item.categories | remove:'all' | categories}}
 									td.font12.white.center {{ item.preview.type }}									
 									td.font12.white.center {{ item | contentType }}
 									td.font12.white.center {{ getDateById(item._id) | date:'dd/MM/yyyy HH:mm' }}

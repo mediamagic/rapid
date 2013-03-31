@@ -43,8 +43,18 @@ a{color:#ffe821;}
 .fullWidth{width:100%;}
 .noBorder{border:none;}
 .placeHolderWhite::-webkit-input-placeholder{color:#fff;}
-#newArticleButton{width:100%;margin-top:10px;text-align:center;}
 .colorPicker{width:60px;height:60px;cursor:pointer;border:solid #ccc 1px;}
+#mainFilters{position:relative;width:100%;height:70px;margin-top:10px;}#mainFilters a{position:absolute;right:-9px;}
+#mainFilters .freeText{position:absolute;font-size:12px;left:0px;top:0px;}#mainFilters .freeText span{color:#00a300;}
+#mainFilters .freeText input{position:absolute;top:25px;left:0px;width:250px;}
+#mainFilters .previewType{position:absolute;font-size:12px;left:330px;top:0px;}#mainFilters .previewType span{color:#00a300;}
+#mainFilters .previewType select{position:absolute;left:135px;width:80px;}
+#mainFilters .contentType{position:absolute;font-size:12px;left:330px;top:25px;}#mainFilters .contentType span{color:#00a300;}
+#mainFilters .contentType select{position:absolute;left:135px;width:80px;}
+#mainFilters .status{position:absolute;font-size:12px;left:330px;top:50px;}#mainFilters .status span{color:#00a300;}
+#mainFilters .status select{position:absolute;left:135px;width:80px;}
+#mainFilters .categories{position:absolute;top:0px;left:570px;font-size:12px;}#mainFilters .categories span{color:#00a300;}
+#mainFilters .categories select{position:absolute;left:135px;width:80px;}
 .font12{font-size:12px;}
 .white{color:#fff;}
 .red{color:#b91d47;}
