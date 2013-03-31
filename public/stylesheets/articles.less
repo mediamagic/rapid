@@ -1,0 +1,181 @@
+#articles {
+	position: relative;
+	max-width: 940px;
+	min-width: 460px;
+	padding: 0 40px;
+	margin: 0 auto;
+}
+.article {
+	.hover {
+		display: none;
+	}
+	.disabled {
+		display: none;
+	}
+	.mask {
+		display: none;
+	}
+	.mobile {
+		display: none;
+	}
+	&.preview {
+		&.size1x1 {
+			.size(1,1);
+		}
+		&.size1x2 {
+			.size(1,2);
+		}
+		&.size2x1 {
+			.size(2,1);
+		}
+		&.size2x2 {
+			.size(2,2);
+		}
+		.preview  {
+			margin-bottom: 20px;
+			p {
+				padding: 0;
+				margin: 0;
+			}
+		}
+		&.disabled {
+			.disabled {
+				display:block;
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: white;
+				opacity: 0.8;
+				z-index: 2000;
+			}
+		}
+		&.enabled {
+			.disabled {
+				display: none;
+			}
+		}
+		&.linked {
+			.hover {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: black;
+				opacity: 0.8;
+				display: none;
+				z-index: 2000;
+				.hovercontent {
+					color: white;
+					height: 100%;
+					width: 100%;
+					opacity: 1;
+					display: table-cell;
+					vertical-align: middle;
+					text-align: center;
+					font-size: 18px;
+					.text {
+						margin: 0 0 18px 0;
+					}
+					button {
+						width: 112px;
+						height: 35px;
+						font-weight: bold;
+						background: @green;
+						color: white;
+						font-size: 20px;
+						border: none;
+						cursor: pointer;
+					}
+				}
+			}
+			.mobile {
+				position: absolute;
+				bottom: 20px;
+				left: 0px;
+				height: 48px;
+				border: @green solid 1px;
+				background: white url(../images/mobile_link.png) top left no-repeat;
+				z-index: 2000;
+				cursor: pointer;
+				.text {
+					height: 28px;
+					position: absolute;
+					right: 0;
+					color: @green;
+					direction: rtl;
+					line-height: 28px;
+					padding: 10px;
+				}
+			}
+			&:hover {
+				&.mobile-hidden, &.tablet-hidden{
+					.hover {
+						display: none;
+					}
+				}
+				.hover {
+					display: table;
+				}
+			}
+		}
+		&.unlinked {
+			cursor: default;
+			.hover {
+				display: none !important;
+			}
+			.mobile {
+				display: none !important;
+			}
+		}
+		&.masked {
+			.mask {
+				position: absolute;
+				top: 0;
+				left: 0;
+				background: white;
+				opacity: 0.8;
+				display: block;
+				z-index: 2000;
+
+			}
+			&:hover {
+				&.linked {
+					.mask {
+						display: none;
+					}
+					.hover {
+						display: table !important;
+					}
+				}
+			}
+		}
+	}
+	&.content {
+		>.content {
+			position: relative;
+			max-width: 960px;
+			min-width: 460px;
+			min-height: 582px;
+			border: solid 1px @gray;
+			margin: 20px 0;
+			.close {
+				position: absolute;
+				top: -20px;
+				right: 0;
+				width: 50px;
+				height: 20px;
+				direction: rtl;
+				background: @green;
+				text-align: center;
+				color: white;
+				font-weight: bold;
+				cursor: pointer;
+			}
+		}
+		.mobile {
+			display: none !important;
+		}
+		.hover {
+			display: none !important;
+		}
+	}
+}

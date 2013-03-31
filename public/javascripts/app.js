@@ -1,5 +1,7 @@
 'use strict'; 
 
+var staticForm = createForm();
+
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
 .config(['$routeProvider'
@@ -12,13 +14,11 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                         , controller: LoginCtrl, name: 'Login' })
 		. otherwise(    { redirectTo: '/main' })
 }])
-
 .directive('uiIsotope', function() {
  return {
     priority: 0,
     restrict: 'A',
     link: function(scope, elm, attr) {
-
     	var opts = JSON.parse(attr.options)
     	opts.getSortData = {}
     	for (var cat in scope.settings.categories) {
@@ -43,7 +43,6 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 })
 
 .directive('isoItem', ['$compile', function(compile) {
-    var staticForm = createForm();
     return {
         priority: 100,
         restrict: 'A',
@@ -80,6 +79,48 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     }
 })
 
+.directive('totop', function(){
+    return {
+        priority:0,
+        restrict: 'C',
+        link: function(scope, elm, attr) {
+            elm.bind('click', function(){
+                var anim = { scrollTop: 0}
+                $("html, body")
+                    .animate(anim);
+            })
+
+            $(window).scroll(function(){
+                var par = $(elm).parent()
+                    , win = $(window)
+                    , doc = $(document)
+                    , coord =  par.width() - $(elm).width() + par.offset().left -9
+                    , top = win.scrollTop()
+                    , port = win.height()
+                    , height=  doc.height()
+                    , footer = $('#footer').height()
+                    , bottom = height-(top+port)
+                    , css = { position: 'fixed'
+                            , bottom: 20+footer
+                            , left:  coord }
+                if (port+top+20 == height) {
+                    css.bottom = 20+footer;
+                    $(elm)
+                        .css(css)
+                } else if (bottom-20 < footer) {
+                    css.bottom = 20+footer+bottom;
+                    $(elm)
+                        .css(css)
+                } else {
+                    css.bottom = 0;
+                    $(elm)
+                        .css(css)
+                }
+            });
+        }
+    }
+})
+
 
 //some closure magic
 function createOrderFn(cat){
@@ -98,45 +139,7 @@ function createPreview(elm, obj){
                 , height: d[1]*220 + ((d[1]-1)*20) }
         , content = (obj.preview.link.type != 'none') 
             ? createContent(obj) : ''
-    switch(obj.preview.type) {
-        case 'flash':
-            var w = $('<div></div>')
-            w.flash({ swf: '/images/swfs/'+obj.preview.content
-                    , width: dim.width
-                    , height: dim.height
-                    , wmode: 'transparent'
-                    , allowFullScreen: false })
-            html = w;
-            break;
-        case 'iframe':
-            var w       = $('<iframe></iframe>')
-                , src   = obj.preview.content
-                , attrs =   { scrolling: 'no'
-                            , frameborder: 0
-                            , width: dim.width
-                            , height: dim.height
-                            , src: src }
-            w.attr(attrs);
-            html = w;
-            break;
-        case 'image':
-            var w   = $('<div></div>')
-                , c = obj.preview.content
-            if (c.length > 1)
-                w.attr('iso-gallery', JSON.stringify(dim))
-            for(var i=0;i<c.length;i++){
-                var img = $('<img />');
-                img
-                    .attr('src', '/images/imgs/'+c[i].hashName)
-                    .appendTo(w);
-            }
-            html = w;
-            break;
-        case 'text':
-        default:
-            html = obj.preview.content;
-            break;
-    }
+    html = parseContent(obj, dim, 'preview');
     elm
         .html(html)
         .css('background', obj.preview.bgColor)
@@ -149,7 +152,7 @@ function createPreview(elm, obj){
                     .parent()
                     .removeClass('preview')
                     .addClass('content')
-                    .append(content.show())
+                    .append(content.show().append(obj.form))
                     .parent()
                     .isotope('reLayout', function(){
                         var scrollItem = $('#item_'+obj.index).offset()
@@ -183,21 +186,8 @@ function createContent(obj){
         .append(closeElm)
         .append(sideBar)
         .append(contentBar)
-        .append(obj.form.clone())
-    console.log(obj.form);
-    switch(content.type) {
-        case 'flash':
-            break;
-        case 'iframe':
-            break;
-        case 'image':
-            break;
-        case 'text':
-        default:
-            html = content.content;
-            break;
-    }
-    $(html).appendTo(contentBar);
+    html = parseContent(obj,null,'content');
+    contentBar.append(html)
     elm
         .css('background', obj.content.bgColor)
         .show()
@@ -226,6 +216,7 @@ function createSidebar(obj){
         , title     = $('<div></div>')
         , content   = $('<div></div>')
         , link      = $('<a></a>')
+    sidebar.addClass('sidebar');
     title
         .addClass('title')
         .html(obj.title)
@@ -267,11 +258,15 @@ function createForm(){
                     , priv:     { type: 'radio'
                                 , placeholder: 'first name' 
                                 , name: 'type'
-                                , value: 'private' }
+                                , value: 'private'
+                                , label: 'other label'
+                                , id: 'form_private' }
                     , business: { type: 'radio'
                                 , placeholder: 'first name' 
                                 , name: 'type'
-                                , value: 'business' }
+                                , value: 'business'
+                                , label: 'some label'
+                                , id: 'form_business'}
                     , submit:   { type: 'submit'
                                 , value: 'submit' } }
 
@@ -280,6 +275,15 @@ function createForm(){
         inputelm
             .attr(names[i])
             .appendTo(form)
+            .after(function(index){
+                if (names[i].type=='radio') {
+                    var elm = $('<label></label>')
+                    elm.attr('for', names[i].id);
+                    elm.html(names[i].label)
+                    elm.append('<div class="icon"></div>')
+                    return elm;
+                }
+            })
     }
     form
         .appendTo(elm);
@@ -287,4 +291,52 @@ function createForm(){
         .addClass('form')
 
     return elm
+}
+
+function parseContent(obj, dim, type){
+    var html =''
+        , content = obj[type].content;
+    if (type === 'content')
+        dim =   { width: 480
+                , height: 500 }
+    switch(obj[type].type) {
+        case 'flash':
+            var w = $('<div></div>')
+            w.flash({ swf: '/images/swfs/'+content
+                    , width: dim.width
+                    , height: dim.height
+                    , wmode: 'transparent'
+                    , allowFullScreen: false })
+            html = w;
+            break;
+        case 'iframe':
+            var w       = $('<iframe></iframe>')
+                , src   = content
+                , attrs =   { scrolling: 'no'
+                            , frameborder: 0
+                            , width: dim.width
+                            , height: dim.height
+                            , src: src }
+            w.attr(attrs);
+            html = w;
+            break;
+        case 'image':
+            var w   = $('<div></div>')
+                , c = content
+            if (c.length > 1)
+                w.attr('iso-gallery', JSON.stringify(dim))
+            for(var i=0;i<c.length;i++){
+                var img = $('<img />');
+                img
+                    .attr('src', '/images/imgs/'+c[i].hashName)
+                    .appendTo(w);
+            }
+            html = w;
+            break;
+        case 'text':
+        default:
+            html = content;
+            break;
+    }
+    return html;
 }
