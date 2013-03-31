@@ -53,8 +53,8 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             article.index = itemIndex;
             article.form = staticForm;
             var element = createPreview(preview, article);
-            if (article.preview.type == 'flash' || article.content.type == 'flash'){
-                console.log('here');
+            if (article.preview.type == 'flash' 
+                || article.content.type == 'flash'){
                 elm.addClass('hidden-phone hidden-tablet')
             }
             compile(element.contents())(scope);
@@ -98,7 +98,10 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                 var par = $(elm).parent()
                     , win = $(window)
                     , doc = $(document)
-                    , coord =  par.width() - $(elm).width() + par.offset().left -9
+                    , coord =  par.width() 
+                            - $(elm).width() 
+                            + par.offset().left 
+                            - 9
                     , top = win.scrollTop()
                     , port = win.height()
                     , height=  doc.height()
@@ -141,16 +144,19 @@ function createPreview(elm, obj){
         , d = obj.preview.size.split('x')
         , dim = { width:  d[0]*220 + ((d[0]-1)*20)
                 , height: d[1]*220 + ((d[1]-1)*20) }
-        , content = (obj.preview.link.type != 'none') 
-            ? createContent(obj) : ''
     html = parseContent(obj, dim, 'preview');
     elm
         .html(html)
         .css('background', obj.preview.bgColor)
-        .siblings('.bind')
-        .bind('click', function(){
-            if (obj.preview.link.type == 'inner') {
+        .parent()
+        .addClass('preview')
+        if (obj.preview.link.type == 'inner') {
+            elm
+                .siblings('.bind')
+                .bind('click', function(){
                 $('.close').click()
+                var content = (obj.preview.link.type != 'none') 
+                    ? createContent(obj) : ''
                 elm
                     .hide()
                     .parent()
@@ -165,13 +171,11 @@ function createPreview(elm, obj){
                             .animate(anim);
                     });
                     $('.article.preview').addClass('masked');
-            } else {
-                var win=window.open(obj.preview.link.url, '_blank');
-                win.focus();
-            }
-        })
-        .parent()
-        .addClass('preview')
+            })
+        } else {
+            var win=window.open(obj.preview.link.url, '_blank');
+            win.focus();
+        }
     return elm;
 }
 
@@ -199,6 +203,7 @@ function createContent(obj){
         .bind('click', function(){
             elm
                 .hide()
+                .html('')
                 .siblings('.preview')
                 .show();
             elm
@@ -305,7 +310,7 @@ function parseContent(obj, dim, type){
                 , height: 500 }
     switch(obj[type].type) {
         case 'flash':
-            var w = $('<div></div>')
+            var w = $('<div class="flash"></div>')
             w.flash({ swf: '/images/swfs/'+content
                     , width: dim.width
                     , height: dim.height
@@ -314,7 +319,7 @@ function parseContent(obj, dim, type){
             html = w;
             break;
         case 'iframe':
-            var w       = $('<iframe></iframe>')
+            var w       = $('<iframe class="iframe"></iframe>')
                 , src   = content
                 , attrs =   { scrolling: 'no'
                             , frameborder: 0
@@ -325,7 +330,7 @@ function parseContent(obj, dim, type){
             html = w;
             break;
         case 'image':
-            var w   = $('<div></div>')
+            var w   = $('<div class="image"></div>')
                 , c = content
             if (c.length > 1)
                 w.attr('iso-gallery', JSON.stringify(dim))
@@ -335,6 +340,17 @@ function parseContent(obj, dim, type){
                     .attr('src', '/images/imgs/'+c[i].hashName)
                     .appendTo(w);
             }
+            html = w;
+            break;
+        case 'video':
+            var w       =   $('<iframe class="player"></iframe>')
+                , src   =   '//www.youtube.com/embed/'+
+                            content+
+                            '?feature=oembed&autoplay=1&rel=0&wmode=transparent'
+                , attrs =   { scrolling: 'no'
+                            , frameborder: 0
+                            , src: src }
+            w.attr(attrs);
             html = w;
             break;
         case 'text':
