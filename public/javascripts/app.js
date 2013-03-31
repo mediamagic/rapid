@@ -53,6 +53,10 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             article.index = itemIndex;
             article.form = staticForm;
             var element = createPreview(preview, article);
+            if (article.preview.type == 'flash' || article.content.type == 'flash'){
+                console.log('here');
+                elm.addClass('hidden-phone hidden-tablet')
+            }
             compile(element.contents())(scope);
         }
     }
