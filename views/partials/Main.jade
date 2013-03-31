@@ -8,6 +8,8 @@
 					.text {{article.preview.link.text}}
 					button לחצו כאן
 			.mobile.hidden-desktop.bind 
-				.text mobile only
+				.text {{article.preview.link.text}}
 			.preview(class="size{{article.preview.size}}")
 	.clr
+.totop(ui-scrollfix="+20")
+	a.butt(ng-click="console.log('up')") up

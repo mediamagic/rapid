@@ -789,6 +789,7 @@ var ListsCtrl = ['$scope', function($scope){
 }];
 
 var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
+	console.log('here');
 	var id = $scope.route.id;
 	$scope.articleEditMode = false;
 	$scope.articleButtonMode = 'Save';
@@ -1131,16 +1132,17 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		//$scope.Files.query({type:'swfs'}, function(res) {
 			//$scope.editor.files.flash = res;
 			if($scope.articleEditMode) {
+				console.log($scope.content)
 				for(var item in $scope.content) {
 					if($scope.content[item]._id == id) {
 						$scope.editor.data = $scope.content[item];
 						$scope.loadTempContent(item);
+						var found = true;
 						break;
-					} else {
-						$scope.location.path('/main');
-						return;
 					}
 				}
+				if (!found)
+					$scope.location.path('/main');
 				
 				// $scope.safeApply(function() {	
 				// 	$scope.editor.open.colorPickerClass = 'colorPicker_' + (colorPicker.indexOf($scope.editor.data.content.bgColor) + 1);
