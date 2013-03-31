@@ -828,6 +828,33 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.articleEditMode = false;
 	$scope.articleButtonMode = 'Save';
 
+	$scope.hide = {
+		preview: false,
+		content: false
+	}
+
+	$scope.changeArrowIcon = function(type) {
+		if($scope.hide[type]) {
+			return 'icon-arrow-down-2'; 
+		}
+
+		return 'icon-arrow-up-2';
+	}
+
+	$scope.slideToggle = function(type) {
+		$scope.hide[type] = !$scope.hide[type];
+
+		if(type == 'preview')
+			$('#closedEditorWrapper').slideToggle('slow');
+		if(type == 'content')
+			$('#openEditorWrapper').slideToggle('slow');
+	}
+
+	// if type in not inner we need to change $scope.hide.content to true cuz the content editor is closed
+	$scope.$watch('editor.data.preview.link.type', function(n, o) {
+		$scope.hide.content = true;
+	}, true);	
+
 	// make default objects
 	$scope.editor.categories = [];	
 	$scope.editor.data = angular.copy($scope.editor.defaultData);

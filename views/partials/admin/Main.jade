@@ -60,9 +60,8 @@
 									th.white.bold.center actions
 									th.white.bold.center edit
 									th.white.bold.center delete
-							tbody
-								//tr(ng-repeat="item in content | startFrom:currentPage*pageSize | limitTo:pageSize")
-								tr(ng-repeat="item in content | articlesFilter | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total")
+							tbody								
+								tr(ng-repeat="item in content | articlesFilter | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total", ui-animate)
 									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
 									td.font12.white {{ item.sidebar.description }}

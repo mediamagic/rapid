@@ -10,12 +10,16 @@
 			.grid
 				.row
 					.span4(style="width:100%;")
-						h3.padding5.bg-color-green.progress-bar(style="position:relative;height:40px;")							
+						h3.padding5.bg-color-green.progress-bar(style="position:relative;height:40px;margin:0;")							
+							.showHide(style="position:absolute; width:100%;")
+								//.center.white(ng-click="hide.preview=!hide.preview", ng-class="changeArrowIcon('preview')")
+								.center.white(ng-click="slideToggle('preview')", ng-class="changeArrowIcon('preview')")
 							.bar.bg-color-blue(style="width:{{ progressBar }}%;")
 							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ uploadprogress }}
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
-								span.white Article Preview Editor						
+								span.white Article Preview Editor							
+						//#closedEditorWrapper.animate(ui-hide="hide.preview")
 						#closedEditorWrapper
 							#upperForm
 								//- .colorPicker(ng-click="toggleColor('closed')", class="{{editor.closed.colorPickerClass}}")
@@ -99,6 +103,8 @@
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
 								span.white Article Content Editor
+							.showHide(style="position:absolute; width:100%;")									
+									.center.white(ng-click="slideToggle('content')", ng-class="changeArrowIcon('content')")
 						#openEditorWrapper(ng-show="editor.data.preview.link.type == 'inner'")
 							#leftSide								
 								#textContent(ui-if="editor.data.content.type == 'text'")									
