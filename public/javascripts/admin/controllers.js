@@ -269,6 +269,10 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			flash:[],
 			images: []
 		},		
+		tinyImageUpload: {
+			preview: null,
+			content: null
+		},
 		tinymceOptions: {
 			// General options			
 			theme : "advanced",
@@ -283,7 +287,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			content_css : "stylesheets/tinyFonts.css",
 
 			// Theme options			
-			theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
+			theme_advanced_buttons1 : "uploadImage,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
 			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",			
 			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,ltr,rtl",
 			theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid",
@@ -291,7 +295,20 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_toolbar_location : "top",
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
-			theme_advanced_resizing : false
+			theme_advanced_resizing : false,
+
+			setup : function(ed) {
+		        // Add a custom button
+		        ed.addButton('addImage', {
+		            title : 'Upload Image',
+		            image : 'images/upload.png',
+		            onclick : function() {
+		                // Add you own code to execute something on click
+		                $scope.editor.tinyImageUpload.preview = ed;
+		                $scope.triggerClick('uploadNewImageTinymce_preview');		                
+		            }
+		        });
+		    }
 
 			//onchange_callback:'$scope.tinymceChange'
 		},
@@ -309,14 +326,27 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			content_css : "stylesheets/tinyFonts.css",
 
 			// Theme options			
-			theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
+			theme_advanced_buttons1 : "uploadImage,newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
 			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",			
 			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,ltr,rtl",
 			theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid",
 			theme_advanced_toolbar_location : "external",			
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
-			theme_advanced_resizing : false
+			theme_advanced_resizing : false,
+
+			setup : function(ed) {
+		        // Add a custom button
+		        ed.addButton('uploadImage', {
+		            title : 'Upload Image',
+		            image : 'images/upload.png',
+		            onclick : function() {
+		                // Add you own code to execute something on click
+		                $scope.editor.tinyImageUpload.content = ed;
+		                $scope.triggerClick('uploadNewImageTinymce_content');		                
+		            }
+		        });
+		    }
 
 			//onchange_callback:'$scope.tinymceChange'
 		}
@@ -463,6 +493,57 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 									uploadprogress:''
 						}
 	} 
+
+	$scope.uploadResourceImageForTiny = function(type, file) {
+		$scope.upload[type].uploading = true;		 
+
+		var fd = new FormData();
+		fd.append('fileName', file);
+		fd.append('_csrf', $scope.cookies['csrf.token'])
+		
+		var xhr = new XMLHttpRequest();  
+
+		var mimeType = /image.*/;				
+			if(!file.type.match(mimeType))
+				return alert('only image type allowed!');
+
+			xhr.open("POST", "/api/uploads/images" , true);
+
+			xhr.onload = function(e) {							
+				var image = {
+					fileName:file.name,
+					hashName:JSON.parse(this.response).hashName					
+				}
+
+				$scope.editor.tinyImageUpload[type].focus();
+		        $scope.editor.tinyImageUpload[type].selection.setContent('<img src="' + $scope.host + 'images/imgs/' + image.hashName + '" alt="" />');
+
+				$scope.safeApply(function() {					
+					$scope.upload[type].progressBar = '0';
+					$scope.upload[type].uploadprogress = '';
+					$scope.upload[type].uploading = false;
+				});
+			}
+
+		xhr.onerror = function(e) {
+			$scope.safeApply(function() {									
+				$scope.upload[type].progressBar = '0';
+				$scope.upload[type].uploadprogress = '';
+				$scope.upload[type].uploading = false;
+			});
+		}
+
+		xhr.upload.onprogress = function(e) {
+			$scope.safeApply(function() {
+				if (e.lengthComputable) {
+     				$scope.upload[type].progressBar = Math.ceil(((e.loaded / e.total) * 100));
+     				$scope.upload[type].uploadprogress = $scope.upload[type].progressBar + '%';     				
+     			}
+     		});
+		}
+
+		xhr.send(fd);
+	}
 
 	$scope.uploadNewResource = function(type, fileType, file) {
 		$scope.upload[type].uploading = true;		 
@@ -850,7 +931,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	//
 
 	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 			
-		if(n != undefined) {			
+		if(n != undefined) {						
 			$scope.safeApply(function() {	
 				$scope.editor.display.preview.content.text = n;
 			});			
@@ -1082,11 +1163,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		}
 	}
 
-	$scope.loadTempContent = function(index) {
+	$scope.loadTempContent = function(index) {		
 		$scope.safeApply(function() {
 			switch($scope.content[index].preview.type) {
 				case 'text':				
-					$scope.editor.tempContent.preview.text = angular.copy($scope.content[index].preview.content);
+					$scope.editor.tempContent.preview.text = angular.copy($scope.content[index].preview.content);					
 				break;
 				case 'flash':
 					for (var i in $scope.editor.files.flash){

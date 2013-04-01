@@ -16,7 +16,7 @@
 							a((href="#/editor"))
 									button Create New Article
 							.freeText
-								span Select By Name/Title/Description
+								span Select By Name / Title
 								input(type="text", placeholder="search article", ng-model="filters.text", style="margin-bottom:5px; width:250px")								
 							.previewType
 								span Select By Preview Type:
@@ -51,7 +51,7 @@
 								tr
 									th.white.bold.center name
 									th.white.bold.center title
-									th.white.bold.center description
+									//- th.white.bold.center description
 									th.white.bold.center categories
 									th.white.bold.center preview type
 									th.white.bold.center content type
@@ -63,7 +63,7 @@
 								tr(ng-repeat="item in content | articlesFilter | startFrom:(pagination.main.page - 1)*pagination.main.total | limitTo:pagination.main.total", ui-animate)
 									td.font12.white {{ item.name }}
 									td.font12.white {{ item.sidebar.title }}
-									td.font12.white {{ item.sidebar.description }}
+									//td.font12.white {{ item.sidebar.description }}
 									td.font12.white.center {{ item.categories | remove:'all' | categories}}
 									td.font12.white.center {{ item.preview.type }}									
 									td.font12.white.center {{ item | contentType }}

@@ -104,8 +104,6 @@ a{color:#ffe821;}
 .pagination-mini ul>li>a,.pagination-mini ul>li>span{padding:0 6px;font-size:10.5px;}
 tr{transition:all 0.5s ease;-o-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-webkit-transition:all 0.5s ease;max-height:50px;overflow:hidden;}
 tr.ui-animate{opacity:0;max-height:0;padding:0 5px;}
-li{transition:all 0.5s ease;-o-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-webkit-transition:all 0.5s ease;max-height:50px;overflow:hidden;}
-li.ui-animate{opacity:0;max-height:0;padding:0 5px;}
 .trToUl{display:ul;}
 .tdToLi{display:li;}
 .ui-show{transition:all 0.5s ease;}
