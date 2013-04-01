@@ -47,16 +47,17 @@
 									option(style="background-color:#8c9299;;color:#fff;", value="#8c9299") grey
 									option(style="background-color:#4aa82e;;color:#fff;", value="#4aa82e") green
 								input.bg-color-green.white.linkTitle(type="text", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
-								input.bg-color-green.white.linkUrl(type="text", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
+								input#previewLinkUrlInput.bg-color-green.white.linkUrl(type="text", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
 									//textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
+										p(dir="rtl")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									//- input(type="text", ng-model="editor.tempContent.preview.flash.url", placeholder="url to swf file", style="width:300px;")
 									//- input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('preview', 'flash', this.files[0])")
 									//span {{ uploadprogress }}
-									button(style="position:relative;margin:0 auto; margin-top:20px;margin-bottom:20px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="uploading") Upload New SWF Resource
+									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="uploading") Upload New SWF Resource
 									input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
 									//br
 									//select(width="250", style="position:relative; margin:0 auto; width:250px;display:block;", size="25", ng-model="editor.tempContent.preview.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
@@ -71,7 +72,7 @@
 									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="position:relative; margin:0 auto; margin-top:20px; width:80%; display:block;")
 									button(style="position:relative;margin:0 auto; margin-top:20px;display:block;", ng-click="updateIframePreview()", ng-disabled="editor.tempContent.preview.iframe.length < 10") Update IFrame
 								#imagePreview(ng-show="editor.data.preview.type == 'image'")
-									button(style="position:relative;margin:0 auto; margin-top:20px;margin-bottom:20px;display:block;", ng-click="triggerClick('uploadNewImageInput_preview')", ng-disabled="uploading") Upload New Image
+									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewImageInput_preview')", ng-disabled="uploading") Upload New Image
 									input#uploadNewImageInput_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadNewResource('preview', 'image', this.files[0])", style="display:none;")
 									//input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('preview', 'image', this.files[0])") 
 									//span {{ uploadprogress }}
@@ -106,9 +107,9 @@
 							.showHide(style="position:absolute; width:100%;")									
 									.center.white(ng-click="slideToggle('content')", ng-class="changeArrowIcon('content')")
 						#openEditorWrapper(ng-show="editor.data.preview.link.type == 'inner'")
-							#leftSide								
-								#textContent(ui-if="editor.data.content.type == 'text'")									
-									textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important")
+							#upperTypeForm
+								//- #textContent(ui-if="editor.data.content.type == 'text'")									
+								//- 	textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important")
 								#videoContent(ui-if="editor.data.content.type == 'video'")
 									input(type="text", ng-model="editor.tempContent.content.video.id", placeholder="youtube video id", style="width:300px;")
 									img(ng-src="{{ editor.tempContent.content.video.icon }}", width="32", height="32")
@@ -116,10 +117,20 @@
 									.br
 									button(ng-click="checkVideo('content')") Check Video
 								#flashContent(ng-show="editor.data.content.type == 'flash'")
-									input(type="text", ng-model="editor.tempContent.content.flash.url", placeholder="url to swf file", style="width:300px;")
-									input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('content', 'flash', this.files[0])")
-									span {{ uploadprogress }}
-									select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.content.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_content')", ng-disabled="uploading") Upload New SWF Resource
+									input#uploadNewSwfInput_content(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('content', 'flash', this.files[0])", style="display:none;")										
+									ul#contentSwfs.listview
+										li.contentSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data == swf.hashName}", ng-click="showSelectedSwf('content', swf)")
+											h2.icon.icon-font
+											.data
+												{{ swf.fileName }}
+												br
+												a(href="{{ host }}/images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+								//- #flashContent(ng-show="editor.data.content.type == 'flash'")
+								//- 	input(type="text", ng-model="editor.tempContent.content.flash.url", placeholder="url to swf file", style="width:300px;")
+								//- 	input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('content', 'flash', this.files[0])")
+								//- 	span {{ uploadprogress }}
+								//- 	select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.content.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
 								#iframeContent(ng-show="editor.data.content.type == 'iframe'")									
 									input(type="text", ng-model="editor.tempContent.content.iframe", placeholder="url to external link", style="width:300px;")									
 								#imageContent(ng-show="editor.data.content.type == 'image'")									
@@ -131,18 +142,78 @@
 											span(ng-click="removeImage('content', image)", style="cursor:pointer;") X
 											.br 
 											span {{ image.fileName }}
-							#rightSide
-								.colorPicker(ng-click="toggleColor('open')", class="{{editor.open.colorPickerClass}}")
-								select.bg-color-green.white(width="150", style="width:150px;", ng-model="editor.data.content.type")									
-									option(value="text") text
-									option(value="video") video
-									option(value="flash") flash
-									option(value="iframe") iframe
-									option(value="image") image
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="title", ng-model="editor.data.sidebar.title")
-								textarea.bg-color-green.white(rows="5", cols="80", width="150", style="width:150px !important", placeholder="description", ng-model="editor.data.sidebar.description")
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.sidebar.readMore.url")
-								input.bg-color-green.white(type="text", style="width:150px;", placeholder="url title", ng-model="editor.data.sidebar.readMore.title")						
+							#upperForm
+								//.colorPicker(ng-click="toggleColor('open')", class="{{editor.open.colorPickerClass}}")
+								.color
+									select(style="background-color:{{ editor.data.content.bgColor }};color:{{ editor.open.colorInput }};", ng-model="editor.data.content.bgColor")									
+										option(style="background-color:#ffffff;color:#000;", value="#ffffff") white
+										option(style="background-color:#8c9299;;color:#fff;", value="#8c9299") grey
+										option(style="background-color:#4aa82e;;color:#fff;", value="#4aa82e") green
+								.type
+									select.bg-color-green.white(ng-model="editor.data.content.type")									
+										option(value="text") text
+										option(value="video") video
+										option(value="flash") flash
+										option(value="iframe") iframe
+										option(value="image") image
+								.title
+									input.bg-color-green.white(type="text", placeholder="title", ng-model="editor.data.sidebar.title")
+								.description
+									textarea.bg-color-green.white(rows="5", cols="80", placeholder="description", ng-model="editor.data.sidebar.description")
+								.readMore
+									.url
+										input#contentLinkUrlInput.bg-color-green.white(type="text", placeholder="url", ng-model="editor.data.sidebar.readMore.url")
+								.readMore
+									.title
+										input.bg-color-green.white(type="text", placeholder="url title", ng-model="editor.data.sidebar.readMore.title")
+							#contentDisplay
+								#rightSide
+									.header SKODA RAPID
+									.title.green.alfi.bold {{ editor.data.sidebar.title }}
+									pre.description.alfi {{ editor.data.sidebar.description }}
+									.readMore.alfi
+										a.alfi(href="{{ editor.data.sidebar.readMore.url }}", target="_blank") {{ editor.data.sidebar.readMore.title }}									
+								#leftSide									
+									#textContent(ui-if="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
+										textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceContentOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important;border:none;")
+											p(dir="rtl")
+							//- #leftSide								
+							//- 	#textContent(ui-if="editor.data.content.type == 'text'")									
+							//- 		textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important")
+							//- 	#videoContent(ui-if="editor.data.content.type == 'video'")
+							//- 		input(type="text", ng-model="editor.tempContent.content.video.id", placeholder="youtube video id", style="width:300px;")
+							//- 		img(ng-src="{{ editor.tempContent.content.video.icon }}", width="32", height="32")
+							//- 		//icon-checkmark
+							//- 		.br
+							//- 		button(ng-click="checkVideo('content')") Check Video
+							//- 	#flashContent(ng-show="editor.data.content.type == 'flash'")
+							//- 		input(type="text", ng-model="editor.tempContent.content.flash.url", placeholder="url to swf file", style="width:300px;")
+							//- 		input(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().handleFile('content', 'flash', this.files[0])")
+							//- 		span {{ uploadprogress }}
+							//- 		select(width="250", style="width:250px;", size="5", ng-model="editor.tempContent.content.flash.data", ng-options="swf.hashName as swf.fileName for swf in editor.files.flash")
+							//- 	#iframeContent(ng-show="editor.data.content.type == 'iframe'")									
+							//- 		input(type="text", ng-model="editor.tempContent.content.iframe", placeholder="url to external link", style="width:300px;")									
+							//- 	#imageContent(ng-show="editor.data.content.type == 'image'")									
+							//- 		input(type="file", accept="image/*", onchange="angular.element(this).scope().handleFile('content', 'image', this.files[0])") 
+							//- 		span {{ uploadprogress }}
+							//- 		#contentImages(ui-sortable="{ axis:'x'}", ng-model="editor.tempContent.content.image")
+							//- 			.contentImage(ng-repeat="image in editor.tempContent.content.image", style="position:relative; float:left; width:100px; height:140px; margin:10px; overflow:hidden; border:solid red 1px")
+							//- 				img(ng-src="{{ host }}images/imgs/{{image.hashName}}", width="100", height="100")
+							//- 				span(ng-click="removeImage('content', image)", style="cursor:pointer;") X
+							//- 				.br 
+							//- 				span {{ image.fileName }}
+							//- #rightSide
+							//- 	.colorPicker(ng-click="toggleColor('open')", class="{{editor.open.colorPickerClass}}")
+							//- 	select.bg-color-green.white(width="150", style="width:150px;", ng-model="editor.data.content.type")									
+							//- 		option(value="text") text
+							//- 		option(value="video") video
+							//- 		option(value="flash") flash
+							//- 		option(value="iframe") iframe
+							//- 		option(value="image") image
+							//- 	input.bg-color-green.white(type="text", style="width:150px;", placeholder="title", ng-model="editor.data.sidebar.title")
+							//- 	textarea.bg-color-green.white(rows="5", cols="80", width="150", style="width:150px !important", placeholder="description", ng-model="editor.data.sidebar.description")
+							//- 	input.bg-color-green.white(type="text", style="width:150px;", placeholder="url", ng-model="editor.data.sidebar.readMore.url")
+							//- 	input.bg-color-green.white(type="text", style="width:150px;", placeholder="url title", ng-model="editor.data.sidebar.readMore.title")						
 					button(ng-click="saveContent()", ng-disabled="savingArticle") {{ articleButtonMode }}
 					pre(ng-bind="editor.data | json")					
 					//pre(ng-bind="editor.categories | json")

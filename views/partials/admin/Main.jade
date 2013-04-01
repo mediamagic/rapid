@@ -38,14 +38,14 @@
 							.status
 								span Select By Status:
 								select.bg-color-green.white(ng-model="filters.status")
-									option(value="0") both
+									option(value="0") all
 									option(value="true") enabled
 									option(value="false") disabled
 							.categories
 								span Select By Categories:
 								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="filters.categories", ng-options="key as value for (key,value) in settings.categories")
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")												
 						table.bg-color-green
 							thead
 								tr
@@ -57,7 +57,7 @@
 									th.white.bold.center content type
 									th.white.bold.center date created
 									th.white.bold.center status
-									th.white.bold.center actions
+									//th.white.bold.center actions
 									th.white.bold.center edit
 									th.white.bold.center delete
 							tbody								
@@ -73,8 +73,8 @@
 										span.font12.white.center (
 										a.font12(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
 										span )
-									td.font12.center
-										a.font12(ng-click="itemPreview(item._id)") preview
+									//- td.font12.center
+									//- 	a.font12(ng-click="itemPreview(item._id)") preview
 									td.font12.center
 										a.font12(href="/admin#/editor/{{item._id}}") edit
 									td.font12.center
