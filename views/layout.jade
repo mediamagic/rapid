@@ -40,8 +40,8 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 							label(for="nav_{{$index}}") {{val}}
 								.icon
 						.clr
-					a(ng-click="toggleForm()") form
-			#wrapper(ng-view, ng-class="{'formOpen': showForm}")
+					.toggleForm(ng-click="toggleForm()")
+			#wrapper(ng-view)
 		#footer
 			.footer
 				.links

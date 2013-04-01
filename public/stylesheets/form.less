@@ -1,11 +1,27 @@
 #headerForm {
 	width: 940px;
 	position: relative;
-	margin: 0 auto 20px auto;
+	margin: -20px auto 20px auto;
+	.form {
+		background: @green url(../images/form_bg.png) repeat-x top;
+		.closeForm {
+			background: transparent url(../images/form_close.png) no-repeat center center;
+			width: 19px;
+			height: 19px;
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			color: white;
+			display: block;
+			text-align: center;
+			line-height: 19px;
+			cursor:pointer;
+		}
+	}
 }
 .form {
 	height: 80px;
-	width: 870px;
+	width: 860px;
 	margin: 0 auto;
 	background: @green;
 	padding: 20px 20px 20px 60px;
@@ -13,7 +29,7 @@
 	text-align: right;
 	span {
 		direction: rtl;
-		font-size: 20px;
+		font-size: 19px;
 		font-family: 'alfi bold';
 	}
 	input {
@@ -38,15 +54,49 @@
 		-webkit-appearance: none;
 		margin: 0;
 	}
-	input[type="submit"] {
-		background: yellow;
-		height: 45px;
-		width: 120px;
+	.submit {
+		background: transparent url(../images/form_submit.png) no-repeat center center;
+		height: 49px;
+		width: 121px;
 		position: absolute;
-		left: -10px;
-		bottom: 40px;
+		left: -8px;
+		bottom: 30px;
 		margin: 0;
 		border: none;
 		cursor: pointer;
+	}
+	.closeForm {
+		display: none;
+	}
+}
+input[type="radio"] {
+	display: none;
+	+label{
+		.icon {
+			display: inline-block;
+			background:url(../images/form_checkfalse.png) no-repeat center center;
+			width: 30px;
+			height: 30px;
+			vertical-align: middle;
+		}
+		padding:0 20px 0 0;
+		display: inline-block;
+		appearance:none;
+		-moz-appearance:none;
+		-webkit-appearance:none;
+		-ms-appearance: none;
+		-o-appearance: none;
+		color: white;
+	}
+	&:checked {
+		+label {
+			color: black;
+			.icon {
+				background:url(../images/form_checktrue.png) no-repeat center center;
+				width: 30px;
+				height: 30px;
+				vertical-align: middle;
+			}
+		}
 	}
 }
