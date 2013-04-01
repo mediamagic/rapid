@@ -9,21 +9,29 @@
     padding: 0;
     max-width: 540px;
   }
-  #articles .article.content > .content {
-    max-width: 460px;
-    background: red;
-    .sidebar {
-      width: 460px;
-      height: 210px;
+  #articles .article {
+      &.content {
+        height: 802px;
+        >.content {
+        max-width: 460px;
+        background: red;
+        .sidebar {
+          width: 420px;
+          height: 175px;
+        }
+        .inner {
+          width: 460px;
+          height: 315px;
+        }
+      }
     }
-    .inner {
-      width: 460px;
-      height: 350px;
-    }
-    .form {
-      height: 200px;
-      width: 460px;
-    }
+  }
+  .form {
+    height: 160px;
+    width: 380px;
+  }
+  #headerForm {
+    width: 460px;
   }
 }
 

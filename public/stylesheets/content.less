@@ -1,14 +1,36 @@
 #articles {
     .article {
         &.content {
+            height: 626px;
+            z-index: 1000;
             >.content {
                 .sidebar {
                     float: right;
-                    width: 239px;
-                    height: 464px;
+                    width: 199px;
+                    height: 394px;
                     top: 0;
                     right: 0;
                     border-left: solid 1px @gray;
+                    direction: rtl;
+                    padding: 50px 20px 20px 20px;
+                    overflow: hidden;
+                    background: white url(../images/content_head.png) no-repeat top right;
+                    .divider {
+                        background: @darkGray;
+                        height: 1px;
+                    }
+                    .title {
+                        margin: 20px 0 0 0;
+                        color: @green;
+                        font-size: 25px;
+                        font-family: 'alfi bold';
+                    }
+                    .description {
+                        font-size: 13px;
+                    }
+                    .link {
+                        color: @green;
+                    }
                 }
                 .inner {
                     float: right;
@@ -17,8 +39,6 @@
                 }
                 .form {
                     clear: both;
-                    height: 120px;
-                    background: @green;
                 }
             }
         }    

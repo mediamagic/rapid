@@ -157,27 +157,32 @@ function createPreview(elm, obj){
             elm
                 .siblings('.bind')
                 .bind('click', function(){
-                $('.close').click()
-                var content = (obj.preview.link.type != 'none') 
-                    ? createContent(obj) : ''
-                elm
-                    .hide()
-                    .parent()
-                    .removeClass('preview')
-                    .addClass('content')
-                    .append(content.show(1000).append(obj.form))
-                    .parent()
-                    .isotope('reLayout', function(){
-                        var scrollItem = $('#item_'+obj.index).offset()
-                            , anim = { scrollTop: scrollItem.top - 190}
-                        $("html, body")
-                            .animate(anim);
-                    });
-                    $('.article.preview').addClass('masked');
-            })
+                    $('.close').click()
+                    var content = (obj.preview.link.type != 'none') 
+                        ? createContent(obj) : ''
+                    elm
+                        .hide()
+                        .parent()
+                        .removeClass('preview')
+                        .addClass('content')
+                        .append(content.append(obj.form))
+                        .show()
+                        .parent()
+                        .isotope('reLayout', function(){
+                            var scrollItem = $('#item_'+obj.index).offset()
+                                , anim = { scrollTop: scrollItem.top - 190}
+                            $("html, body")
+                                .animate(anim);
+                        });
+                        $('.article.preview').addClass('masked');
+                })
         } else {
-            var win=window.open(obj.preview.link.url, '_blank');
-            win.focus();
+            elm
+                .siblings('.bind')
+                .bind('click', function(){
+                    var win=window.open(obj.preview.link.url, '_blank');
+                    win.focus();
+                })
         }
     return elm;
 }
@@ -210,7 +215,7 @@ function createContent(obj){
                     $(this)
                         .html('')
                         .siblings('.preview')
-                        .show(500)
+                        .show()
                         .parent()
                         .addClass('preview')
                         .removeClass('content')
@@ -227,16 +232,21 @@ function createContent(obj){
 
 function createSidebar(obj){
     var sidebar     = $('<div></div>')
+        , divider   = $('<div></div>')
         , title     = $('<div></div>')
-        , content   = $('<div></div>')
+        , content   = $('<pre></pre>')
         , link      = $('<a></a>')
     sidebar.addClass('sidebar');
+
+    divider
+        .addClass('divider')
+        .appendTo(sidebar)
     title
         .addClass('title')
         .html(obj.title)
         .appendTo(sidebar)
     content
-        .addClass('content')
+        .addClass('description')
         .html(obj.description)
         .appendTo(sidebar)
     var attrs = { href: obj.readMore.url
@@ -247,67 +257,6 @@ function createSidebar(obj){
         .attr(attrs)
         .appendTo(sidebar)
     return sidebar
-}
-
-function createForm(){
-    var elm     = $('<div></div>')
-        , form  = $('<form></form>')
-        , input = $('<input />')
-        , names =   { firstname:{ type: 'text'
-                                , placeholder: 'first name' 
-                                , required: ''
-                                , name: 'firstname' }
-                    , lastname: { type: 'text'
-                                , placeholder: 'last name' 
-                                , required: ''
-                                , name: 'lastname' } 
-                    , phone:    { type: 'phone'
-                                , placeholder: 'phone' 
-                                , required: ''
-                                , name: 'phone' }
-                    , email:    { type: 'email'
-                                , placeholder: 'email' 
-                                , required: ''
-                                , name: 'email' }
-                    , priv:     { type: 'radio'
-                                , placeholder: 'first name' 
-                                , name: 'type'
-                                , value: 'private'
-                                , label: 'private'
-                                , id: 'form_private' }
-                    , business: { type: 'radio'
-                                , placeholder: 'first name' 
-                                , name: 'type'
-                                , value: 'business'
-                                , label: 'business'
-                                , id: 'form_business'}
-                    , submit:   { type: 'submit'
-                                , value: 'submit'
-                                , 'ng-click': 'formSubmit()' } }
-    for (var i in names){
-        var inputelm    = input.clone()
-            , el = names[i]
-        if (i != 'submit')
-            el['ng-model'] = 'form.'+el.name;
-        inputelm
-            .attr(el)
-            .appendTo(form)
-            .after(function(index){
-                if (el.type=='radio') {
-                    var elm = $('<label></label>')
-                    elm.attr('for', el.id);
-                    elm.html(el.label)
-                    elm.append('<div class="icon"></div>')
-                    return elm;
-                }
-            })
-    }
-    form
-        .appendTo(elm);
-    elm
-        .addClass('form')
-
-    return elm
 }
 
 function parseContent(obj, dim, type){

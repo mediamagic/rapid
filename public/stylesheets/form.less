@@ -1,0 +1,52 @@
+#headerForm {
+	width: 940px;
+	position: relative;
+	margin: 0 auto 20px auto;
+}
+.form {
+	height: 80px;
+	width: 870px;
+	margin: 0 auto;
+	background: @green;
+	padding: 20px 20px 20px 60px;
+	color: white;
+	text-align: right;
+	span {
+		direction: rtl;
+		font-size: 20px;
+		font-family: 'alfi bold';
+	}
+	input {
+		border: @gray solid 1px;
+		float: right;
+		direction: rtl;
+		margin: 15px 0 0 15px;
+	}
+	label { 
+		float: right;
+		margin: 15px -15px 0 0px;
+	}
+	input[type="text"], input[type="email"], input[type="number"] {
+		height: 28px;
+		width: 108px;
+		line-height: 28px;
+		padding: 0 15px;
+	}
+	input::-webkit-outer-spin-button,
+	input::-webkit-inner-spin-button {
+		display: none;
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	input[type="submit"] {
+		background: yellow;
+		height: 45px;
+		width: 120px;
+		position: absolute;
+		left: -10px;
+		bottom: 40px;
+		margin: 0;
+		border: none;
+		cursor: pointer;
+	}
+}
