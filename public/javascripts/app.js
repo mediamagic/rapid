@@ -14,7 +14,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                         , controller: LoginCtrl, name: 'Login' })
 		. otherwise(    { redirectTo: '/main' })
 }])
-.directive('uiIsotope', function() {
+.directive('uiIsotope', ['$compile', function(compile) {
  return {
     priority: 0,
     restrict: 'A',
@@ -38,9 +38,10 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     	scope.$watch('filters.category', function(n,o){
   			elm.isotope({sortBy:n});
     	})
+        compile(staticForm)(scope);
     }
   }
-})
+}])
 
 .directive('isoItem', ['$compile', function(compile) {
     return {
@@ -52,6 +53,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                 , preview   = elm.children('.preview')
             article.index = itemIndex;
             article.form = staticForm;
+            article.compile = compile;
             var element = createPreview(preview, article);
             if (article.preview.type == 'flash' 
                 || article.content.type == 'flash'){
@@ -268,27 +270,30 @@ function createForm(){
                                 , placeholder: 'first name' 
                                 , name: 'type'
                                 , value: 'private'
-                                , label: 'other label'
+                                , label: 'private'
                                 , id: 'form_private' }
                     , business: { type: 'radio'
                                 , placeholder: 'first name' 
                                 , name: 'type'
                                 , value: 'business'
-                                , label: 'some label'
+                                , label: 'business'
                                 , id: 'form_business'}
                     , submit:   { type: 'submit'
-                                , value: 'submit' } }
-
+                                , value: 'submit'
+                                , 'ng-click': 'formSubmit()' } }
     for (var i in names){
-        var inputelm    = input.clone();
+        var inputelm    = input.clone()
+            , el = names[i]
+        if (i != 'submit')
+            el['ng-model'] = 'form.'+el.name;
         inputelm
-            .attr(names[i])
+            .attr(el)
             .appendTo(form)
             .after(function(index){
-                if (names[i].type=='radio') {
+                if (el.type=='radio') {
                     var elm = $('<label></label>')
-                    elm.attr('for', names[i].id);
-                    elm.html(names[i].label)
+                    elm.attr('for', el.id);
+                    elm.html(el.label)
                     elm.append('<div class="icon"></div>')
                     return elm;
                 }

@@ -22,7 +22,7 @@ var GlobalCtrl = ['$scope', '$resource', '$location', '$window', '$routeParams',
 	$scope.filters = { category: 'all' }
 }];
 
-var MainCtrl = ['$scope', function($scope){
+var MainCtrl = ['$scope', '$http', function($scope, $http){
 	$scope.Articles 		= $scope.resource('/resources/articles/:id')
 	$scope.contentLoaded 	= false;
 
@@ -51,6 +51,29 @@ var MainCtrl = ['$scope', function($scope){
 		$scope.articles = resp;
 		$scope.contentLoaded = true;
 	});
+
+	$scope.form = {
+		firstname: '',
+		lastname: '',
+		phone: '',
+		email: '',
+		type: 'private'
+	}
+	$scope.formReset = angular.copy($scope.form);
+
+	$scope.formSubmit = function(){
+		console.log($scope.form)
+		$http.post('/someUrl', $scope.form)
+			.success(function(data, status, headers, config) {
+				$scope.form = angular.copy($scope.formReset);
+				return false;
+			})
+			.error(function(data, status, headers, config) {
+				return false;
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+			});
+	}
 }];
 
 var LoginCtrl = ['$scope', '$window' , function($scope, $window){
