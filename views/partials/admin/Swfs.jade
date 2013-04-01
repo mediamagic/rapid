@@ -11,15 +11,15 @@
 				.row
 					.span4(style="width:100%;")
 						h3.padding5.bg-color-green.progress-bar(style="height:40px;")
-							.bar.bg-color-blue(style="width:{{ progressBar }}%;")
-							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ uploadprogress }}
+							.bar.bg-color-blue(style="width:{{ upload.resource.progressBar }}%;")
+							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ upload.resource.uploadprogress }}
 							.a(style="position:absolute;left:5px;top:15px;")
 								i.icon-font.white
 								span.white Flash Resources
 						#uploadNewSwf							
-							button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="uploading") Upload New SWF Resource
+							button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="upload.resource.uploading") Upload New SWF Resource
 							//input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewSwfResource(this.files[0])", style="display:none;")
-							input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
+							input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('resource', 'flash', this.files[0])", style="display:none;")
 						.paginationWrapper
 							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
 						table.bg-color-green
@@ -29,7 +29,7 @@
 									th.white.bold.center OnDisk File Name
 									th.white.bold.center Delete
 							tbody
-								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id' | startFrom:(pagination.swfs.page - 1)*pagination.swfs.total | limitTo:pagination.swfs.total")
+								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id' | startFrom:(pagination.swfs.page - 1)*pagination.swfs.total | limitTo:pagination.swfs.total", ui-animate)
 									td.font12.white.center {{ swf.fileName }}
 									td.font12.white.center 
 										a.font12(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}

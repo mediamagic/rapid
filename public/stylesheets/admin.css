@@ -18,9 +18,9 @@ a{color:#ffe821;}
 #closedEditorWrapper #upperForm .categories{position:absolute;top:30px;left:10px;width:120px;}
 #closedEditorWrapper #leftSide{position:relative;float:left;width:460px;}#closedEditorWrapper #leftSide #flashPreview{position:relative;width:100%;height:100%;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs{width:100%;height:535px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf{width:100%;height:70px;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .data{color:#fff;}
 #closedEditorWrapper #leftSide #iframePreview{position:relative;width:100%;height:100%;}
-#closedEditorWrapper #leftSide #imagePreview #previewImages{width:100%;height:535px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #imagePreview #previewImages .previewImage{width:100%;}#closedEditorWrapper #leftSide #imagePreview #previewImages .previewImage .removeImage{position:absolute;top:5px;right:5px;cursor:pointer;}
-#closedEditorWrapper #leftSide #imagePreview #previewImages .previewImage .move{position:absolute;top:5px;right:25px;cursor:pointer;}
-#closedEditorWrapper #leftSide #imagePreview #previewImages .previewImage .data{color:#fff;}
+#closedEditorWrapper #leftSide #imagePreview .previewImages{width:100%;height:535px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage{width:100%;}#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage .removeImage{position:absolute;top:5px;right:5px;cursor:pointer;}
+#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage .move{position:absolute;top:5px;right:25px;cursor:pointer;}
+#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage .data{color:#fff;}
 #closedEditorWrapper #rightSide{position:relative;float:right;width:478px;height:480px;border-left:solid #ccc 1px;}#closedEditorWrapper #rightSide #previewDisplay{position:relative;outline:solid #ccc 1px;margin:0 auto;overflow:hidden;}#closedEditorWrapper #rightSide #previewDisplay .original{position:absolute;top:0px;left:0px;}
 #closedEditorWrapper #rightSide #previewDisplay .hover{position:absolute;top:0px;left:0px;background-image:url('../images/transparent.png');display:none;z-index:100;}#closedEditorWrapper #rightSide #previewDisplay .hover button{color:#fff;background-color:#4aa82e;font-size:14px;}
 #closedEditorWrapper #rightSide #previewDisplay .hover .content{color:#fff;width:100%;text-align:center;display:table-cell;vertical-align:middle;}
@@ -35,7 +35,15 @@ a{color:#ffe821;}
 #listsPreviewWrapper #listsIsotope .listItem .iconWrapper{position:relative;text-align:center;display:table-cell;vertical-align:middle;width:100%;}
 #listsPreviewWrapper #listsIsotope .listItem.disabled{opacity:0.4;}
 #listsPreviewWrapper #listsIsotope .listItem.enabled{opacity:1;}
-#openEditorWrapper{position:relative;width:940px;height:665px;overflow:hidden;border:solid #ccc 1px;}#openEditorWrapper #upperTypeForm{position:relative;width:469px;height:200px;float:left;border-right:solid #ccc 1px;border-bottom:solid #ccc 1px;}#openEditorWrapper #upperTypeForm #flashContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs{width:100%;height:147px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf{width:100%;height:70px;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .data{color:#fff;}
+#openEditorWrapper{position:relative;width:940px;height:665px;overflow:hidden;border:solid #ccc 1px;}#openEditorWrapper #upperTypeForm{position:relative;width:469px;height:200px;float:left;border-right:solid #ccc 1px;border-bottom:solid #ccc 1px;}#openEditorWrapper #upperTypeForm #videoContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #videoContent input{position:relative;float:left;text-align:center;margin-top:20px;width:200px;margin-left:135px;margin-bottom:20px;}
+#openEditorWrapper #upperTypeForm #videoContent span{position:relative;margin-top:20px;float:left;}
+#openEditorWrapper #upperTypeForm #videoContent button{clear:both;position:relative;margin:0 auto;margin-top:20px;display:block;}
+#openEditorWrapper #upperTypeForm #flashContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs{width:100%;height:147px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf{width:100%;height:70px;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .data{color:#fff;}
+#openEditorWrapper #upperTypeForm #iframeContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #iframeContent input{position:relative;margin:0 auto;margin-top:20px;width:80%;display:block;}
+#openEditorWrapper #upperTypeForm #iframeContent button{position:relative;margin:0 auto;margin-top:20px;display:block;}
+#openEditorWrapper #upperTypeForm #imageContent .previewImages{width:100%;height:147px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage{width:100%;}#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage .removeImage{position:absolute;top:5px;right:5px;cursor:pointer;}
+#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage .move{position:absolute;top:5px;right:25px;cursor:pointer;}
+#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage .data{color:#fff;}
 #openEditorWrapper #upperForm{position:relative;width:469px;height:200px;float:left;border-bottom:solid #ccc 1px;}#openEditorWrapper #upperForm .type{position:absolute;top:10px;left:10px;width:100px;}#openEditorWrapper #upperForm .type select{width:100px;}
 #openEditorWrapper #upperForm .color{position:absolute;top:40px;left:10px;width:100px;}#openEditorWrapper #upperForm .color select{width:100px;}
 #openEditorWrapper #upperForm .title{position:absolute;top:10px;left:130px;width:300px;}#openEditorWrapper #upperForm .title input{width:300px;}
@@ -48,7 +56,7 @@ a{color:#ffe821;}
 #openEditorWrapper #contentDisplay #rightSide .description{position:relative;width:240px;font-size:13px;text-align:right;direction:rtl;padding-right:20px;padding-left:20px;margin-top:20px;}
 #openEditorWrapper #contentDisplay #rightSide pre{background:none;border:none;color:#000;}
 #openEditorWrapper #contentDisplay #rightSide .readMore{position:relative;width:240px;text-align:right;direction:rtl;padding-right:20px;padding-left:20px;margin-top:20px;}#openEditorWrapper #contentDisplay #rightSide .readMore a{font-size:13px;color:#00a300;text-decoration:underline;}
-#openEditorWrapper #contentDisplay #leftSide{position:absolute;width:700px;height:464px;top:0px;left:0px;}
+#openEditorWrapper #contentDisplay #leftSide{position:absolute;width:700px;height:464px;top:0px;left:0px;}#openEditorWrapper #contentDisplay #leftSide #contentPreviewDisplay{position:relative;outline:solid #ccc 1px;margin:0 auto;overflow:hidden;}#openEditorWrapper #contentDisplay #leftSide #contentPreviewDisplay .original{position:absolute;top:0px;left:0px;}
 #uploadNewSwf{text-align:center;}
 #saveCategory{width:100%;text-align:center;margin-top:10px;}#saveCategory input{width:200px;text-align:center;}
 #saveCategory button{margin-top:5px;}
