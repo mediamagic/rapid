@@ -57,7 +57,6 @@
 									th.white.bold.center content type
 									th.white.bold.center date created
 									th.white.bold.center status
-									//th.white.bold.center actions
 									th.white.bold.center edit
 									th.white.bold.center delete
 							tbody								
@@ -73,8 +72,6 @@
 										span.font12.white.center (
 										a.font12(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
 										span )
-									//- td.font12.center
-									//- 	a.font12(ng-click="itemPreview(item._id)") preview
 									td.font12.center
 										a.font12(href="/admin#/editor/{{item._id}}") edit
 									td.font12.center

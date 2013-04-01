@@ -1,0 +1,23 @@
+html, body { 
+    margin:0; padding:0 
+}
+
+p { 
+    margin:0; padding:0 
+}
+
+@font-face {
+    font-family: 'alfi regular';
+    src: url('../fonts/alfiregularwebfont.eot');
+    src: local('alfi regular'),
+         url('../fonts/alfiregularwebfont.ttf') format('truetype'),
+         url('../fonts/alfiregularwebfont.svg#font') format('svg'); 
+}
+
+@font-face {
+    font-family: 'alfi bold';
+    src: url('../fonts/alfiboldwebfont.eot');
+    src: local('alfi bold'),
+         url('../fonts/alfiboldwebfont.ttf') format('truetype'),
+         url('../fonts/alfiboldwebfont.svg#font') format('svg'); 
+}

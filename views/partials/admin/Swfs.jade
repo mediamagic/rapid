@@ -18,7 +18,6 @@
 								span.white Flash Resources
 						#uploadNewSwf							
 							button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="upload.resource.uploading") Upload New SWF Resource
-							//input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewSwfResource(this.files[0])", style="display:none;")
 							input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('resource', 'flash', this.files[0])", style="display:none;")
 						.paginationWrapper
 							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
