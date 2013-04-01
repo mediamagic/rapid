@@ -5,7 +5,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .clr{clear:both;}
 input[type="radio"]{display:none;}input[type="radio"]+label{padding:0 20px 0 0;display:inline-block;appearance:none;-moz-appearance:none;-webkit-appearance:none;-ms-appearance:none;-o-appearance:none;}input[type="radio"]+label .icon{display:inline-block;background:url('http://refundfx.com.au/uploads/image/checkbox_empty.png') no-repeat center center;width:30px;height:30px;vertical-align:middle;}
 input[type="radio"]:checked+label .icon{background:url('http://refundfx.com.au/uploads/image/checkbox_full.png') no-repeat center center;width:30px;height:30px;vertical-align:middle;}
-#wrapper{margin:191px auto 0 auto;max-width:1020px;position:relative;z-index:1;min-width:540px;}
+#wrapper{margin:191px auto 0 auto;max-width:1020px;position:relative;z-index:1;min-width:540px;}#wrapper.formOpen{margin-top:250px;}
 .timedWrapper{min-width:460px;}
 .totop{display:none;position:absolute;bottom:20px;right:7px;width:24px;height:25px;padding-top:25px;background:transparent url(../images/to_top.png) no-repeat top center;cursor:pointer;}.totop.ui-scrollfix{display:block;}
 .footer,.push{min-height:48px;}

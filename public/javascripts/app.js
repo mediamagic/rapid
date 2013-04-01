@@ -1,6 +1,6 @@
 'use strict'; 
 
-var staticForm = createForm();
+var staticForm = '';
 
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
@@ -20,6 +20,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     restrict: 'A',
     link: function(scope, elm, attr) {
     	var opts = JSON.parse(attr.options)
+        staticForm = $('.form').clone();
     	opts.getSortData = {}
     	for (var cat in scope.settings.categories) {
     		var c 	= cat
