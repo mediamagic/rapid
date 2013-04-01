@@ -56,7 +56,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 							swfs: {
 								pages:1,
 					  			page:1,
-								total:3
+								total:10
 							}
 	}
 
@@ -206,26 +206,54 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			showLinkUrl: false,
 			colorInput:'#ffffff'
 		},
-		previewDisplayDefault: {
-							width:220,
-							height:220,
-							margin:130,
-							content: {
-								text:'',
-								flash:'',
-								iframe:'',
-								image:''
-							}
-		},
-		previewDisplay: {							
+		// previewDisplayDefault: {
+		// 					width:220,
+		// 					height:220,
+		// 					margin:130,
+		// 					content: {
+		// 						text:'',
+		// 						flash:'',
+		// 						iframe:'',
+		// 						image:''
+		// 					}
+		// },
+		// previewDisplay: {							
 						
+		// },
+		displayDefault: {
+					preview: {
+								width:220,
+								height:220,
+								margin:130,
+								content: {
+									text:'',
+									flash:'',
+									iframe:'',
+									image:''
+								}
+					},
+					content: {
+								width:700,
+								height:464,
+								margin:0,
+								content: {
+									text:'',
+									video:'',
+									flash:'',
+									iframe:'',
+									image:''
+								}
+					}
+		},
+		display: {
+
 		},
 		defaultTempContent: {
 			preview: {
 						text: '<p dir="rtl"></p>',
 						video: { 
 									id:'',
-									icon:'images/disabled.png',
+									icon:'',
 									valid:false
 						},
 						flash: {
@@ -239,7 +267,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 						text: '<p dir="rtl"></p>',
 						video: { 
 									id:'',
-									icon:'images/disabled.png',
+									icon:'',
 									valid:false
 						},
 						flash: {
@@ -267,7 +295,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	  		height: "572",
 			//directionality : "rtl",
 
-			theme_advanced_fonts:"Arial=arial,Tahoma=tahoma",
+			theme_advanced_fonts:"Alfi=alfi,Arial=arial,Tahoma=tahoma",
 
 			//content_css : "custom_content.css"
 
@@ -293,7 +321,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	  		height: "464",
 			//directionality : "rtl",
 
-			theme_advanced_fonts:"Arial=arial,Tahoma=tahoma",
+			theme_advanced_fonts:"Alfi=alfi,Arial=arial,Tahoma=tahoma",
 
 			//content_css : "custom_content.css"
 
@@ -360,28 +388,52 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	$scope.updatePreviewDisplaySize = function(size) {
 		switch(size) {
 			case '1x1':
-				$scope.editor.previewDisplay.width = 220;
-				$scope.editor.previewDisplay.height = 220;
-				$scope.editor.previewDisplay.margin = 130;
+				$scope.editor.display.preview.width = 220;
+				$scope.editor.display.preview.height = 220;
+				$scope.editor.display.preview.margin = 130;
 			break;
 			case '1x2':
-				$scope.editor.previewDisplay.width = 220;
-				$scope.editor.previewDisplay.height = 460;
-				$scope.editor.previewDisplay.margin = 10;
+				$scope.editor.display.preview.width = 220;
+				$scope.editor.display.preview.height = 460;
+				$scope.editor.display.preview.margin = 10;
 			break;
 			case '2x2':
-				$scope.editor.previewDisplay.width = 460;
-				$scope.editor.previewDisplay.height = 460;
-				$scope.editor.previewDisplay.margin = 10;
+				$scope.editor.display.preview.width = 460;
+				$scope.editor.display.preview.height = 460;
+				$scope.editor.display.preview.margin = 10;
 			break;
 			case '2x1':
-				$scope.editor.previewDisplay.width = 460;
-				$scope.editor.previewDisplay.height = 220;
-				$scope.editor.previewDisplay.margin = 130;
+				$scope.editor.display.preview.width = 460;
+				$scope.editor.display.preview.height = 220;
+				$scope.editor.display.preview.margin = 130;
 			break;
 			default:
 			break;
 		}
+		// switch(size) {
+		// 	case '1x1':
+		// 		$scope.editor.previewDisplay.width = 220;
+		// 		$scope.editor.previewDisplay.height = 220;
+		// 		$scope.editor.previewDisplay.margin = 130;
+		// 	break;
+		// 	case '1x2':
+		// 		$scope.editor.previewDisplay.width = 220;
+		// 		$scope.editor.previewDisplay.height = 460;
+		// 		$scope.editor.previewDisplay.margin = 10;
+		// 	break;
+		// 	case '2x2':
+		// 		$scope.editor.previewDisplay.width = 460;
+		// 		$scope.editor.previewDisplay.height = 460;
+		// 		$scope.editor.previewDisplay.margin = 10;
+		// 	break;
+		// 	case '2x1':
+		// 		$scope.editor.previewDisplay.width = 460;
+		// 		$scope.editor.previewDisplay.height = 220;
+		// 		$scope.editor.previewDisplay.margin = 130;
+		// 	break;
+		// 	default:
+		// 	break;
+		// }
 	}
 
 	$scope.rebuildGalleryOrFlash = function(type) {
@@ -412,44 +464,85 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	});
 
 	$scope.buildFlash = function(type) {		
-		if(type == 'preview') {
-			var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" id="previewFlash">' +
-						'<param name="movie" value="' + $scope.editor.tempContent.preview.flash.url +'" />' + 
-						'<param name="quality" value="high" />' +
-						'<param name="bgcolor" value="' + $scope.editor.data.preview.bgColor + '" />' +
-						'<embed src="' + $scope.editor.tempContent.preview.flash.url +'" quality="high" bgcolor="' + $scope.editor.data.preview.bgColor + '" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
-						'</embed>' +
-						'</object>';
-			$scope.editor.previewDisplay.content.flash = swf;
-		} else if(type == 'content') {
+		// if(type == 'preview') {			
+		// 	// var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" id="previewFlash">' +
+		// 	// 			'<param name="movie" value="' + $scope.editor.tempContent.preview.flash.url +'" />' + 
+		// 	// 			'<param name="quality" value="high" />' +
+		// 	// 			'<param name="bgcolor" value="' + $scope.editor.data.preview.bgColor + '" />' +
+		// 	// 			'<embed src="' + $scope.editor.tempContent.preview.flash.url +'" quality="high" bgcolor="' + $scope.editor.data.preview.bgColor + '" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
+		// 	// 			'</embed>' +
+		// 	// 			'</object>';
+		// 	// $scope.editor.previewDisplay.content.flash = swf;
+		// } else if(type == 'content') {
 
-		}
+		// }
+
+		var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '" id="previewFlash">' +
+					'<param name="movie" value="' + $scope.editor.tempContent[type].flash.url +'" />' + 
+					'<param name="quality" value="high" />' +
+					'<param name="bgcolor" value="' + $scope.editor.data[type].bgColor + '" />' +
+					'<embed src="' + $scope.editor.tempContent[type].flash.url +'" quality="high" bgcolor="' + $scope.editor.data[type].bgColor + '" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
+					'</embed>' +
+					'</object>';
+		$scope.editor.display[type].content.flash = swf;
 	}
 
 	$scope.buildGallery = function(type) {
 		var wrapper = angular.element('<div></div>');
-		if($scope.editor.tempContent.preview.image.length > 1) 
-			wrapper.attr('iso-gallery', '{ "width":' + $scope.editor.previewDisplay.width + ', "height":' + $scope.editor.previewDisplay.height + ' }');
+		if($scope.editor.tempContent[type].image.length > 1) 
+			wrapper.attr('iso-gallery', '{ "width":' + $scope.editor.display[type].width + ', "height":' + $scope.editor.display[type].height + ' }');
 		
-		for(var image in $scope.editor.tempContent.preview.image) {
+		for(var image in $scope.editor.tempContent[type].image) {
 			var img = angular.element('<img />');
-			img.attr('src', $scope.host + '/images/imgs/' + $scope.editor.tempContent.preview.image[image].hashName);
-			img.attr('width', $scope.editor.previewDisplay.width);
-			img.attr('height', $scope.editor.previewDisplay.height);
+			img.attr('src', $scope.host + '/images/imgs/' + $scope.editor.tempContent[type].image[image].hashName);
+			img.attr('width', $scope.editor.display[type].width);
+			img.attr('height', $scope.editor.display[type].height);
 			img.appendTo(wrapper);
 		}
 					
-		$scope.editor.previewDisplay.content.image = wrapper;			
-		$compile($scope.editor.previewDisplay.content.image)($scope);	
+		$scope.editor.display[type].content.image = wrapper;			
+		$compile($scope.editor.display[type].content.image)($scope);	
+		// var wrapper = angular.element('<div></div>');
+		// if($scope.editor.tempContent.preview.image.length > 1) 
+		// 	wrapper.attr('iso-gallery', '{ "width":' + $scope.editor.previewDisplay.width + ', "height":' + $scope.editor.previewDisplay.height + ' }');
+		
+		// for(var image in $scope.editor.tempContent.preview.image) {
+		// 	var img = angular.element('<img />');
+		// 	img.attr('src', $scope.host + '/images/imgs/' + $scope.editor.tempContent.preview.image[image].hashName);
+		// 	img.attr('width', $scope.editor.previewDisplay.width);
+		// 	img.attr('height', $scope.editor.previewDisplay.height);
+		// 	img.appendTo(wrapper);
+		// }
+					
+		// $scope.editor.previewDisplay.content.image = wrapper;			
+		// $compile($scope.editor.previewDisplay.content.image)($scope);	
 	}
 
 	$scope.triggerClick = function(div) {		
 		$('#' + div).trigger('click');
 	}
 
-	$scope.uploading = false;
-	$scope.progressBar = '0';
-	$scope.uploadprogress = '';
+	// $scope.uploading = false;
+	// $scope.progressBar = '0';
+	// $scope.uploadprogress = '';
+
+	$scope.upload = {
+						preview: {
+									uploading:false,
+									progressBar:'0',
+									uploadprogress:''
+						},
+						content: {
+									uploading:false,
+									progressBar:'0',
+									uploadprogress:''
+						},
+						resource: {
+									uploading:false,
+									progressBar:'0',
+									uploadprogress:''
+						}
+	} 
 
 	// $scope.uploadNewSwfResource = function(file) {
 		
@@ -491,7 +584,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 	$scope.uploadNewResource = function(type, fileType, file) {
 
-		$scope.uploading = true;
+		//$scope.uploading = true;
+		$scope.upload[type].uploading = true;		 
 
 		var fd = new FormData();
 		fd.append('fileName', file);
@@ -515,9 +609,9 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 				$scope.safeApply(function() {
 					$scope.editor.tempContent[type].image.push(image);
-					$scope.progressBar = '0';
-					$scope.uploadprogress = '';
-					$scope.uploading = false;
+					$scope.upload[type].progressBar = '0';
+					$scope.upload[type].uploadprogress = '';
+					$scope.upload[type].uploading = false;
 				});
 			}			
 		} else if(fileType == 'flash') {
@@ -532,26 +626,26 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 				$scope.safeApply(function() {				
 					$scope.editor.files.flash.push(flash);
-					$scope.progressBar = '0';
-					$scope.uploadprogress = '';
-					$scope.uploading = false;
+					$scope.upload[type].progressBar = '0';
+					$scope.upload[type].uploadprogress = '';
+					$scope.upload[type].uploading = false;
 				});
 			}
 		}	
 
 		xhr.onerror = function(e) {
 			$scope.safeApply(function() {									
-				$scope.progressBar = '0';
-				$scope.uploadprogress = '';
-				$scope.uploading = false;
+				$scope.upload[type].progressBar = '0';
+				$scope.upload[type].uploadprogress = '';
+				$scope.upload[type].uploading = false;
 			});
 		}
 
 		xhr.upload.onprogress = function(e) {
 			$scope.safeApply(function() {
 				if (e.lengthComputable) {
-     				$scope.progressBar = Math.ceil(((e.loaded / e.total) * 100));
-     				$scope.uploadprogress = $scope.progressBar + '%';     				
+     				$scope.upload[type].progressBar = Math.ceil(((e.loaded / e.total) * 100));
+     				$scope.upload[type].uploadprogress = $scope.upload[type].progressBar + '%';     				
      			}
      		});
 		}
@@ -560,7 +654,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	}
 
 	$scope.showSelectedSwf = function(type, swf) {
-		$scope.editor.tempContent.preview.flash.data = swf.hashName;
+		$scope.editor.tempContent[type].flash.data = swf.hashName;		
 	}
 
 	// function createArticle(i){
@@ -932,7 +1026,8 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.editor.categories = [];	
 	$scope.editor.data = angular.copy($scope.editor.defaultData);
 	$scope.editor.tempContent = angular.copy($scope.editor.defaultTempContent);		
-	$scope.editor.previewDisplay = angular.copy($scope.editor.previewDisplayDefault);
+	//$scope.editor.previewDisplay = angular.copy($scope.editor.previewDisplayDefault);
+	$scope.editor.display = angular.copy($scope.editor.displayDefault);
 
 	if(id != undefined) {		
 		$scope.articleEditMode = true;
@@ -959,10 +1054,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// 	}			
 	// });
 	// //
-	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 				
-		if(n != o && n != undefined) {			
+	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 			
+		if(n != undefined) {			
 			$scope.safeApply(function() {	
-				$scope.editor.previewDisplay.content.text = n;
+				$scope.editor.display.preview.content.text = n;
+				//$scope.editor.previewDisplay.content.text = n;
 			});			
 			//$('#previewDisplay').html(n);
 		}			
@@ -984,6 +1080,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		if(n != o && n != '' && n != undefined)			
 			$scope.buildGallery('preview');							
 	}, true);	
+
+	$scope.$watch('editor.tempContent.content.image', function(n, o) { 		
+		if(n != o && n != '' && n != undefined)			
+			$scope.buildGallery('content');							
+	}, true);
 
 	$scope.$watch('editor.data.preview.type', function(n, o) { 		
 		if(n != o && n != '' && n != undefined) {
@@ -1228,7 +1329,8 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 						$scope.content[item] = res;
 						$scope.createIsotopeContent();
 						$scope.splitCategories();
-						$scope.savingArticle = false;
+						//$scope.savingArticle = false;
+						$scope.location.path('/main');
 						break;
 					}
 				}
@@ -1239,7 +1341,8 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					$scope.content.unshift(res);
 					$scope.createIsotopeContent();
 					$scope.splitCategories();
-					$scope.savingArticle = false;
+					//$scope.savingArticle = false;
+					$scope.location.path('/main');
 				}		
 			});
 		}
@@ -1250,7 +1353,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 			$scope.safeApply(function() {
 				$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + n;
 
-				$scope.buildFlash('preview');				
+				$scope.buildFlash('preview');			
 			});
 		}
 	}, true);	
@@ -1259,15 +1362,22 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		if(n != undefined) {
 			$scope.safeApply(function() {
 				$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
+
+				$scope.buildFlash('content');
 			});
 		}
 	}, true);
 
-	$scope.updateIframePreview = function() {
-		if($scope.editor.tempContent.preview.iframe.indexOf('//') != 0 && $scope.editor.tempContent.preview.iframe.indexOf('http'))
-			$scope.editor.tempContent.preview.iframe = 'http://' + $scope.editor.tempContent.preview.iframe;
+	//$scope.updateIframePreview = function() {
+	$scope.updateIframeDisplay = function(type) {
+		if($scope.editor.tempContent[type].iframe.indexOf('//') != 0 && $scope.editor.tempContent[type].iframe.indexOf('http'))
+			$scope.editor.tempContent[type].iframe = 'http://' + $scope.editor.tempContent[type].iframe;
 		
-		$scope.editor.previewDisplay.content.iframe = '<iframe scrolling="no" src="' + $scope.editor.tempContent.preview.iframe + '" frameborder="0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '"></iframe>';
+		$scope.editor.display[type].content.iframe = '<iframe scrolling="no" src="' + $scope.editor.tempContent[type].iframe + '" frameborder="0" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '"></iframe>';
+		// if($scope.editor.tempContent.preview.iframe.indexOf('//') != 0 && $scope.editor.tempContent.preview.iframe.indexOf('http'))
+		// 	$scope.editor.tempContent.preview.iframe = 'http://' + $scope.editor.tempContent.preview.iframe;
+		
+		// $scope.editor.previewDisplay.content.iframe = '<iframe scrolling="no" src="' + $scope.editor.tempContent.preview.iframe + '" frameborder="0" width="' + $scope.editor.previewDisplay.width + '" height="' + $scope.editor.previewDisplay.height + '"></iframe>';
 	}
 
 	$scope.checkLinked = function() {
@@ -1336,7 +1446,8 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				break;
 				case 'iframe':
 					$scope.editor.tempContent.preview.iframe = angular.copy($scope.content[index].preview.content);
-					$scope.updateIframePreview();
+					//$scope.updateIframePreview();
+					$scope.updateIframeDisplay('preview');
 				break;
 				case 'image':
 					$scope.editor.tempContent.preview.image = angular.copy($scope.content[index].preview.content);
@@ -1350,17 +1461,23 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				case 'text':
 					$scope.editor.tempContent.content.text = angular.copy($scope.content[index].content.content);
 				break;
+				case 'video':
+					$scope.editor.tempContent.content.video.id = angular.copy($scope.content[index].content.content);
+					$scope.buildEmbedVideo('content');
+				break;
 				case 'flash':
 					for (var i in $scope.editor.files.flash){
 						if ($scope.editor.data.content.content === $scope.editor.files.flash[i].hashName) {
 							$scope.editor.tempContent.content.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
 							$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.content.flash.data;
+							$scope.rebuildGalleryOrFlash('content');
 							break;
 						}
 					}
 				break;
 				case 'iframe':
 					$scope.editor.tempContent.content.iframe = angular.copy($scope.content[index].content.content);
+					$scope.updateIframeDisplay('content');
 				break;
 				case 'image':					
 					$scope.editor.tempContent.content.image = angular.copy($scope.content[index].content.content);
@@ -1382,11 +1499,28 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		$scope.videoCheck($scope.editor.tempContent[type].video.id, function(valid) {
 			$scope.editor.tempContent[type].video.valid = valid;
 			if(valid) {
-				$scope.editor.tempContent[type].video.icon = 'images/enabled.png';
+				$scope.editor.tempContent[type].video.icon = 'green icon-checkmark';
+				$scope.buildEmbedVideo(type);
 			} else {
-				$scope.editor.tempContent[type].video.icon = 'images/disabled.png';
+				$scope.editor.tempContent[type].video.icon = 'red icon-cancel-2';
 			}
 		});
+	}
+
+	$scope.buildEmbedVideo = function(type) {
+		var videoId = $scope.editor.tempContent[type].video.id;
+		var w =  $('<iframe class="player"></iframe>')
+		, src =  '//www.youtube.com/embed/'+ videoId + '?feature=oembed&autoplay=1&rel=0&wmode=transparent'
+		, attrs =	{ 
+						scrolling: 'no',
+		           		frameborder: 0,
+		           		width:700,
+		           		height:464,
+        		   		src: src 
+        			};
+        w.attr(attrs);
+
+        $scope.editor.display[type].content[$scope.editor.data[type].type] = w;
 	}
 
 	if($scope.settingsLoaded)

@@ -25,7 +25,7 @@
 									th.white.bold.center(style="width:100px;") Save
 									th.white.bold.center(style="width:100px;") Delete
 							tbody
-								tr(ng-repeat="(key,value) in settings.categories | remove:'all'")
+								tr(ng-repeat="(key,value) in settings.categories | remove:'all'", ui-animate)
 									td.font12.white.center
 										input.center.fullWidth.bg-color-green.white.noBorder.placeHolderWhite(type="text", placeholder="{{ value }}", onkeyup="angular.element(this).scope().changeName('{{ key }}', this.value)")
 									td.font12.white.center
