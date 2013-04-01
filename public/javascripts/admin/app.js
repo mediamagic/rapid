@@ -8,8 +8,6 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
 		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
     when('/swfs', {templateUrl: '/views/admin/swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
     when('/categories', {templateUrl: '/views/admin/categories.html', controller: CategoriesCtrl, name:'Categories Manager'}).
-		//when('/settings', {templateUrl: '/views/admin/Settings.html', controller: SettingsCtrl, name:'settings'}).		
-		//when('/voters', {templateUrl: '/views/admin/Voters.html', controller: VotersCtrl, name:'Statistics'}).
 		otherwise({redirectTo: '/main'});
 }]).
 filter('status', function() {
@@ -158,14 +156,12 @@ directive('isoGallery', function(){
       },100)
       scope.$watch('isotopeContent.copy',function(n,o){
         if (n!=o && n != undefined) {
-          //console.log('iso content changed')            
           setTimeout(function(){                    
             elm.isotope('reloadItems').isotope({sortBy:scope.filter.category});          
           },1);
         }
       }, true)
       scope.$watch('filter.category', function(n,o){        
-        //console.log(n)
         if (n!=o && n != undefined && scope.filter.category != 0) {          
           elm.isotope({sortBy:n});          
         }
@@ -173,58 +169,6 @@ directive('isoGallery', function(){
     }
   }
  });
-//.directive('uiIsotope', function() {
-//  return {
-//     priority: 0,
-//     restrict: 'A',    
-//     link: function(scope, elm, attr) {        
-      
-//       var opts = JSON.parse(attr.options)
-//       opts.getSortData = {};           
-      
-//       scope.$watch('category[filter.category]',function(n,o){           
-//         if (n!=o && n != undefined && scope.filter.category != 0) {
-//             createIsotope(opts, scope.filter.category, elm, function() {
-//               elm.isotope('reloadItems').isotope({sortBy:n});
-//             });
-            
-//         }
-//       }, true);
-//       // scope.$watch('content',function(n,o){        
-//       //   if (n!=o && n != undefined)
-//       //     elm.isotope('reloadItems');
-//       // });
-//       scope.$watch('filter.category', function(n,o){ 
-//         if (n!=o && n != undefined) {
-//             createIsotope(opts, n, elm, null);       
-//         }
-//       });
-//     }
-//   }
-// });
-
-// var createIsotope = function(opts, category, elm, cb) {
-//   opts.getSortData[category] = createOrderFn(category);
-            
-//   setTimeout(function(){
-//     // if(elm.hasClass('isotope'))
-//     //    elm.isotope('destroy');
-//     if(elm.hasClass('isotope')) {
-//       elm
-//         .isotope('reloadItems')      
-//         .isotope({sortBy:category}); 
-//     } else {
-//       elm      
-//         .isotope(opts)
-//         .isotope('reloadItems')      
-//         .isotope({sortBy:category});  
-//     }
-    
-
-//     if(cb)
-//       cb();
-//   },100);
-// }
 
 angular.module('ui.directives').directive('uiSortable', [
 'ui.config', function(uiConfig) {
@@ -276,66 +220,9 @@ angular.module('ui.directives').directive('uiSortable', [
 }
 ]);
 
-// angular.module('ui.directives').directive('uiTinymce', ['ui.config', function (uiConfig) {
-//   uiConfig.tinymce = uiConfig.tinymce || {};
-//   return {
-//     require: 'ngModel',
-//     link: function (scope, elm, attrs, ngModel) {
-//       scope.$watch('editor.tinymceOptions', function(n,o) {          
-//           if(n != o && n != undefined) {
-//             elm.tinymce(scope.editor.tinymceOptions);
-//           }          
-//       });
-//       var expression,
-//         options = {
-//           // Update model on button click
-//           onchange_callback: function (inst) {
-//             if (inst.isDirty()) {
-//               inst.save();
-//               ngModel.$setViewValue(elm.val());
-//               if (!scope.$$phase)
-//                 scope.$apply();
-//             }
-//           },
-//           // Update model on keypress
-//           handle_event_callback: function (e) {
-//             if (this.isDirty()) {
-//               this.save();
-//               ngModel.$setViewValue(elm.val());
-//               if (!scope.$$phase)
-//                 scope.$apply();
-//             }
-//             return true; // Continue handling
-//           },
-//           // Update model when calling setContent (such as from the source editor popup)
-//           setup: function (ed) {
-//             ed.onSetContent.add(function (ed, o) {
-//               if (ed.isDirty()) {
-//                 ed.save();
-//                 ngModel.$setViewValue(elm.val());
-//                 if (!scope.$$phase)
-//                   scope.$apply();
-//               }
-//             });
-//           }
-//         };
-//       if (attrs.uiTinymce) {
-//         expression = scope.$eval(attrs.uiTinymce);
-//       } else {
-//         expression = {};
-//       }
-//       angular.extend(options, uiConfig.tinymce, expression);
-//       setTimeout(function () {
-//         elm.tinymce(options);
-//       });
-//     }
-//   };
-// }]);
-
 function createOrderFn(cat){
   var c = cat;
   return function(elm){      
-  //console.log($(elm).attr('rel'))  
     var rel   = $(elm).attr('rel')
       , tmp =  JSON.parse(rel)
     return parseInt(tmp[c]);

@@ -78,6 +78,7 @@ a{color:#ffe821;}
 .font12{font-size:12px;}
 .white{color:#fff;}
 .red{color:#b91d47;}
+.yellow{color:yellow;}
 .green{color:#00a300;}
 .bold{font-weight:bold;}
 .center{text-align:center;}
@@ -103,6 +104,8 @@ a{color:#ffe821;}
 .pagination-mini ul>li>a,.pagination-mini ul>li>span{padding:0 6px;font-size:10.5px;}
 tr{transition:all 0.5s ease;-o-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-webkit-transition:all 0.5s ease;max-height:50px;overflow:hidden;}
 tr.ui-animate{opacity:0;max-height:0;padding:0 5px;}
+li{transition:all 0.5s ease;-o-transition:all 0.5s ease;-moz-transition:all 0.5s ease;-webkit-transition:all 0.5s ease;max-height:50px;overflow:hidden;}
+li.ui-animate{opacity:0;max-height:0;padding:0 5px;}
 .trToUl{display:ul;}
 .tdToLi{display:li;}
 .ui-show{transition:all 0.5s ease;}
