@@ -1,0 +1,26 @@
+#articles {
+    .article {
+        &.content {
+            >.content {
+                .sidebar {
+                    float: right;
+                    width: 239px;
+                    height: 464px;
+                    top: 0;
+                    right: 0;
+                    border-left: solid 1px @gray;
+                }
+                .inner {
+                    float: right;
+                    width: 700px;
+                    height: 464px;
+                }
+                .form {
+                    clear: both;
+                    height: 120px;
+                    background: @green;
+                }
+            }
+        }    
+    }
+}

@@ -43,18 +43,19 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 					a(ng-click="toggleForm()") form
 				#headerForm(style="background: white;", ng-show="showForm")
 					a(ng-click="toggleForm()") close
-					form.form
-						input(type="text", name="firstname", ng-model="form.firstname", placeholder="first name")
-						input(type="text", name="lastname", ng-model="form.lastname", placeholder="last name")
-						input(type="phone", name="phone", ng-model="form.phone", placeholder="phone")
-						input(type="email", name="email", ng-model="form.email", placeholder="email")
-						input(type="radio", id="radio_1", ng-model="form.type", value="private")
-						label(for="radio_1") private
-							.icon
-						input(type="radio", id="radio_2", ng-model="form.type", value="business")
-						label(for="radio_2") business
-							.icon
-						input(type="submit", value="submit", ng-click="formSubmit()")
+					.form
+						form
+							input(type="text", name="firstname", ng-model="form.firstname", placeholder="first name")
+							input(type="text", name="lastname", ng-model="form.lastname", placeholder="last name")
+							input(type="phone", name="phone", ng-model="form.phone", placeholder="phone")
+							input(type="email", name="email", ng-model="form.email", placeholder="email")
+							input(type="radio", id="radio_1", ng-model="form.type", value="private")
+							label(for="radio_1") private
+								.icon
+							input(type="radio", id="radio_2", ng-model="form.type", value="business")
+							label(for="radio_2") business
+								.icon
+							input(type="submit", value="submit", ng-click="formSubmit()")
 			#wrapper(ng-view, ng-class="{'formOpen': showForm}")
 		#footer
 			.footer

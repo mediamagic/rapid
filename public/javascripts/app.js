@@ -165,7 +165,7 @@ function createPreview(elm, obj){
                     .parent()
                     .removeClass('preview')
                     .addClass('content')
-                    .append(content.show().append(obj.form))
+                    .append(content.show(1000).append(obj.form))
                     .parent()
                     .isotope('reLayout', function(){
                         var scrollItem = $('#item_'+obj.index).offset()
@@ -198,27 +198,29 @@ function createContent(obj){
         .append(sideBar)
         .append(contentBar)
     html = parseContent(obj,null,'content');
+    contentBar.addClass('inner')
     contentBar.append(html)
     elm
         .css('background', obj.content.bgColor)
-        .show()
+        .show(500)
         .children('.close')
         .bind('click', function(){
             elm
-                .hide()
-                .html('')
-                .siblings('.preview')
-                .show();
-            elm
-                .parent()
-                .addClass('preview')
-                .removeClass('content')
-                .parent()
-                .isotope('reLayout', function(){
-                });
-                $('.article.masked')
-                    .removeClass('masked');
-        })
+                .hide(500, function(){
+                    $(this)
+                        .html('')
+                        .siblings('.preview')
+                        .show(500)
+                        .parent()
+                        .addClass('preview')
+                        .removeClass('content')
+                        .parent()
+                        .isotope('reLayout', function(){
+                        });
+                        $('.article.masked')
+                            .removeClass('masked');
+                        })
+                })
     return elm;
 }
 
