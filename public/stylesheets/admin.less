@@ -171,7 +171,7 @@ a {
 			height: 100%;
 			#previewSwfs {
 				width:100%;
-				height: 515px;
+				height: 535px;
 				overflow-x:hidden;
 				overflow-y:scroll;				
 				.previewSwf {
@@ -191,7 +191,7 @@ a {
 		#imagePreview {
 			#previewImages {
 				width:100%;
-				height: 515px;
+				height: 535px;
 				overflow-x:hidden;
 				overflow-y:scroll;
 				.previewImage {
@@ -323,22 +323,181 @@ a {
 #openEditorWrapper {
 	position: relative;
 	width: 940px;
-	height: 415px;
+	height: 665px;
 	overflow: hidden;
-	#leftSide {
-		position: absolute;
-		top:0px;
-		left:0px;
-		width:700px;				
+	border: solid #ccc 1px;
+	#upperTypeForm {
+		position: relative;
+		width: 469px;
+		height: 200px;
+		float:left;
+		border-right: solid #ccc 1px;
+		border-bottom: solid #ccc 1px;
+		#flashContent {
+			position: relative;
+			width:100%;
+			height: 100%;
+			#contentSwfs {
+				width:100%;
+				height: 147px;
+				overflow-x:hidden;
+				overflow-y:scroll;				
+				.contentSwf {
+					width:100%;					
+					height: 70px;					
+					.data {						
+						color:#fff;
+					}
+				}
+			}
+		}
 	}
-	#rightSide {
-		position: absolute;
-		top:0px;
-		right:0px;
-		width:200px;
-		height: 415px;
-		border: solid #ccc 1px;
+	#upperForm {
+		position: relative;
+		width: 469px;
+		height: 200px;
+		float:left;
+		border-bottom: solid #ccc 1px;		
+		.type {
+			position: absolute;
+			top:10px;
+			left: 10px;	
+			width: 100px;
+			select {
+				width:100px;
+			}
+		}
+		.color {
+			position: absolute;
+			top:40px;
+			left: 10px;	
+			width: 100px;
+			select {
+				width:100px;
+			}
+		}	
+		.title {
+			position: absolute;
+			top:10px;
+			left: 130px;	
+			width: 300px;
+			input {
+				width:300px;
+			}
+		}
+		.description {
+			position: absolute;
+			top:40px;
+			left: 130px;	
+			width: 300px;
+			textarea {
+				width:300px;
+			}
+		}
+		.readMore {
+			position: absolute;
+			top:0px;
+			left: 130px;
+			width: 300px;
+			.title {
+				position: absolute;
+				top:135px;
+				left: 0px;
+			}
+			.url {
+				position: absolute;
+				top:165px;
+				left: 0px;
+			}
+			input {
+					width:300px;
+			}
+		}
+
 	}
+	#contentDisplay {
+		position: relative;
+		width:940px;
+		height:464px;
+		clear:both;		
+		#rightSide {
+			position: absolute;
+			width:240px;
+			height: 464px;
+			border-left: solid #ccc 1px;
+			top:0px;
+			right:0px;
+			.header {
+				position: relative;
+				width:200px;
+				height: 39px;
+				border-bottom: solid #000 1px;
+				text-align: right;
+				margin:0 auto;				
+			}
+			.title {
+				position: relative;
+				width:240px;	
+				font-size:25px;
+				line-height: 20px;				
+				text-align: right;
+				direction: rtl;
+				padding-right:20px;
+				padding-left:20px;
+				margin-top: 20px;
+			}
+			.description {
+				position: relative;
+				width:240px;
+				font-size:13px;
+				text-align: right;
+				direction: rtl;
+				padding-right:20px;
+				padding-left:20px;
+				margin-top: 20px;
+			}
+			pre {
+				background: none;
+				border:none;		
+				color:#000;		
+			}
+			.readMore {
+				position: relative;
+				width:240px;				
+				text-align: right;
+				direction: rtl;
+				padding-right:20px;
+				padding-left:20px;
+				margin-top: 20px;				
+				a {
+					font-size:13px;
+					color: #00a300;
+					text-decoration: underline;	
+				}
+			}
+		}
+		#leftSide {
+			position: absolute;
+			width:700px;
+			height: 464px;			
+			top:0px;
+			left:0px;
+		}
+	}
+	// #leftSide {
+	// 	position: absolute;
+	// 	top:0px;
+	// 	left:0px;
+	// 	width:700px;				
+	// }
+	// #rightSide {
+	// 	position: absolute;
+	// 	top:0px;
+	// 	right:0px;
+	// 	width:200px;
+	// 	height: 415px;
+	// 	border: solid #ccc 1px;
+	// }
 }
 
 #uploadNewSwf {
@@ -484,6 +643,10 @@ a {
 	color: #b91d47;
 }
 
+.green {
+	color: #00a300;
+}
+
 .bold {
 	font-weight: bold;
 }
@@ -538,6 +701,14 @@ tr.ui-animate {
   padding: 0 5px;
 }
 
+.trToUl {
+	display: ul;
+}
+
+.tdToLi {
+	display: li;
+}
+
 .ui-show {	
 	transition: all 0.5s ease; // You should probably browser-prefix this
 }
@@ -567,5 +738,13 @@ tr.ui-animate {
 	max-height: 0;
 }
 
+.alfi {
+	font-family: 'alfi regular';
+	&.bold {		
+		font-family: 'alfi bold';		
+	}
+}
+
 @import 'sliderjs.less';
 @import 'isotope.less';
+@import 'fonts.less';

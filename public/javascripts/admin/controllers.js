@@ -197,7 +197,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 
 		},
 		open: {
-			colorPickerClass:'colorPicker_1'			
+			colorPickerClass:'colorPicker_1',
+			colorInput:'#ffffff'
 		},
 		closed: {
 			colorPickerClass:'colorPicker_1',
@@ -282,6 +283,31 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_resizing : false
 
 			//onchange_callback:'$scope.tinymceChange'
+		},
+		tinymceContentOptions: {
+			// General options			
+			theme : "advanced",
+			plugins : "autolink,lists,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,wordcount,advlist,autosave,visualblocks",
+
+			width: "700",
+	  		height: "464",
+			//directionality : "rtl",
+
+			theme_advanced_fonts:"Arial=arial,Tahoma=tahoma",
+
+			//content_css : "custom_content.css"
+
+			// Theme options			
+			theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,fontselect,fontsizeselect",
+			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo",			
+			theme_advanced_buttons3 : "link,unlink,image,cleanup,code,|,forecolor,backcolor, | ,charmap,iespell,media,advhr,|,ltr,rtl",
+			theme_advanced_buttons4 : "tablecontrols,|,hr,removeformat,visualaid",
+			theme_advanced_toolbar_location : "external",			
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_statusbar_location : "none",
+			theme_advanced_resizing : false
+
+			//onchange_callback:'$scope.tinymceChange'
 		}
 	}	
 
@@ -300,6 +326,22 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 				}
 
 				$scope.buildFlash('preview');
+			});
+		}
+	}, true);
+	//
+
+	// change input color for content mode in editor
+	$scope.$watch('editor.data.content.bgColor', function(n,o){
+		if (n!=o && n!=undefined) {
+			$scope.safeApply(function() {
+				if(n == '#ffffff') {
+					$scope.editor.open.colorInput = '#000000';
+				} else {
+					$scope.editor.open.colorInput = '#ffffff';
+				}
+
+				$scope.buildFlash('content');
 			});
 		}
 	}, true);
@@ -830,7 +872,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 
 	$scope.hide = {
 		preview: false,
-		content: false
+		content: true
 	}
 
 	$scope.changeArrowIcon = function(type) {
@@ -839,7 +881,10 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		}
 
 		return 'icon-arrow-up-2';
-	}
+	}	
+
+	$scope.changeArrowIcon('preview');
+	$scope.changeArrowIcon('content');
 
 	$scope.slideToggle = function(type) {
 		$scope.hide[type] = !$scope.hide[type];
@@ -849,21 +894,49 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		if(type == 'content')
 			$('#openEditorWrapper').slideToggle('slow');
 	}
-
-	// if type in not inner we need to change $scope.hide.content to true cuz the content editor is closed
-	$scope.$watch('editor.data.preview.link.type', function(n, o) {
-		$scope.hide.content = true;
+	
+	$scope.$watch('editor.data.preview.link.type', function(n, o) {		
+		if(n == 'inner') {
+			$scope.hide.content = false;
+			$scope.changeArrowIcon('content');
+		}
 	}, true);	
+
+	$scope.$watch('editor.data.sidebar.readMore.url', function(n, o) {
+		if(n != o) {			
+			if(n.length >= 4)
+				if(n.indexOf('http') != 0) {
+					$scope.editor.data.sidebar.readMore.url = 'http://' + n;					
+					setTimeout(function() {
+						document.getElementById('contentLinkUrlInput').setSelectionRange($scope.editor.data.sidebar.readMore.url.length, $scope.editor.data.sidebar.readMore.url.length);
+						document.getElementById('contentLinkUrlInput').focus();
+					}, 1);				
+				}
+		}			
+	}, true);
+
+	$scope.$watch('editor.data.preview.link.url', function(n, o) {
+		if(n != o) {			
+			if(n.length >= 4)
+				if(n.indexOf('http') != 0) {
+					$scope.editor.data.preview.link.url = 'http://' + n;					
+					setTimeout(function() {
+						document.getElementById('previewLinkUrlInput').setSelectionRange($scope.editor.data.preview.link.url.length, $scope.editor.data.preview.link.url.length);
+						document.getElementById('previewLinkUrlInput').focus();
+					}, 1);				
+				}
+		}			
+	}, true);
 
 	// make default objects
 	$scope.editor.categories = [];	
 	$scope.editor.data = angular.copy($scope.editor.defaultData);
-	$scope.editor.tempContent = angular.copy($scope.editor.defaultTempContent);	
+	$scope.editor.tempContent = angular.copy($scope.editor.defaultTempContent);		
 	$scope.editor.previewDisplay = angular.copy($scope.editor.previewDisplayDefault);
 
 	if(id != undefined) {		
 		$scope.articleEditMode = true;
-		$scope.articleButtonMode = 'Update';		
+		$scope.articleButtonMode = 'Update';
 	}
 
 	//fix for tinymce that wont let me update the preview content while two ng-model are connected to it
@@ -886,14 +959,22 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	// 	}			
 	// });
 	// //
-	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 		
-		if(n != '' && n != undefined) {			
+	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 				
+		if(n != o && n != undefined) {			
 			$scope.safeApply(function() {	
 				$scope.editor.previewDisplay.content.text = n;
 			});			
 			//$('#previewDisplay').html(n);
 		}			
 	},true);
+
+	// $scope.$watch('editor.tempContent.content.text', function(n, o) { 	
+	// console.log(n)			
+	// 	if(n != o && n != undefined) {			
+	// 		if(n.length == 0)
+	// 			$scope.editor.tempContent.content.text = angular.copy($scope.editor.defaultTempContent.content.text);
+	// 	}			
+	// },true);
 
 	// $scope.$watch('editor.tempContent.preview.iframe', function(n, o) { 		
 	// 	$scope.updateIframePreview();
