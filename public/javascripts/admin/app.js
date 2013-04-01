@@ -90,7 +90,8 @@ filter('contentType', function() {
 
           var regex = new RegExp(filters.text, "gi");          
 
-          if(filters.text.length == 0 || article.name.match(regex) || article.sidebar.title.match(regex) || article.sidebar.description.match(regex))
+          //if(filters.text.length == 0 || article.name.match(regex) || article.sidebar.title.match(regex) || article.sidebar.description.match(regex))
+          if(filters.text.length == 0 || article.name.match(regex) || article.sidebar.title.match(regex))
             valid.text = true;
 
           if(filters.preview == 0 || filters.preview == article.preview.type) 

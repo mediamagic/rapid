@@ -46,7 +46,9 @@
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
-										p(dir="rtl")
+										p(dir="rtl")				
+											{{ editor.tempContent.preview.text }}
+									input#uploadNewImageTinymce_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('preview', this.files[0])", style="display:none;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="upload.preview.uploading") Upload New SWF Resource
 									input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
@@ -156,6 +158,8 @@
 									#textContent(ui-if="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
 										textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceContentOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important;border:none;")
 											p(dir="rtl")
+												{{ editor.tempContent.content.text }}
+										input#uploadNewImageTinymce_content(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('content', this.files[0])", style="display:none;")
 									#contentPreviewDisplay(ui-if="editor.data.content.type != 'text'", ng-class="checkLinked()", style="width:{{editor.display.content.width}}px;height:{{editor.display.content.height}}px;margin-top:{{editor.display.content.margin}}px;background-color:{{ editor.data.content.bgColor }};")
 										.original(style="width:{{editor.display.content.width}}px;height:{{editor.display.content.height}}px;", ng-bind-html-unsafe="editor.display.content.content[editor.data.content.type]")																	
 					button(ng-click="saveContent()", ng-disabled="checkSaveStatus()", style="position:relative;margin:0 auto;display:block;") {{ articleButtonMode }}
