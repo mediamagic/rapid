@@ -21,23 +21,34 @@
 	&.preview {
 		&.size1x1 {
 			.size(1,1);
+			iframe {
+				width: 220px;
+				height: 220px;
+			}
 		}
 		&.size1x2 {
-			.size(1,2);
+			.size(1,2)
+			iframe {
+				width: 220px;
+				height: 460px;
+			}
 		}
 		&.size2x1 {
 			.size(2,1);
+			iframe {
+				width: 460px;
+				height: 220px;
+			}
 		}
 		&.size2x2 {
 			.size(2,2);
+			iframe {
+				width: 460px;
+				height: 460px;
+			}
 		}
 		.preview  {
 			margin-bottom: 20px;
-			p {
-				padding: 0;
-				margin: 0;
-				line-height: normal !important;
-			}
 		}
 		&.disabled {
 			.disabled {

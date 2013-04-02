@@ -22,7 +22,7 @@ var ArticlesSchema = new mongoose.Schema(
 							, default: '#ffffff' } }
 	, content: 	{ type:		{ type: mongoose.Schema.Types.Mixed
 							, default: 'text' }
-				, content: 	{ type: String } 
+				, content: 	{ type: mongoose.Schema.Types.Mixed } 
 				, bgColor: 	{ type: String
 							, default: '#ffffff' } }
 	, categories: 	{ type: Object}

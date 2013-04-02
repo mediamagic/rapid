@@ -55,6 +55,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             article.index = itemIndex;
             article.form = staticForm;
             article.compile = compile;
+            article.scope = scope;
             var element = createPreview(preview, article);
             if (article.preview.type == 'flash' 
                 || article.content.type == 'flash'){
@@ -73,8 +74,8 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             setTimeout(function(){
                 var options = JSON.parse(elm.attr('iso-gallery'));
                 elm.slidesjs({
-                    width: parseInt(options.width),
-                    height: parseInt(options.height),
+                    // width: parseInt(options.width),
+                    // height: parseInt(options.height),
                     navigation: {active: false},
                     play: {
                         auto: true,
@@ -263,8 +264,8 @@ function parseContent(obj, dim, type){
     var html =''
         , content = obj[type].content;
     if (type === 'content')
-        dim =   { width: 480
-                , height: 500 }
+        dim =   { width: '100%'
+                , height: '100%' }
     switch(obj[type].type) {
         case 'flash':
             var w = $('<div class="flash"></div>')
@@ -289,18 +290,20 @@ function parseContent(obj, dim, type){
         case 'image':
             var w   = $('<div class="image"></div>')
                 , c = content
-            if (c.length > 1)
+            if (c.length > 1) {
+                console.log('more than one!');
                 w.attr('iso-gallery', JSON.stringify(dim))
+            }
             for(var i=0;i<c.length;i++){
                 var img = $('<img />');
                 img
                     .attr('src', '/images/imgs/'+c[i].hashName)
                     .appendTo(w);
             }
-            html = w;
+            html = obj.compile(w)(obj.scope);
             break;
         case 'video':
-            var w       =   $('<iframe class="player"></iframe>')
+            var w       =   $('<iframe class="video"></iframe>')
                 , src   =   '//www.youtube.com/embed/'+
                             content+
                             '?feature=oembed&autoplay=1&rel=0&wmode=transparent'
@@ -312,7 +315,29 @@ function parseContent(obj, dim, type){
             break;
         case 'text':
         default:
-            html = content;
+                var wrapper = $('<html />')
+                    , style = $('<link  />')
+                        .attr(  { 'type': "text/css"
+                                , 'rel': "stylesheet"
+                                , 'href': "http://localhost:8080/stylesheets/tinyFonts.css" })
+                    , head  = $('<head />')
+                    , wrap  = $('<body />')
+                        .attr('dir', 'rtl')
+                style
+                    .appendTo(head)
+                wrap
+                    .append(content)
+                wrapper
+                    .append(head)
+                    .append(wrap)
+                var iframe  = $('<iframe />')
+                    .attr(  { 'frameborder':0
+                            , style:"padding:0;border:none"
+                            , scrolling: 'no'
+                            , src: 'data:text/html;charset=utf-8,' + wrapper.html()
+                        })
+                    .attr('class', (obj[type].size || 'text' ))
+            html = iframe;
             break;
     }
     return html;

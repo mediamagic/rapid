@@ -37,6 +37,19 @@
         .inner {
           width: 460px;
           height: 315px;
+          >.image {
+            width: 460px;
+            height: 315px;
+            position: relative;
+            .slidesjs-container {
+                width: 460px !important;
+                height: 315px !important;
+            }
+            .slidesjs-pagination {
+                bottom: 20px;
+                right: 20px;
+            }
+          }
         }
       }
     }
@@ -54,7 +67,7 @@
   }
 }
 
-@media (max-width: 780px) {
+@media (min-width: 541px) and (max-width: 780px) {
  html, body {
     padding: 0;
     max-width: 780px;
