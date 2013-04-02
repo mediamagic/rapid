@@ -343,49 +343,65 @@ a {
 #openEditorWrapper {
 	position: relative;
 	width: 940px;
-	height: 665px;
+	height: 765px;
 	overflow: hidden;
 	border: solid #ccc 1px;
 	#upperTypeForm {
 		position: relative;
-		width: 469px;
-		height: 200px;
+		width: 669px;
+		height: 300px;
 		float:left;
-		border-right: solid #ccc 1px;
-		border-bottom: solid #ccc 1px;
+		border-right: solid #ccc 1px;		
+		-webkit-transition-property: width, border;
+    	-webkit-transition-duration: 0.5s;    	
 		#videoContent {
 			position: relative;
 			width:100%;
 			height: 100%;
+			clear:both;
 			input {
-				position:relative; 
-				float:left;				
-				text-align: center;
-				margin-top:20px;
-				width:200px; 				
-				margin-left:135px;
-				margin-bottom:20px;
-			}
-			span {
-				position:relative; 
-				margin-top:20px;
-				float:left;
-			}
+				position:relative; 				
+				text-align: center;				
+				width:200px;
+				margin:0 auto;
+				margin-top:50px;
+				display:block;
+			}			
 			button {
-				clear:both;
+				
 				position:relative;
 				margin:0 auto; 
 				margin-top:20px;
 				display:block;
+			}
+			span {				
+				position:relative; 				
+				width: 100%;
+				margin-top:20px;	
+				text-align: center;						
+				display:block;				
 			}
 		}
 		#flashContent {
 			position: relative;
 			width:100%;
 			height: 100%;
-			#contentSwfs {
+			.flashForm {
+				position:relative;
 				width:100%;
-				height: 147px;
+				height: 80px;
+				.uploadButton {
+					position:relative;					
+					margin:0 auto; 
+					top:20px;
+					display:block;
+				}			
+			}
+			#contentSwfs {
+				position: absolute;
+				top:80px;
+				width:100%;
+				height: 220px;
 				overflow-x:hidden;
 				overflow-y:scroll;				
 				.contentSwf {
@@ -400,11 +416,11 @@ a {
 		#iframeContent {
 			position: relative;
 			width:100%;
-			height: 100%;	
+			height: 100%;				
 			input {
 				position:relative; 
 				margin:0 auto; 
-				margin-top:20px; 
+				margin-top:50px; 
 				width:80%; 
 				display:block;
 			}
@@ -418,7 +434,7 @@ a {
 		#imageContent {
 			.previewImages {
 				width:100%;
-				height: 147px;
+				height: 247px;
 				overflow-x:hidden;
 				overflow-y:scroll;
 				.previewImage {
@@ -442,12 +458,11 @@ a {
 			}
 		}
 	}
-	#upperForm {
+	#upperFormContent {
 		position: relative;
-		width: 469px;
-		height: 200px;
-		float:left;
-		border-bottom: solid #ccc 1px;		
+		width: 269px;
+		height: 300px;
+		float:left;				
 		.type {
 			position: absolute;
 			top:10px;
@@ -468,39 +483,40 @@ a {
 		}	
 		.title {
 			position: absolute;
-			top:10px;
-			left: 130px;	
-			width: 300px;
+			top:70px;
+			left: 10px;	
+			width: 250px;
 			input {
-				width:300px;
+				width:250px;
 			}
 		}
 		.description {
 			position: absolute;
-			top:40px;
-			left: 130px;	
-			width: 300px;
+			top:100px;
+			left: 10px;	
+			width: 250px;
 			textarea {
-				width:300px;
+				width:250px;
+				height: 125px;
 			}
 		}
 		.readMore {
 			position: absolute;
-			top:0px;
-			left: 130px;
-			width: 300px;
+			top:235px;
+			left: 10px;
+			width: 250px;
 			.title {
 				position: absolute;
-				top:135px;
+				top:0px;
 				left: 0px;
 			}
 			.url {
 				position: absolute;
-				top:165px;
+				top:30px;
 				left: 0px;
 			}
 			input {
-					width:300px;
+					width:250px;
 			}
 		}
 
@@ -508,8 +524,9 @@ a {
 	#contentDisplay {
 		position: relative;
 		width:940px;
-		height:464px;
+		height:463px;
 		clear:both;		
+		border-top: solid #ccc 1px;
 		#rightSide {
 			position: absolute;
 			width:240px;
@@ -575,7 +592,8 @@ a {
 			left:0px;
 			#textContent {
 				-webkit-transition-property: background-color;
-    			-webkit-transition-duration: 0.5s;	
+    			-webkit-transition-duration: 0.5s;
+    			margin-top: -1px;    			
 			}
 			#contentPreviewDisplay {
 				position: relative;
