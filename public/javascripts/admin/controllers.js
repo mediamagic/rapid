@@ -487,8 +487,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		for(var image in $scope.editor.tempContent[type].image) {
 			var img = angular.element('<img />');
 			img.attr('src', $scope.host + '/images/imgs/' + $scope.editor.tempContent[type].image[image].hashName);
-			img.attr('width', $scope.editor.display[type].width);
-			img.attr('height', $scope.editor.display[type].height);
+			//img.attr('width', $scope.editor.display[type].width);
+			//img.attr('height', $scope.editor.display[type].height);
 			img.appendTo(wrapper);
 		}
 					
@@ -1269,6 +1269,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				break;
 				case 'image':					
 					$scope.editor.tempContent.content.image = angular.copy($scope.content[index].content.content);
+					$scope.rebuildGalleryOrFlash('content');
 				break;
 				default:
 				break;
