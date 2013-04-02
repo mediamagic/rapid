@@ -44,11 +44,9 @@
 								input.bg-color-green.white.linkTitle(type="text", placeholder="mouse over title", ng-model="editor.data.preview.link.text", ng-show="checkLinkType('text')")
 								input#previewLinkUrlInput.bg-color-green.white.linkUrl(type="text", placeholder="url", ng-model="editor.data.preview.link.url", ng-show="checkLinkType('url')")
 							#leftSide
-								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
+								#textPreview(ng-show="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
-										{{ editor.tempContent.preview.text }}
-										//- p(dir="rtl", style="font-size:13px;")
-										//- 	{{ editor.tempContent.preview.text }}
+										{{ editor.tempContent.preview.text }}										
 									input#uploadNewImageTinymce_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('preview', this.files[0])", style="display:none;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
 									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="upload.preview.uploading") Upload New SWF Resource
@@ -96,11 +94,12 @@
 							#upperTypeForm
 								#videoContent(ui-if="editor.data.content.type == 'video'")
 									input(type="text", ng-model="editor.tempContent.content.video.id", placeholder="youtube video id")									
-									span(class="{{ editor.tempContent.content.video.icon }}")									
 									button(ng-click="checkVideo('content')") Check Video
+									span(class="{{ editor.tempContent.content.video.icon }}")
 								#flashContent(ng-show="editor.data.content.type == 'flash'")
-									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_content')", ng-disabled="upload.content.uploading") Upload New SWF Resource
-									input#uploadNewSwfInput_content(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('content', 'flash', this.files[0])", style="display:none;")										
+									.flashForm
+										button.uploadButton(ng-click="triggerClick('uploadNewSwfInput_content')", ng-disabled="upload.content.uploading") Upload New SWF Resource
+										input#uploadNewSwfInput_content(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('content', 'flash', this.files[0])", style="display:none;")										
 									ul#contentSwfs.listview
 										li.contentSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data == swf.hashName}", ng-click="showSelectedSwf('content', swf)")
 											h2.icon.icon-font
@@ -125,7 +124,7 @@
 												span {{ image.fileName }}
 												br
 												a(href="{{ host }}/images/imgs/{{ image.hashName }}", target="_blank") {{ image.hashName }}
-							#upperForm
+							#upperFormContent
 								.color
 									select(style="background-color:{{ editor.data.content.bgColor }};color:{{ editor.open.colorInput }};", ng-model="editor.data.content.bgColor")									
 										option(style="background-color:#ffffff;color:#000;", value="#ffffff") white
@@ -156,11 +155,9 @@
 									.readMore.alfi
 										a.alfi(href="{{ editor.data.sidebar.readMore.url }}", target="_blank") {{ editor.data.sidebar.readMore.title }}									
 								#leftSide									
-									#textContent(ui-if="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
+									#textContent(ng-show="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
 										textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceContentOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important;border:none;")
-											{{ editor.tempContent.content.text }}
-											//- p(dir="rtl", style="font-size:13px;")
-											//- 	{{ editor.tempContent.content.text }}
+											{{ editor.tempContent.content.text }}											
 										input#uploadNewImageTinymce_content(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('content', this.files[0])", style="display:none;")
 									#contentPreviewDisplay(ui-if="editor.data.content.type != 'text'", ng-class="checkLinked()", style="width:{{editor.display.content.width}}px;height:{{editor.display.content.height}}px;margin-top:{{editor.display.content.margin}}px;background-color:{{ editor.data.content.bgColor }};")
 										.original(style="width:{{editor.display.content.width}}px;height:{{editor.display.content.height}}px;", ng-bind-html-unsafe="editor.display.content.content[editor.data.content.type]")																	

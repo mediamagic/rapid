@@ -1008,6 +1008,25 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		}			
 	}, true);	
 
+	$scope.$watch('editor.data.content.type', function(n, o) { 		
+		if(n != o && n != '' && n != undefined) {
+			//console.log('changing content type to ' + n)			
+			$scope.changeContentFormsSizes(n);
+		}			
+	}, true);
+
+	$scope.changeContentFormsSizes = function(type) {
+		if(type == 'text') {
+			document.getElementById('upperTypeForm').style.width = 340 + 'px';
+			document.getElementById('upperTypeForm').style.borderRight = 'none';			
+		} else {			
+			document.getElementById('upperTypeForm').style.width = 669 + 'px';			
+			document.getElementById('upperTypeForm').style.borderRight = 'solid #ccc 1px';
+		}		
+	}
+
+	$scope.changeContentFormsSizes('text');
+
 	$scope.removeImage = function(type, image) {
 		if(confirm('are you sure you want to remove this image ?')) {			
 			var id = image.hashName.split('.')[0];
@@ -1163,7 +1182,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	}, true);	
 
 	$scope.$watch("editor.tempContent.content.flash.data", function(n, o) {				
-		if(n != undefined) {
+		if(n!= o && n != undefined) {
 			$scope.safeApply(function() {
 				$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
 
@@ -1274,6 +1293,8 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				default:
 				break;
 			}
+
+			$scope.changeContentFormsSizes($scope.content[index].content.type);
 		});
 	}
 
