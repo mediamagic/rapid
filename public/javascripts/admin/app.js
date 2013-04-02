@@ -4,10 +4,10 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
 	$routeProvider.
 		when('/main', {templateUrl: '/views/admin/Main.html', controller: MainCtrl, name:'Main'}).
 		when('/lists', {templateUrl: '/views/admin/Lists.html', controller: ListsCtrl, name:'Lists'}).		
-		when('/editor', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
-		when('/editor/:id', {templateUrl: '/views/admin/editor.html', controller: EditorCtrl, name:'Editor'}).
-    when('/swfs', {templateUrl: '/views/admin/swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
-    when('/categories', {templateUrl: '/views/admin/categories.html', controller: CategoriesCtrl, name:'Categories Manager'}).
+		when('/editor', {templateUrl: '/views/admin/Editor.html', controller: EditorCtrl, name:'Editor'}).
+		when('/editor/:id', {templateUrl: '/views/admin/Editor.html', controller: EditorCtrl, name:'Editor'}).
+    when('/swfs', {templateUrl: '/views/admin/Swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
+    when('/categories', {templateUrl: '/views/admin/Categories.html', controller: CategoriesCtrl, name:'Categories Manager'}).
 		otherwise({redirectTo: '/main'});
 }]).
 filter('status', function() {
