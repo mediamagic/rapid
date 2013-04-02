@@ -18,6 +18,7 @@ var GlobalCtrl= [ '$scope'
 		$scope.settings = settings
 		, $scope.Login 	= $scope.resource 	( '/api/login'
 											, { _csrf: $cookies['csrf.token'] } )
+		$scope.$broadcast('settings_loaded');
 	});
 	$scope.filters = { category: 'all' }
 
@@ -40,8 +41,6 @@ var GlobalCtrl= [ '$scope'
 			})
 			.error(function (data, status, headers, config) {
 				return false;
-				// called asynchronously if an error occurs
-				// or server returns response with an error status.
 			});
 	}
 	$scope.showForm = false;
@@ -54,31 +53,38 @@ var MainCtrl = ['$scope', function ( $scope ){
 	$scope.Articles 		= $scope.resource('/resources/articles/:id')
 	$scope.contentLoaded 	= false;
 
-	$scope.getCategory = function ( index ){
-		var item 	= $scope.articles[index]
-			, arr 	= []
-			, cat = $scope.filters.category
-		arr.push('size'+item.preview.size);
-		arr.push( (item.categories[cat] > $scope.articles.length) ? 'disabled' : 'enabled');
-		arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
-		return arr;
-	}
+	$scope.$on('settings_loaded', function(){
+		console.log('herer');
+		$scope.getCategory = function ( index ){
+			var item 	= $scope.articles[index]
+				, arr 	= []
+				, cat = $scope.filters.category
+			arr.push('size'+item.preview.size);
+			arr.push( (item.categories[cat] > $scope.articles.length) ? 'disabled' : 'enabled');
+			arr.push( (item.preview.link.type == 'none') ? 'unlinked' : 'linked');
+			return arr;
+		}
 
-	$scope.Articles.query({}, function ( resp ){
-		var cats = $scope.settings.categories
-			, l = resp.length +1;
-		for (var cat in resp){
-			var itm = resp[cat];
-			for (var i in cats){
-				if (itm.categories[i] == undefined) {
-					itm.categories[i] = l;
-					l++
+		$scope.Articles.query({}, function ( resp ){
+			var cats = $scope.settings.categories
+				, l = resp.length +1;
+			for (var cat in resp){
+				var itm = resp[cat];
+				for (var i in cats){
+					if (itm.categories[i] == undefined) {
+						itm.categories[i] = l;
+						l++
+					}
 				}
 			}
-		}
-		$scope.articles = resp;
-		$scope.contentLoaded = true;
-	});
+			$scope.articles = resp;
+			$scope.contentLoaded = true;
+		});
+	})
+
+	if ($scope.settings) {
+		$scope.$emit('settings_loaded')
+	}
 }];
 
 var LoginCtrl = ['$scope', '$window' , function ( $scope, $window ){
