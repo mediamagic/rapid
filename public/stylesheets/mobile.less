@@ -16,6 +16,11 @@
     #nav {
       ul {
         max-width: 460px;
+        li {
+          > ul {
+            max-width: 380px;
+          }
+        }
       }
       .toggleForm {
         left: 10px;
@@ -30,6 +35,12 @@
     }
   }
   #articles .article {
+    .hover {
+        display: none !important;
+    }
+    &:hover {
+      display: none !important; 
+    }
     &.content {
       height: 802px;
       >.content {
@@ -112,6 +123,11 @@
     #nav {
       ul {
         max-width: 700px;
+        li {
+          > ul {
+            max-width: 560px;
+          }
+        }
       }
       .toggleForm {
         left: 10px;
@@ -129,6 +145,12 @@
     padding: 0 34px;
   }
   #articles .article {
+    .hover {
+        display: none !important;
+    }
+    &:hover {
+      display: none !important; 
+    }
     &.content {
       height: 700px;
       width: 700px;

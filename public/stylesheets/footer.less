@@ -1,0 +1,73 @@
+.footer, .push {
+	min-height: @push;
+}
+
+#footer {
+	background: #e2e4e5 url(../images/footer_bg.png) repeat-x;
+}
+
+#footer {
+	position: relative;
+	min-height: @push;
+	.footer {
+		max-width: 740px;
+		margin: 0 auto;
+		padding: 0 103px;
+		position: relative;
+		.logo {
+			background: transparent url(../images/brand.png) no-repeat left center;
+			position: absolute;
+			width: 98px;
+			height: 25px;
+			left: 5px;
+			top: 10px;
+		}
+		.links {
+			min-height: 48px;
+			ul {
+				clear: both;
+				margin: 10px auto 0;
+				padding: 0;
+				display: block;
+				min-height: 48px;
+				max-width: 940px;
+				text-align: center;
+				direction: rtl;
+				line-height: 48px;
+				li {
+					display: inline-block;
+					margin: 0 0 0 10px;
+					height: 19px;
+					padding: 3px 20px 3px 0;
+					line-height: 19px;
+					direction: rtl;
+					background: transparent url(../images/footer_bullet.png) no-repeat center right;
+					&:last-child {
+						a {
+							border: none;
+						}
+					}
+					a {
+						color: black;
+						text-decoration: none;
+						display: block;
+						height: 19px;
+						line-height: 19px;
+						border-left: black solid 1px;
+						padding: 0 0 0 10px;
+						cursor: pointer;
+						&:hover {
+							color: #ccc;
+						}
+						// &:visited {
+						// 	color: black;
+						// }
+						img {
+							vertical-align: middle;
+						}
+					}
+				}
+			}
+		}
+	}
+}

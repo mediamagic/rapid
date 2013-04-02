@@ -13,7 +13,7 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 		script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular.min.js")
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-resource.min.js")
-		script(src="//code.angularjs.org/1.0.5/angular-cookies.min.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.5/angular-cookies.min.js")
 		script(src="/javascripts/vendor/jquery.slides.min.js")
 		script(src="/javascripts/vendor/jquery.swfobject.js")
 		script(src="/javascripts/vendor/angular-ui.min.js")
@@ -36,21 +36,26 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 					span#title
 					ul
 						li(style="direction: rtl;") הכי חכם: 
-						li(ng-repeat="(key,val) in settings.categories")
-							input(type="radio", name="category", ng-model="filters.category", value="{{key}}", id="nav_{{$index}}")
-							label(for="nav_{{$index}}") {{val}}
-								.icon
+						li
+							ul
+								li(ng-repeat="(key,val) in settings.categories")
+									input(type="radio", name="category", ng-model="filters.category", value="{{key}}", id="nav_{{$index}}")
+									label(for="nav_{{$index}}") {{val}}
+										.icon
 						.clr
+					.clr
 					.toggleForm(ng-click="toggleForm()")
 			#wrapper(ng-view)
 		#footer
 			.footer
+				.logo
 				.links
 					ul
 						li
 							a(href="http://www.skoda.co.il/", target="_blank") לאתר הבית
 						li
-							a(href="http://www.youtube.com/user/skoda", target="_blank") placeholder
+							a(href="http://www.youtube.com/user/skoda", target="_blank")
+								img(src="/images/footer_youtube.png", width="47", height="20")
 						li
 							a(href="http://www.skoda.co.il/%D7%A6%D7%95%D7%A8-%D7%A7%D7%A9%D7%A8", target="_blank") צור קשר
 						li

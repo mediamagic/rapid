@@ -3,10 +3,10 @@ var db = mongoose.connection
 /*
  * Users Schema
  */
-var swfsSchema = new mongoose.Schema({
-	fileName: String,
-	hashName: String,
-});
+var swfsSchema = new mongoose.Schema(	{ fileName: String
+										, hashName: String
+										, params: String
+										, external: String });
 
 /*
  * Users manipulation
