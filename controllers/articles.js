@@ -24,7 +24,10 @@ module.exports = function(db) {
 	  		});
 		},
 		index: function(req,res,next){
-			db.Articles.find({},{},{},function(err,doc){
+			var finder = {}
+			if (req.headers.referer.indexOf('admin') <0)
+				finder.status = true;
+			db.Articles.find(finder,{},{},function(err,doc){
 				return res.send(handle(err,doc));
 			});
 		},
