@@ -7,6 +7,12 @@
 	.preview {
 		width: @width*@size + (@margin * (@width - 1));
 		height: @height*@size + (@margin * (@height - 1));
+		.image {
+			.slidesjs-container {
+		        width: @width*@size + (@margin * (@width - 1)) !important;
+		        height: @height*@size + (@margin * (@height - 1)) !important;
+		    }
+		}
 	}
 	.hover {
 		width: @width*@size + (@margin * (@width - 1));
