@@ -230,6 +230,11 @@ a {
 				position:absolute;
 				top:0px;
 				left:0px;
+				p {
+					padding:0;
+					margin:0;
+					line-height: normal;
+				}
 			}
 			.hover {
 				position:absolute;
@@ -237,18 +242,20 @@ a {
 				left:0px;								
 				background-image: url('../images/transparent.png');
 				display:none;
-				z-index: 100;
-				button {
-					color:#fff;
-					background-color: #4aa82e;
-					font-size:14px;
-				}
+				z-index: 100;				
 				.content {										
 					color:#fff;		
 					width:100%;								
 					text-align: center;					
 					display:table-cell;
 					vertical-align: middle;
+					button {
+						color:#fff;
+						background-color: #4aa82e;
+						font-size:20px;
+						font-weight: bold;
+						margin-right: 0px !important;
+					}
 				}
 			}
 		}
@@ -497,13 +504,14 @@ a {
 			border-left: solid #ccc 1px;
 			top:0px;
 			right:0px;
+			background: url('../images/content_head.png') no-repeat right top;				
 			.header {
 				position: relative;
 				width:200px;
-				height: 39px;
-				border-bottom: solid #000 1px;
+				height: 49px;
+				border-bottom: solid #a1a1a1 1px;
 				text-align: right;
-				margin:0 auto;				
+				margin:0 auto;						
 			}
 			.title {
 				position: relative;
@@ -524,7 +532,7 @@ a {
 				direction: rtl;
 				padding-right:20px;
 				padding-left:20px;
-				margin-top: 20px;
+				//margin-top: 20px;
 			}
 			pre {
 				background: none;
@@ -538,7 +546,7 @@ a {
 				direction: rtl;
 				padding-right:20px;
 				padding-left:20px;
-				margin-top: 20px;				
+				//margin-top: 20px;				
 				a {
 					font-size:13px;
 					color: #00a300;
