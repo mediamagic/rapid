@@ -33,8 +33,9 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 		#wrap
 			#header(ui-scrollfix="+20")
 				#nav
-					span#title The New ŠKODA Rapid
+					span#title
 					ul
+						li(style="direction: rtl;") הכי חכם: 
 						li(ng-repeat="(key,val) in settings.categories")
 							input(type="radio", name="category", ng-model="filters.category", value="{{key}}", id="nav_{{$index}}")
 							label(for="nav_{{$index}}") {{val}}
@@ -47,15 +48,15 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 				.links
 					ul
 						li
-							a(href="") לאתר הבית
+							a(href="http://www.skoda.co.il/", target="_blank") לאתר הבית
 						li
-							a(href="http://www.google.com") placeholder
+							a(href="http://www.youtube.com/user/skoda", target="_blank") placeholder
 						li
-							a(href="") צור קשר
+							a(href="http://www.skoda.co.il/%D7%A6%D7%95%D7%A8-%D7%A7%D7%A9%D7%A8", target="_blank") צור קשר
 						li
-							a(href="") אולמות תצוגה
+							a(href="http://www.skoda.co.il/%D7%90%D7%95%D7%9C%D7%9E%D7%95%D7%AA-%D7%AA%D7%A6%D7%95%D7%92%D7%94", target="_blank") אולמות תצוגה
 						li
-							a(href="") נתוני זיהום
+							a(href="", target="_blank") נתוני זיהום
 						li
-							a(href="") מדיניות ופרטיות
+							a(href="http://www.skoda.co.il/%D7%9E%D7%93%D7%99%D7%A0%D7%99%D7%95%D7%AA-%D7%A4%D7%A8%D7%98%D7%99%D7%95%D7%AA", target="_blank") מדיניות ופרטיות
 				.clr

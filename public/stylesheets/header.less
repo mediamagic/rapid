@@ -5,36 +5,39 @@
 	width: 100%;
 	z-index: 2;
 	background: white;
-	background: transparent url(../images/nav_bg.png) repeat-x;
+	background: @green url(../images/nav_bg.png) repeat-x;
 	&.ui-scrollfix {
 	}
 	#nav {
 		position: relative;
 		max-width: 940px;
-		min-width: 450px;
+		min-width: 460px;
 		min-height: 171px;
 		margin: 0 auto;
 		background: transparent url(../images/nav_logo.png) no-repeat top right;
 		padding: 0;
+		text-align: center;
 		#title {
+			background: transparent url(../images/header_title.png) no-repeat center center;
 			display: block;
-			font-size: 25px;
-			color: white;
+			width: 280px;
+			height: 29px;
 			position: relative;
 			top: 100px;
-			font-weight: bold;
-			text-align: center;
+			width: 100%;
 		}
 		ul {
+			display: inline-block;
 			position: relative;
-			top: 105px;
-			max-width: 650px;
-			min-width: 450px;
 			padding: 0;
-			margin: 0 auto;
+			margin: 105px auto 0 auto;
 			li {
 				list-style-type: none;
 				float: right;
+				font-size: 22px;
+				font-family: 'alfi bold';
+				height: 30px;
+				line-height: 30px;
 			}
 		}
 		.toggleForm {

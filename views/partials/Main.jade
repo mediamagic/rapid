@@ -8,10 +8,10 @@
 			input(type="number", name="phone", ng-model="form.phone", placeholder="טלפון")
 			input(type="email", name="email", ng-model="form.email", placeholder='דוא"ל')
 			input(type="radio", id="radio_1", ng-model="form.type", value="private")
-			label(for="radio_1") private
+			label(for="radio_1") לקוח פרטי
 				.icon
 			input(type="radio", id="radio_2", ng-model="form.type", value="business")
-			label(for="radio_2") business
+			label(for="radio_2") לקוח עסקי
 				.icon
 			.submit(ng-click="formSubmit()")
 .timedWrapper(ui-if="contentLoaded")

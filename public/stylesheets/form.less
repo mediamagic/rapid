@@ -21,10 +21,10 @@
 }
 .form {
 	height: 80px;
-	width: 860px;
+	width: 840px;
 	margin: 0 auto;
 	background: @green;
-	padding: 20px 20px 20px 60px;
+	padding: 20px 20px 20px 80px;
 	color: white;
 	text-align: right;
 	span {
@@ -41,6 +41,8 @@
 	label { 
 		float: right;
 		margin: 15px -15px 0 0px;
+		font-size: 13px !important;
+		text-decoration: none !important;
 	}
 	input[type="text"], input[type="email"], input[type="number"] {
 		height: 28px;
@@ -87,10 +89,15 @@ input[type="radio"] {
 		-ms-appearance: none;
 		-o-appearance: none;
 		color: white;
+		font-size: 22px;
+		font-family: 'alfi bold';
+		text-decoration: underline;
+		cursor: pointer;
 	}
 	&:checked {
 		+label {
 			color: black;
+			cursor: default;
 			.icon {
 				background:url(../images/form_checktrue.png) no-repeat center center;
 				width: 30px;

@@ -74,8 +74,6 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             setTimeout(function(){
                 var options = JSON.parse(elm.attr('iso-gallery'));
                 elm.slidesjs({
-                    // width: parseInt(options.width),
-                    // height: parseInt(options.height),
                     navigation: {active: false},
                     play: {
                         auto: true,

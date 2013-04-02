@@ -4,17 +4,18 @@
     max-width: 780px;
   }
 }
-@media (max-width: 540px) {
+@media (max-width: 780px) {
   html, body {
     padding: 0;
-    max-width: 540px;
+    max-width: 780px;
   }
   #header {
     position: relative;
-    width: 540px;
+    min-width: 540px;
+    max-width: 780px;
     #nav {
       ul {
-        width: 460px;
+        max-width: 460px;
       }
       .toggleForm {
         left: 10px;
@@ -23,11 +24,15 @@
   }
   #wrapper {
     margin-top: 20px;
+    .timedWrapper {
+      width: 540px;
+      margin: 0 auto;
+    }
   }
   #articles .article {
-      &.content {
-        height: 802px;
-        >.content {
+    &.content {
+      height: 802px;
+      >.content {
         max-width: 460px;
         background: red;
         .sidebar {
@@ -37,6 +42,26 @@
         .inner {
           width: 460px;
           height: 315px;
+          >.flash {
+            width: 460px;
+            height: 315px;
+            object {
+                width: 460px;
+                height: 315px;
+            }
+          }
+          >.iframe {
+            width: 460px;
+            height: 315px;
+          }
+          >.video {
+            width: 460px;
+            height: 315px;
+          }
+          >.text {
+            width: 460px;
+            height: 315px;
+          }
           >.image {
             width: 460px;
             height: 315px;
@@ -56,7 +81,7 @@
   }
   .form {
     height: 160px;
-    width: 380px;
+    width: 360px;
   }
   #headerForm {
     width: 460px;
@@ -65,19 +90,26 @@
       background: @green;
     }
   }
+  #footer {
+    min-width: 540px;
+    max-width: 780px;
+    .footer {
+      max-width: 460px;
+    }
+  }
 }
 
-@media (min-width: 541px) and (max-width: 780px) {
- html, body {
+@media (min-width: 781px) and (max-width: 1019px) {
+  html, body {
     padding: 0;
-    max-width: 780px;
+    max-width: 1020px;
   }
   #header {
     position: relative;
-    width: 780px;
+    max-width: 1020px;
     #nav {
       ul {
-        width: 700px;
+        max-width: 700px;
       }
       .toggleForm {
         left: 10px;
@@ -86,33 +118,79 @@
   }
   #wrapper {
     margin-top: 20px;
+    .timedWrapper {
+      width: 780px;
+      margin: 0 auto;
+    }
   }
   #articles .article {
-      &.content {
-        height: 802px;
-        >.content {
-        max-width: 460px;
+    &.content {
+      height: 700px;
+      width: 700px;
+      >.content {
+        width: 700px;
         background: red;
         .sidebar {
-          width: 420px;
-          height: 175px;
+          width: 660px;
+          height: 130px;
+          border: none;
         }
         .inner {
-          width: 460px;
-          height: 315px;
+          width: 700px;
+          height: 306px;
+          >.flash {
+            width: 700px;
+            height: 306px;
+            object {
+                width: 700px;
+                height: 306px;
+            }
+          }
+          >.iframe {
+            width: 700px;
+            height: 306px;
+          }
+          >.video {
+            width: 700px;
+            height: 306px;
+          }
+          >.text {
+            width: 700px;
+            height: 306px;
+          }
+          >.image {
+            width: 700px;
+            height: 306px;
+            position: relative;
+            .slidesjs-container {
+                width: 700px !important;
+                height: 306px !important;
+            }
+            .slidesjs-pagination {
+                bottom: 20px;
+                right: 20px;
+            }
+          }
         }
       }
     }
   }
   .form {
-    height: 160px;
-    width: 380px;
+    height: 112px;
+    width: 600px;
   }
   #headerForm {
-    width: 460px;
+    width: 700px;
     margin-top: 20px;
     .form {
       background: @green;
+    }
+  }
+   #footer {
+    min-width: 781px;
+    max-width: 1019px;
+    .footer {
+      max-width: 700px;
     }
   }
 }
@@ -120,6 +198,5 @@
 @media (min-width: 1020px) {
   #articles .article.content > .content {
     min-width: 938px;
-    background: red;
   }
 }
