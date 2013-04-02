@@ -46,7 +46,7 @@
 							#leftSide
 								#textPreview(ui-if="editor.data.preview.type == 'text'", style="background-color:{{ editor.data.preview.bgColor }};")
 									textarea#editorClosed.tinyEditor(ui-tinymce="editor.tinymceOptions", ng-model="editor.tempContent.preview.text", rows="15", cols="80", width="700", style="width:700px !important;")
-										p(dir="rtl")				
+										p(dir="rtl", style="font-size:13px;")
 											{{ editor.tempContent.preview.text }}
 									input#uploadNewImageTinymce_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('preview', this.files[0])", style="display:none;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
@@ -80,9 +80,9 @@
 									.original(style="width:{{editor.display.preview.width}}px;height:{{editor.display.preview.height}}px;", ng-bind-html-unsafe="editor.display.preview.content[editor.data.preview.type]")
 									.hover(style="width:{{editor.display.preview.width}}px;height:{{editor.display.preview.height}}px;")
 										.content
-											.text {{ editor.data.preview.link.text }}
+											.text.alfi {{ editor.data.preview.link.text }}
 											br
-											button לחצו כאן							
+											button.alfi לחצו כאן							
 						h3.padding5.bg-color-green.progress-bar(style="position:relative; height:40px;margin-top:10px;", ng-show="editor.data.preview.link.type == 'inner'")							
 							.a(style="position:absolute;left:5px;top:5px;")
 								i.icon-clipboard-2.white
@@ -149,7 +149,7 @@
 										input#contentLinkUrlInput.bg-color-green.white(type="text", placeholder="url", ng-model="editor.data.sidebar.readMore.url")								
 							#contentDisplay
 								#rightSide
-									.header SKODA RAPID
+									.header
 									.title.green.alfi.bold {{ editor.data.sidebar.title }}
 									pre.description.alfi {{ editor.data.sidebar.description }}
 									.readMore.alfi
@@ -157,7 +157,7 @@
 								#leftSide									
 									#textContent(ui-if="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
 										textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceContentOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important;border:none;")
-											p(dir="rtl")
+											p(dir="rtl", style="font-size:13px;")
 												{{ editor.tempContent.content.text }}
 										input#uploadNewImageTinymce_content(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('content', this.files[0])", style="display:none;")
 									#contentPreviewDisplay(ui-if="editor.data.content.type != 'text'", ng-class="checkLinked()", style="width:{{editor.display.content.width}}px;height:{{editor.display.content.height}}px;margin-top:{{editor.display.content.margin}}px;background-color:{{ editor.data.content.bgColor }};")

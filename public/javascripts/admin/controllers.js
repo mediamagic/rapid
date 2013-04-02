@@ -233,7 +233,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		},
 		defaultTempContent: {
 			preview: {
-						text: '<p dir="rtl"></p>',
+						text: '<p dir="rtl", style="font-size:13px;"></p>',
 						video: { 
 									id:'',
 									icon:'',
@@ -247,7 +247,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 						image: []
 					},
 			content: {					
-						text: '<p dir="rtl"></p>',
+						text: '<p dir="rtl", style="font-size:13px;"></p>',
 						video: { 
 									id:'',
 									icon:'',
@@ -296,10 +296,11 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
 			theme_advanced_resizing : false,
+			theme_advanced_font_sizes : "9px=9px,10px=10px,11px=11px,12px=12px,13px=13px,14px=14px,15px=15px,16px=16px,17px=17px,18px=18px,19px=19px,20px=20px,21px=21px,22px=22px",
 
 			setup : function(ed) {
 		        // Add a custom button
-		        ed.addButton('addImage', {
+		        ed.addButton('uploadImage', {
 		            title : 'Upload Image',
 		            image : 'images/upload.png',
 		            onclick : function() {
@@ -334,7 +335,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
 			theme_advanced_resizing : false,
-
+			theme_advanced_font_sizes : "9px=9px,10px=10px,11px=11px,12px=12px,13px=13px,14px=14px,15px=15px,16px=16px,17px=17px,18px=18px,19px=19px,20px=20px,21px=21px,22px=22px",
+			
 			setup : function(ed) {
 		        // Add a custom button
 		        ed.addButton('uploadImage', {
@@ -713,7 +715,7 @@ var ListsCtrl = ['$scope', function($scope){
 	}
 	
 	$scope.$watch('filter.category', function(n,o){				
-		if (n!=o && n!=0 && n!=undefined && $scope.settingsLoaded) 			
+		if (n!=o && n!=0 && n!=undefined && $scope.settingsLoaded && $scope.categoryCopy[n]) 			
 			$scope.categoryCopy[n].sort($scope.compare);
 	}, true);
 	
