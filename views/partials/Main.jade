@@ -1,19 +1,19 @@
 #headerForm(style="background: white;", ng-show="showForm")
-	a(ng-click="toggleForm()") close
 	.form
+		.closeForm(ng-click="toggleForm()") x
 		span רוצה להתקדם למשפחתית אמיתית? השאר פרטים
 		form
-			input(type="text", name="firstname", ng-model="form.firstname", placeholder="first name")
-			input(type="text", name="lastname", ng-model="form.lastname", placeholder="last name")
-			input(type="number", name="phone", ng-model="form.phone", placeholder="phone")
-			input(type="email", name="email", ng-model="form.email", placeholder="email")
+			input(type="text", name="firstname", ng-model="form.firstname", placeholder="שם פרטי")
+			input(type="text", name="lastname", ng-model="form.lastname", placeholder="שם משפחה")
+			input(type="number", name="phone", ng-model="form.phone", placeholder="טלפון")
+			input(type="email", name="email", ng-model="form.email", placeholder='דוא"ל')
 			input(type="radio", id="radio_1", ng-model="form.type", value="private")
 			label(for="radio_1") private
 				.icon
 			input(type="radio", id="radio_2", ng-model="form.type", value="business")
 			label(for="radio_2") business
 				.icon
-			input(type="submit", value="submit", ng-click="formSubmit()")
+			.submit(ng-click="formSubmit()")
 .timedWrapper(ui-if="contentLoaded")
 	#articles(ui-isotope, options='{"itemSelector":".article", "animationEngine":"best-available", "masonry": { "columnWidth": 220, "gutterWidth": 20} }')
 		.article(ng-repeat="article in articles", rel="{{article.categories}}", iso-item, id="item_{{$index}}", ng-class="getCategory($index)")

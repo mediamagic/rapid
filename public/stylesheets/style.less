@@ -55,38 +55,7 @@ h1,h2,h3,h4,h5,h6 {
 	clear:both;
 }
 
-// input[type="radio"]{
-// 	display: none;
-// }
-input[type="radio"] {
-	display: none;
-	+label{
-		.icon {
-			display: inline-block;
-			background:url('http://refundfx.com.au/uploads/image/checkbox_empty.png') no-repeat center center;
-			width: 30px;
-			height: 30px;
-			vertical-align: middle;
-		}
-		padding:0 20px 0 0;
-		display: inline-block;
-		appearance:none;
-		-moz-appearance:none;
-		-webkit-appearance:none;
-		-ms-appearance: none;
-		-o-appearance: none;
-	}
-	&:checked {
-		+label {
-			.icon {
-				background:url('http://refundfx.com.au/uploads/image/checkbox_full.png') no-repeat center center;
-				width: 30px;
-				height: 30px;
-				vertical-align: middle;
-			}
-		}
-	}
-}
+
 
 #wrapper {
 	margin: 191px auto 0 auto;
@@ -94,9 +63,6 @@ input[type="radio"] {
 	position: relative;
 	z-index: 1;
 	min-width: 540px;
-	&.formOpen {
-		//margin-top: 321px;
-	}
 }
 
 .timedWrapper {
