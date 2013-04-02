@@ -14,9 +14,6 @@ var GlobalCtrl= [ '$scope'
 	$scope.Settings = $resource('/resources/settings')
 	$scope.location = $location
 	$scope.resource = $resource
-	$scope.settings = {
-		categories: {}
-	}
 	$scope.Settings.get({}, function(settings)	{ 
 		$scope.settings = settings
 		, $scope.Login 	= $scope.resource 	( '/api/login'

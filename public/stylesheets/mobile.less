@@ -48,6 +48,59 @@
   #headerForm {
     width: 460px;
     margin-top: 20px;
+    .form {
+      background: @green;
+    }
+  }
+}
+
+@media (max-width: 780px) {
+ html, body {
+    padding: 0;
+    max-width: 780px;
+  }
+  #header {
+    position: relative;
+    width: 780px;
+    #nav {
+      ul {
+        width: 700px;
+      }
+      .toggleForm {
+        left: 10px;
+      }
+    }
+  }
+  #wrapper {
+    margin-top: 20px;
+  }
+  #articles .article {
+      &.content {
+        height: 802px;
+        >.content {
+        max-width: 460px;
+        background: red;
+        .sidebar {
+          width: 420px;
+          height: 175px;
+        }
+        .inner {
+          width: 460px;
+          height: 315px;
+        }
+      }
+    }
+  }
+  .form {
+    height: 160px;
+    width: 380px;
+  }
+  #headerForm {
+    width: 460px;
+    margin-top: 20px;
+    .form {
+      background: @green;
+    }
   }
 }
 
