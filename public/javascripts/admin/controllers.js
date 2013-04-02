@@ -160,6 +160,16 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		$scope.categoriesLoaded = true;
 	}
 
+	$scope.generateFontSizeForTinymce = function (start, end) {
+		var fontSize = [];
+
+		for(var i = start; i <= end; i++) {
+			fontSize.push(i+ 'px=' + i + 'px');
+		}
+		
+		return fontSize.join(',');
+	}	
+
 	$scope.editor = {
 		defaultData: {
 			name:'',
@@ -233,7 +243,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		},
 		defaultTempContent: {
 			preview: {
-						text: '<p dir="rtl", style="font-size:13px;"></p>',
+						//text: '<p dir="rtl", style="font-size:13px;"></p>',
+						text:'',
 						video: { 
 									id:'',
 									icon:'',
@@ -247,7 +258,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 						image: []
 					},
 			content: {					
-						text: '<p dir="rtl", style="font-size:13px;"></p>',
+						text: '',
 						video: { 
 									id:'',
 									icon:'',
@@ -296,7 +307,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
 			theme_advanced_resizing : false,
-			theme_advanced_font_sizes : "9px=9px,10px=10px,11px=11px,12px=12px,13px=13px,14px=14px,15px=15px,16px=16px,17px=17px,18px=18px,19px=19px,20px=20px,21px=21px,22px=22px",
+
+			theme_advanced_font_sizes : $scope.generateFontSizeForTinymce(7, 50),
 
 			setup : function(ed) {
 		        // Add a custom button
@@ -309,7 +321,12 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		                $scope.triggerClick('uploadNewImageTinymce_preview');		                
 		            }
 		        });
-		    }
+		    },
+
+		    init_instance_callback : function(editor) {
+		    	editor.execCommand("fontName", false, "alfi regular");
+		    	editor.execCommand("fontSize", false, "13px");
+	        }
 
 			//onchange_callback:'$scope.tinymceChange'
 		},
@@ -335,7 +352,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			theme_advanced_toolbar_align : "left",
 			theme_advanced_statusbar_location : "none",
 			theme_advanced_resizing : false,
-			theme_advanced_font_sizes : "9px=9px,10px=10px,11px=11px,12px=12px,13px=13px,14px=14px,15px=15px,16px=16px,17px=17px,18px=18px,19px=19px,20px=20px,21px=21px,22px=22px",
+			theme_advanced_font_sizes : $scope.generateFontSizeForTinymce(7, 50),
 			
 			setup : function(ed) {
 		        // Add a custom button
@@ -348,7 +365,12 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		                $scope.triggerClick('uploadNewImageTinymce_content');		                
 		            }
 		        });
-		    }
+		    },
+
+		    init_instance_callback : function(editor) {
+		    	editor.execCommand("fontName", false, "alfi regular");
+		    	editor.execCommand("fontSize", false, "13px");
+	        }
 
 			//onchange_callback:'$scope.tinymceChange'
 		}
@@ -933,12 +955,42 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	//
 
 	$scope.$watch('editor.tempContent.preview.text', function(n, o) { 			
-		if(n != undefined) {						
-			$scope.safeApply(function() {	
-				$scope.editor.display.preview.content.text = n;
-			});			
+		if(n != undefined) {
+			$scope.safeApply(function() {						
+				$scope.editor.display.preview.content.text = $scope.wrappWithIframe(n);
+			});
+			// $scope.safeApply(function() {	
+			// 	$scope.editor.display.preview.content.text = n;
+			// });			
 		}			
 	},true);
+
+	$scope.wrappWithIframe = function(text) {
+		var wrapper = $('<html />')
+	        , style = $('<link  />')
+	            .attr(  { 'type': "text/css"
+	                    , 'rel': "stylesheet"
+	                    , 'href': $scope.host + "stylesheets/tinyFonts.css" })
+	        , head  = $('<head />')
+	        , wrap  = $('<body />')
+	            .attr('dir', 'rtl')
+	    style
+	        .appendTo(head)
+	    wrap
+	        .append(text)
+	    wrapper
+	        .append(head)
+	        .append(wrap)
+	    var iframe  = $('<iframe />')
+	        .attr(  { 'frameborder':0
+	                , style:"padding:0;border:none"
+	                , scrolling: 'no'
+	                , src: 'data:text/html;charset=utf-8,' + wrapper.html()
+	            });
+	        //.attr('class', (obj[type].size || 'text' ))
+
+		return iframe;		
+	}
 
 	$scope.$watch('editor.tempContent.preview.image', function(n, o) { 		
 		if(n != o && n != '' && n != undefined)			

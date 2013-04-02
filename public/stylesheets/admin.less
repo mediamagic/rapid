@@ -40,7 +40,7 @@
 // * CSS *//
 
 html {
-	background:  url(../images/main_bg_pat.png);
+	//background:  url(../images/main_bg_pat.png);
 	&.pop {
 		background: #011520;
 	}
@@ -48,6 +48,7 @@ html {
 body {
 	background: transparent;
 	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	line-height: normal;
 	margin: 0;
 	padding: 0;
 }
@@ -60,7 +61,7 @@ a {
 }
 
 #wrapper {
-	background: transparent url(../images/main_bg.png) no-repeat top left;
+	//background: transparent url(../images/main_bg.png) no-repeat top left;
 	height: 700px;
 	margin: 0 auto;
 	width: 1024px;
@@ -164,7 +165,11 @@ a {
 	#leftSide {
 		position: relative;
 		float:left;
-		width:460px;	
+		width:460px;			
+		#textPreview {
+			-webkit-transition-property: background-color;
+    		-webkit-transition-duration: 0.5s;
+		}
 		#flashPreview {
 			position: relative;
 			width:100%;
@@ -224,13 +229,19 @@ a {
 		#previewDisplay {
 			position: relative;
 			outline:solid #ccc 1px;
-			margin: 0 auto;			
+			margin: 0 auto;									
 			overflow: hidden;
+			-webkit-transition-property: height, width, margin, background-color;
+    		-webkit-transition-duration: 0.5s;
 			.original {
 				position:absolute;
 				top:0px;
-				left:0px;
+				left:0px;				
+				clear:both;
+				font-size: 13px;
+				direction: rtl;
 				p {
+					font-size: 13px;
 					padding:0;
 					margin:0;
 					line-height: normal;
@@ -249,11 +260,13 @@ a {
 					text-align: center;					
 					display:table-cell;
 					vertical-align: middle;
+					font-size:20px;
 					button {
 						color:#fff;
 						background-color: #4aa82e;
 						font-size:20px;
-						font-weight: bold;
+						width: 112px;
+						height: 35px;						
 						margin-right: 0px !important;
 					}
 				}
@@ -560,15 +573,27 @@ a {
 			height: 464px;			
 			top:0px;
 			left:0px;
+			#textContent {
+				-webkit-transition-property: background-color;
+    			-webkit-transition-duration: 0.5s;	
+			}
 			#contentPreviewDisplay {
 				position: relative;
 				outline:solid #ccc 1px;
 				margin: 0 auto;			
-				overflow: hidden;
+				overflow: hidden;				
+				-webkit-transition-property: background-color;
+    			-webkit-transition-duration: 0.5s;	
 				.original {
 					position:absolute;
 					top:0px;
-					left:0px;
+					left:0px;					
+					p {
+						padding:0;
+						margin:0;
+						line-height: normal;
+						font-size: 13px;
+					}
 				}
 			}
 		}
