@@ -1,0 +1,61 @@
+.login {
+	width: 100%;
+	min-height: 700px;
+	form {
+		::-webkit-input-placeholder { 
+			color:@darkGray; 
+			text-align: center;
+			font-style: italic;
+		}
+		::-moz-placeholder { 
+			color:@darkGray; 
+			text-align: center;
+			font-style: italic;
+		}
+		:-ms-input-placeholder { 
+			color:@darkGray; 
+			text-align: center;
+			font-style: italic;
+		}
+		input:-moz-placeholder { 
+			color:@darkGray; 
+			text-align: center;
+			font-style: italic;
+		}
+		padding: 30px;
+		background: @green;
+		display: block;
+		height: 155px;
+		width: 300px;
+		margin: 250px auto -100px auto;
+		position: relative;
+		border: @gray solid 2px;
+		div {
+			width: 182px;
+			margin: 0 auto 30px auto;
+			text-align: center;
+			input[type="text"], input[type="password"] {
+				border: @gray solid 2px;
+				height: 25px;
+				width: 170px;
+				padding: 5px;
+				line-height: 25px;
+				font-size: 22px;
+				font-family: verdana;
+				color: #333;
+			}
+			input[type="submit"] {
+				width: 100px;
+				height: 30px;
+				background: @gray;
+				border: none;
+				color: white;
+				cursor: pointer;
+				font-size: 18px;
+				font-family: arial;
+				font-weight: bold;
+				border: @darkGray solid 2px;
+			}
+		}
+	}
+}

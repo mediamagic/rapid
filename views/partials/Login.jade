@@ -1,9 +1,8 @@
-form()
-	div
-		label username
-		input(type="text", name="username", ng-model="username")
-	div
-		label password
-		input(type="password", name="password", ng-model="password")
-	div
-		input(type="submit", value="Log in",  ng-click="loginSubmit()")
+.login
+	form
+		div
+			input(type="text", name="username", ng-model="username", placeholder="user name")
+		div
+			input(type="password", name="password", ng-model="password", placeholder="password")
+		div
+			input(type="submit", value="Log in",  ng-click="loginSubmit()")

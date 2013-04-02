@@ -20,15 +20,13 @@ var GlobalCtrl= [ '$scope'
 											, { _csrf: $cookies['csrf.token'] } )
 		$scope.$broadcast('settings_loaded');
 	});
-	$scope.filters = { category: 'all' }
+	$scope.filters 	= { category: 'all' }
 
-	$scope.form = {
-		firstname: '',
-		lastname: '',
-		phone: '',
-		email: '',
-		type: 'private'
-	}
+	$scope.form 	= 	{ firstname: ''
+						, lastname: ''
+						, phone: ''
+						, email: ''
+						, type: 'private' }
 
 	$scope.formReset = angular.copy($scope.form);
 
@@ -94,10 +92,8 @@ var LoginCtrl = ['$scope', '$window' , function ( $scope, $window ){
 							, { username: $scope.username
 							, password: $scope.password }
 							, function(resp){
-				if (resp.error === undefined){
-					(prevUrl === undefined) ? 
-					$scope.location.path('/admin') : 
-					$window.location.href = prevUrl;
+				if (resp.error === 0){
+					$window.location.href = '/admin';
 				} 
 			});
 	}

@@ -82,7 +82,7 @@
   //MIDDLEWARE
   function ensureAuthenticated(req, res, next){
     if (req.isAuthenticated()) return next();
-    res.redirect('/');
+    res.redirect('/#/login');
   }
 
   //load db async
@@ -127,11 +127,14 @@
     app.get ('/views/:view.html', routes.views);
     app.get ('/views/admin/:view.html', ensureAuthenticated, admin.views);
     app.get ('/admin*', ensureAuthenticated, admin.index);
-    app.get ('/logout', admin.logout);
+    app.get ('/logout', function(req,res){
+      req.logout();
+      res.redirect('/');
+    });
 
     //API
     app.post('/api/login', pass.authenticate('local'), function(req,res) {
-      if (req.user) res.json(req.user);
+      if (req.user) res.json({error:0});
       else res.send(401);
     });
     app.get ('/api/createCSV', ensureAuthenticated,  Api.createCSV);
