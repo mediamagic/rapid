@@ -324,8 +324,10 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		    },
 
 		    init_instance_callback : function(editor) {
-		    	editor.execCommand("fontName", false, "alfi regular");
-		    	editor.execCommand("fontSize", false, "13px");
+		    	if(editor.startContent == '<p><br data-mce-bogus="1"></p>') {
+		    		editor.execCommand("fontName", false, "alfi regular");
+		    		editor.execCommand("fontSize", false, "13px");
+		    	}
 	        }
 
 			//onchange_callback:'$scope.tinymceChange'
@@ -368,8 +370,10 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		    },
 
 		    init_instance_callback : function(editor) {
-		    	editor.execCommand("fontName", false, "alfi regular");
-		    	editor.execCommand("fontSize", false, "13px");
+		    	if(editor.startContent == '<p><br data-mce-bogus="1"></p>') {
+		    		editor.execCommand("fontName", false, "alfi regular");
+		    		editor.execCommand("fontSize", false, "13px");
+		    	}
 	        }
 
 			//onchange_callback:'$scope.tinymceChange'
