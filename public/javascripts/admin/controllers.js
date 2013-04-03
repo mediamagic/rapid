@@ -324,8 +324,10 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		    },
 
 		    init_instance_callback : function(editor) {
-		    	editor.execCommand("fontName", false, "alfi regular");
-		    	editor.execCommand("fontSize", false, "13px");
+		    	if(editor.startContent == '<p><br data-mce-bogus="1"></p>') {
+		    		editor.execCommand("fontName", false, "alfi regular");
+		    		editor.execCommand("fontSize", false, "13px");
+		    	}
 	        }
 
 			//onchange_callback:'$scope.tinymceChange'
@@ -368,8 +370,10 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		    },
 
 		    init_instance_callback : function(editor) {
-		    	editor.execCommand("fontName", false, "alfi regular");
-		    	editor.execCommand("fontSize", false, "13px");
+		    	if(editor.startContent == '<p><br data-mce-bogus="1"></p>') {
+		    		editor.execCommand("fontName", false, "alfi regular");
+		    		editor.execCommand("fontSize", false, "13px");
+		    	}
 	        }
 
 			//onchange_callback:'$scope.tinymceChange'
@@ -442,6 +446,13 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			break;
 			default:
 			break;
+		}
+
+		var previewIframeWraper = $('#preview_iframe_wrapper');
+
+		if(previewIframeWraper) {
+			previewIframeWraper.attr('width', $scope.editor.display.preview.width);
+			previewIframeWraper.attr('height', $scope.editor.display.preview.height);
 		}
 	}
 
@@ -966,14 +977,18 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	},true);
 
 	$scope.wrappWithIframe = function(text) {
-		var wrapper = $('<html />')
+		var wrapper = $('<html />')			
+			, base = $('<base />')
+				.attr({'href': $scope.host})
 	        , style = $('<link  />')
 	            .attr(  { 'type': "text/css"
 	                    , 'rel': "stylesheet"
 	                    , 'href': $scope.host + "stylesheets/tinyFonts.css" })
 	        , head  = $('<head />')
 	        , wrap  = $('<body />')
-	            .attr('dir', 'rtl')
+	            .attr('dir', 'rtl')	    	    
+	    base
+	    	.appendTo(head)
 	    style
 	        .appendTo(head)
 	    wrap
@@ -982,9 +997,12 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	        .append(head)
 	        .append(wrap)
 	    var iframe  = $('<iframe />')
-	        .attr(  { 'frameborder':0
+	        .attr(  { id:'preview_iframe_wrapper' 
+	        		, 'frameborder':0
 	                , style:"padding:0;border:none"
 	                , scrolling: 'no'
+	                , width: $scope.editor.display.preview.width
+	                , height: $scope.editor.display.preview.height
 	                , src: 'data:text/html;charset=utf-8,' + wrapper.html()
 	            });
 	        //.attr('class', (obj[type].size || 'text' ))
@@ -1017,10 +1035,10 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 
 	$scope.changeContentFormsSizes = function(type) {
 		if(type == 'text') {
-			document.getElementById('upperTypeForm').style.width = 340 + 'px';
+			document.getElementById('upperTypeForm').style.width = 350 + 'px';
 			document.getElementById('upperTypeForm').style.borderRight = 'none';			
 		} else {			
-			document.getElementById('upperTypeForm').style.width = 669 + 'px';			
+			document.getElementById('upperTypeForm').style.width = 701 + 'px';			
 			document.getElementById('upperTypeForm').style.borderRight = 'solid #ccc 1px';
 		}		
 	}
