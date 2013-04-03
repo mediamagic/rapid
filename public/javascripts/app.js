@@ -1,7 +1,8 @@
 'use strict'; 
 
 var staticForm = '';
-
+    , host = window.document.location.host+
+                    '//'+window.document.location.host
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
 .config(['$routeProvider'
@@ -317,13 +318,15 @@ function parseContent(obj, dim, type){
                     , style = $('<link  />')
                         .attr(  { 'type': "text/css"
                                 , 'rel': "stylesheet"
-                                , 'href': window.document.location.protocol+
-                                  "//"+
-                                  window.document.location.host+
+                                , 'href': host
                                   "/stylesheets/tinyFonts.css" })
                     , head  = $('<head />')
                     , wrap  = $('<body />')
                         .attr('dir', 'rtl')
+                    , base = $('<base />')
+                        .attr('href', host)
+                base
+                    .appendTo(head)
                 style
                     .appendTo(head)
                 wrap
