@@ -30,9 +30,11 @@ var GlobalCtrl= [ '$scope'
 
 	$scope.formReset = angular.copy($scope.form);
 
-	$scope.formSubmit = function(){
-		console.log($scope.form)
-		$http.post('/someUrl', $scope.form)
+	$scope.formSubmit = function(a){
+		if (a.leadForm.$invalid) {
+			return a.leadForm.$setDirty();
+		}
+		$http.post('/resources/leads?_csrf='+$cookies['csrf.token'], $scope.form)
 			.success(function ( data, status, headers, config ) {
 				$scope.form = angular.copy($scope.formReset);
 				return false;
@@ -52,7 +54,6 @@ var MainCtrl = ['$scope', function ( $scope ){
 	$scope.contentLoaded 	= false;
 
 	$scope.$on('settings_loaded', function(){
-		console.log('herer');
 		$scope.getCategory = function ( index ){
 			var item 	= $scope.articles[index]
 				, arr 	= []

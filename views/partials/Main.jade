@@ -2,11 +2,11 @@
 	.form
 		.closeForm(ng-click="toggleForm()") x
 		span רוצה להתקדם למשפחתית אמיתית? השאר פרטים
-		form
-			input(type="text", name="firstname", ng-model="form.firstname", placeholder="שם פרטי")
-			input(type="text", name="lastname", ng-model="form.lastname", placeholder="שם משפחה")
-			input(type="number", name="phone", ng-model="form.phone", placeholder="טלפון")
-			input(type="email", name="email", ng-model="form.email", placeholder='דוא"ל')
+		form(ng-submit="formSubmit(this)", name="leadForm", novalidate)
+			input(type="text", name="firstname", ng-model="form.firstname", placeholder="שם פרטי", required)
+			input(type="text", name="lastname", ng-model="form.lastname", placeholder="שם משפחה", required)
+			input(type="tel", name="phone", ng-model="form.phone", placeholder="טלפון", required)
+			input(type="email", name="email", ng-model="form.email", placeholder='דוא"ל', required)
 			input(type="radio", id="radio_1", ng-model="form.type", value="private")
 			label(for="radio_1") לקוח פרטי
 				.icon
@@ -17,7 +17,7 @@
 			input(type="checkbox", id="chck_1", ng-model="form.marketing", value="true")
 			label(for="chck_1") אני מעוניין לקבל מידע על מבצעים והטבות מסקודה
 				.icon
-			.submit(ng-click="formSubmit()")
+			input.submit(type="submit", value="&nbsp;")
 .timedWrapper(ui-if="contentLoaded")
 	#articles(ui-isotope, options='{"itemSelector":".article", "animationEngine":"best-available", "masonry": { "columnWidth": 220, "gutterWidth": 20}, "animationOptions": { "duration": 1200 } }')
 		.article(ng-repeat="article in articles", rel="{{article.categories}}", iso-item, id="item_{{$index}}", ng-class="getCategory($index)")

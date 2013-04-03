@@ -27,6 +27,7 @@
 	padding: 20px 20px 20px 80px;
 	color: white;
 	text-align: right;
+	::-webkit-validation-bubble{ display: none;}
 	span {
 		direction: rtl;
 		font-size: 19px;
@@ -37,6 +38,7 @@
 		float: right;
 		direction: rtl;
 		margin: 15px 0 0 15px;
+		outline: none;
 	}
 	label { 
 		float: right;
@@ -44,7 +46,14 @@
 		font-size: 13px !important;
 		text-decoration: none !important;
 	}
-	input[type="text"], input[type="email"], input[type="number"] {
+	form.ng-dirty {
+		input[type="text"], input[type="email"], input[type="number"], input[type="tel"] {
+			&.ng-invalid {
+				background: #ffcccc;
+			}
+		}
+	}
+	input[type="text"], input[type="email"], input[type="number"], input[type="tel"] {
 		height: 28px;
 		width: 108px;
 		line-height: 28px;

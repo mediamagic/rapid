@@ -93,6 +93,7 @@ if (cluster.isMaster) {
     , Stats       = require('./controllers/statistics')(resp)
     , PowerUsers  = require('./controllers/powerUsers')(resp)
     , Api         = require('./controllers/api')(resp)
+    , Leads       = require('./controllers/leads')(resp)
 
     pass.use(new LocalS(
       function(username, password, done){
@@ -161,6 +162,8 @@ if (cluster.isMaster) {
     app.put ('/resources/settings', ensureAuthenticated, Settings.update);
     app.post('/resources/stats/:type', Stats.create);
     app.get ('/resources/stats/:type', ensureAuthenticated, Stats.index);
+
+    app.post('/resources/leads', Leads.create);
 
     var server = http.createServer(app);
     server.listen(app.get('port'), function(){
