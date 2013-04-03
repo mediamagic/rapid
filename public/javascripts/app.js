@@ -1,7 +1,7 @@
 'use strict'; 
 
 var staticForm = ''
-    , host = window.document.location.host+
+    , host = window.document.location.protocol+
                     '//'+window.document.location.host
 
 
@@ -178,11 +178,11 @@ function createContent(obj){
     contentBar.append(html)
     elm
         .css('background', obj.content.bgColor)
-        .show(500)
+        .show()
         .children('.close')
         .bind('click', function(){
             elm
-                .hide(500, function(){
+                .hide(0, function(){
                     $(this)
                         .html('')
                         .siblings('.preview')
@@ -260,7 +260,6 @@ function parseContent(obj, dim, type){
             var w   = $('<div class="image"></div>')
                 , c = content
             if (c.length > 1) {
-                console.log('more than one!');
                 w.attr('iso-gallery', JSON.stringify(dim))
             }
             for(var i=0;i<c.length;i++){
@@ -288,8 +287,7 @@ function parseContent(obj, dim, type){
                     , style = $('<link  />')
                         .attr(  { 'type': "text/css"
                                 , 'rel': "stylesheet"
-                                , 'href': host +
-                                  "/stylesheets/tinyFonts.css" })
+                                , 'href': "/stylesheets/tinyFonts.css" })
                     , head  = $('<head />')
                     , wrap  = $('<body />')
                         .attr('dir', 'rtl')
@@ -310,8 +308,7 @@ function parseContent(obj, dim, type){
                             , scrolling: 'no'
                             , src: 'data:text/html;charset=utf-8,' +
                               wrapper.html()
-                        })
-                    .attr('class', (obj[type].size || 'text' ))
+                            , class: (obj[type].size || 'text' ) })
             html = iframe;
             break;
     }
