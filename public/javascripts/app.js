@@ -317,7 +317,10 @@ function parseContent(obj, dim, type){
                     , style = $('<link  />')
                         .attr(  { 'type': "text/css"
                                 , 'rel': "stylesheet"
-                                , 'href': "http://localhost:8080/stylesheets/tinyFonts.css" })
+                                , 'href': window.document.location.protocol+
+                                  "//"+
+                                  window.document.location.host+
+                                  "/stylesheets/tinyFonts.css" })
                     , head  = $('<head />')
                     , wrap  = $('<body />')
                         .attr('dir', 'rtl')
@@ -332,7 +335,8 @@ function parseContent(obj, dim, type){
                     .attr(  { 'frameborder':0
                             , style:"padding:0;border:none"
                             , scrolling: 'no'
-                            , src: 'data:text/html;charset=utf-8,' + wrapper.html()
+                            , src: 'data:text/html;charset=utf-8,' +
+                              wrapper.html()
                         })
                     .attr('class', (obj[type].size || 'text' ))
             html = iframe;

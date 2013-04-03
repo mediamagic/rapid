@@ -447,6 +447,13 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			default:
 			break;
 		}
+
+		var previewIframeWraper = $('#preview_iframe_wrapper');
+
+		if(previewIframeWraper) {
+			previewIframeWraper.attr('width', $scope.editor.display.preview.width);
+			previewIframeWraper.attr('height', $scope.editor.display.preview.height);
+		}
 	}
 
 	$scope.rebuildGalleryOrFlash = function(type) {
@@ -986,9 +993,12 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	        .append(head)
 	        .append(wrap)
 	    var iframe  = $('<iframe />')
-	        .attr(  { 'frameborder':0
+	        .attr(  { id:'preview_iframe_wrapper' 
+	        		, 'frameborder':0
 	                , style:"padding:0;border:none"
 	                , scrolling: 'no'
+	                , width: $scope.editor.display.preview.width
+	                , height: $scope.editor.display.preview.height
 	                , src: 'data:text/html;charset=utf-8,' + wrapper.html()
 	            });
 	        //.attr('class', (obj[type].size || 'text' ))
@@ -1021,10 +1031,10 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 
 	$scope.changeContentFormsSizes = function(type) {
 		if(type == 'text') {
-			document.getElementById('upperTypeForm').style.width = 340 + 'px';
+			document.getElementById('upperTypeForm').style.width = 350 + 'px';
 			document.getElementById('upperTypeForm').style.borderRight = 'none';			
 		} else {			
-			document.getElementById('upperTypeForm').style.width = 669 + 'px';			
+			document.getElementById('upperTypeForm').style.width = 701 + 'px';			
 			document.getElementById('upperTypeForm').style.borderRight = 'solid #ccc 1px';
 		}		
 	}

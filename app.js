@@ -1,15 +1,15 @@
-// var cluster = require('cluster')
-//   , numCPUs = require('os').cpus().length
-//   , i       = 0;
+var cluster = require('cluster')
+  , numCPUs = require('os').cpus().length
+  , i       = 0;
 
-// if (cluster.isMaster) {
-//   for (; i < numCPUs; i++) {
-//     cluster.fork();
-//   }
-//   cluster.on('death', function(worker) {
-//     cluster.fork();
-//   });
-// } else {
+if (cluster.isMaster) {
+  for (; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  cluster.on('death', function(worker) {
+    cluster.fork();
+  });
+} else {
   var express = require('express')
     , routes  = require('./routes')
     , admin   = require('./routes/admin')
@@ -69,13 +69,12 @@
     //   console.log(err);
     //   }
     // });
-    // console.log('development mode');
+    console.log('development mode');
   });
 
   app.configure('production', function(){
     var live = 86400000;
-    app.use(express.staticCache());
-    app.use(express.static(path.join(__dirname, 'public', {maxAge: live})));
+    app.use(express.static(path.join(__dirname, 'public'), {maxAge: live}));
     console.log('production mode');
   });
 
@@ -168,4 +167,4 @@
       console.log("Express server listening on port " + app.get('port'));
     });
   });
-// }
+}
