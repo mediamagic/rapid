@@ -1,8 +1,10 @@
 'use strict'; 
 
-var staticForm = '';
+var staticForm = ''
     , host = window.document.location.host+
                     '//'+window.document.location.host
+
+
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
 
 .config(['$routeProvider'
@@ -15,6 +17,7 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
                         , controller: LoginCtrl, name: 'Login' })
 		. otherwise(    { redirectTo: '/main' })
 }])
+
 .directive('uiIsotope', ['$compile', function(compile) {
  return {
     priority: 0,
@@ -92,45 +95,13 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
         restrict: 'C',
         link: function(scope, elm, attr) {
             elm.bind('click', function(){
-                var anim = { scrollTop: 0}
+                var anim = { scrollTop: 0 }
                 $("html, body")
                     .animate(anim);
             })
-
-            $(window).scroll(function(){
-                var par = $(elm).parent()
-                    , win = $(window)
-                    , doc = $(document)
-                    , coord =  par.width() 
-                            - $(elm).width() 
-                            + par.offset().left 
-                            - 9
-                    , top = win.scrollTop()
-                    , port = win.height()
-                    , height=  doc.height()
-                    , footer = $('#footer').height()
-                    , bottom = height-(top+port)
-                    , css = { position: 'fixed'
-                            , bottom: 20+footer
-                            , left:  coord }
-                if (port+top+20 == height) {
-                    css.bottom = 20+footer;
-                    $(elm)
-                        .css(css)
-                } else if (bottom-20 < footer) {
-                    css.bottom = 20+footer+bottom;
-                    $(elm)
-                        .css(css)
-                } else {
-                    css.bottom = 0;
-                    $(elm)
-                        .css(css)
-                }
-            });
         }
     }
 })
-
 
 //some closure magic
 function createOrderFn(cat){
@@ -229,7 +200,6 @@ function createContent(obj){
     return elm;
 }
 
-
 function createSidebar(obj){
     var sidebar     = $('<div></div>')
         , divider   = $('<div></div>')
@@ -318,7 +288,7 @@ function parseContent(obj, dim, type){
                     , style = $('<link  />')
                         .attr(  { 'type': "text/css"
                                 , 'rel': "stylesheet"
-                                , 'href': host
+                                , 'href': host +
                                   "/stylesheets/tinyFonts.css" })
                     , head  = $('<head />')
                     , wrap  = $('<body />')
