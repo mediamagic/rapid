@@ -977,14 +977,18 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	},true);
 
 	$scope.wrappWithIframe = function(text) {
-		var wrapper = $('<html />')
+		var wrapper = $('<html />')			
+			, base = $('<base />')
+				.attr({'href': $scope.host})
 	        , style = $('<link  />')
 	            .attr(  { 'type': "text/css"
 	                    , 'rel': "stylesheet"
 	                    , 'href': $scope.host + "stylesheets/tinyFonts.css" })
 	        , head  = $('<head />')
 	        , wrap  = $('<body />')
-	            .attr('dir', 'rtl')
+	            .attr('dir', 'rtl')	    	    
+	    base
+	    	.appendTo(head)
 	    style
 	        .appendTo(head)
 	    wrap
