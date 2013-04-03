@@ -37,7 +37,7 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 							ul
 								li(ng-repeat="(key,val) in settings.categories")
 									input(type="radio", name="category", ng-model="filters.category", value="{{key}}", id="nav_{{$index}}")
-									label(for="nav_{{$index}}") {{val}}
+									label(for="nav_{{$index}}", id="lbl_{{$index}}") {{val}}
 										.icon
 						.clr
 					.clr
