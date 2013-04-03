@@ -74,7 +74,6 @@ if (cluster.isMaster) {
 
   app.configure('production', function(){
     var live = 86400000;
-    app.use(express.staticCache());
     app.use(express.static(path.join(__dirname, 'public'), {maxAge: live}));
     console.log('production mode');
   });
