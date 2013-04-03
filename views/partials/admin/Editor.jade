@@ -49,8 +49,9 @@
 										{{ editor.tempContent.preview.text }}										
 									input#uploadNewImageTinymce_preview(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('preview', this.files[0])", style="display:none;")
 								#flashPreview(ng-show="editor.data.preview.type == 'flash'")
-									button(style="position:relative;margin:0 auto; margin-top:10px;margin-bottom:10px;display:block;", ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="upload.preview.uploading") Upload New SWF Resource
-									input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
+									.flashForm
+										button.uploadButton(ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="upload.preview.uploading") Upload New SWF Resource
+										input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
 									ul#previewSwfs.listview
 										li.previewSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.preview.flash.data == swf.hashName}", ng-click="showSelectedSwf('preview', swf)")
 											h2.icon.icon-font
