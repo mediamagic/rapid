@@ -13,6 +13,10 @@
 			input(type="radio", id="radio_2", ng-model="form.type", value="business")
 			label(for="radio_2") לקוח עסקי
 				.icon
+			.clr
+			input(type="checkbox", id="chck_1", ng-model="form.marketing", value="true")
+			label(for="chck_1") אני מעוניין לקבל מידע על מבצעים והטבות מסקודה
+				.icon
 			.submit(ng-click="formSubmit()")
 .timedWrapper(ui-if="contentLoaded")
 	#articles(ui-isotope, options='{"itemSelector":".article", "animationEngine":"best-available", "masonry": { "columnWidth": 220, "gutterWidth": 20}, "animationOptions": { "duration": 1200 } }')
