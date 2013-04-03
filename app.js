@@ -80,7 +80,7 @@ if (cluster.isMaster) {
 
   //MIDDLEWARE
   function ensureAuthenticated(req, res, next){
-    if (req.isAuthenticated()) return next();
+    if (req.isAuthenticated()) { return next(); }
     res.redirect('/#/login');
   }
 
@@ -117,6 +117,8 @@ if (cluster.isMaster) {
     })
 
     pass.deserializeUser(function(id,done){
+      if (!id)
+        return done(null,false);
       resp.powerUsers.find({_id: id}, function(err, resp){
         return done(null,resp);
       })
