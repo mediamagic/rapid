@@ -102,6 +102,15 @@ input[type="radio"], input[type="checkbox"] {
 		font-family: 'alfi bold';
 		text-decoration: underline;
 		cursor: pointer;
+		&:hover {
+			color: black;
+			.icon {
+				background:url(../images/form_checktrue.png) no-repeat center center;
+				width: 30px;
+				height: 30px;
+				vertical-align: middle;
+			}
+		}
 	}
 	&:checked {
 		+label {

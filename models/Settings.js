@@ -5,6 +5,7 @@ var db = mongoose.connection
  */
 var settingsSchema = new mongoose.Schema({
 	title: String,
+	defaultCategory: String,
 	facebook: {
 		shareTitle: String,
 		shareText: String,
@@ -24,7 +25,8 @@ module.exports = function(extendStaticMethods, callback) {
 				return cb(err)
 			if (typeof(doc) == 'null' || typeof(doc) == 'undefined' || doc.length == 0) {
 				var data = 	{ title: 'Skoda Rapid'
-							, categories: { all:'הכל' } }
+							, categories: { all:'הכל' }
+							, defaultCategory: 'all' }
 					, Settings = db.model('Settings', settingsSchema)
 					, tmp = new Settings(data);
 				tmp.save(function(err,doc){

@@ -7,7 +7,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .timedWrapper{min-width:540px;}
 .totop{display:none;position:fixed;text-align:center;bottom:4px;right:4px;height:25px;max-width:36px;padding-top:25px;background:transparent url(../images/to_top.png) no-repeat top center;cursor:pointer;}.totop.ui-scrollfix{display:block;}
 #header{position:fixed;top:0;min-height:171px;width:100%;z-index:2;background:white;background:#4aa82e url(../images/nav_bg.png) repeat-x;}
-#header #nav{position:relative;max-width:940px;min-width:460px;min-height:171px;margin:0 auto;background:transparent url(../images/nav_logo.png) no-repeat top right;padding:0;text-align:center;}#header #nav #title{background:transparent url(../images/header_title.png) no-repeat center center;display:block;width:280px;height:29px;position:relative;top:100px;width:100%;}
+#header #nav{position:relative;max-width:940px;min-width:460px;min-height:171px;margin:0 auto;background:transparent url(../images/nav_logo.png) no-repeat top right;padding:0;text-align:center;}#header #nav #title{background:transparent url(../images/header_title.png) no-repeat center center;display:block;width:280px;height:29px;position:relative;top:92px;width:100%;}
 #header #nav ul{display:inline-block;position:relative;padding:0;margin:98px auto 0 auto;}#header #nav ul li{list-style-type:none;float:right;font-size:22px;font-family:'alfi bold';min-height:30px;line-height:30px;}#header #nav ul li>ul{margin:0 auto;}#header #nav ul li>ul li{height:30px;line-height:30px;}
 #header #nav ul li>ul #lbl_0{display:none;}
 #header #nav .toggleForm{width:121px;height:71px;background:transparent url(../images/form_toggle.png) no-repeat center center;position:absolute;top:58px;left:0;cursor:pointer;}
@@ -28,6 +28,7 @@ h1,h2,h3,h4,h5,h6{margin:0;padding:0;}
 .form .submit{background:transparent url(../images/form_submit.png) no-repeat center center;height:49px;width:121px;position:absolute;left:-8px;bottom:45px;margin:0;border:none;cursor:pointer;}
 .form .closeForm{display:none;}
 input[type="radio"],input[type="checkbox"]{display:none;}input[type="radio"]+label,input[type="checkbox"]+label{padding:0 20px 0 0;display:inline-block;appearance:none;-moz-appearance:none;-webkit-appearance:none;-ms-appearance:none;-o-appearance:none;color:white;font-size:22px;font-family:'alfi bold';text-decoration:underline;cursor:pointer;}input[type="radio"]+label .icon,input[type="checkbox"]+label .icon{display:inline-block;background:url(../images/form_checkfalse.png) no-repeat center center;width:30px;height:30px;vertical-align:middle;}
+input[type="radio"]+label:hover,input[type="checkbox"]+label:hover{color:black;}input[type="radio"]+label:hover .icon,input[type="checkbox"]+label:hover .icon{background:url(../images/form_checktrue.png) no-repeat center center;width:30px;height:30px;vertical-align:middle;}
 input[type="radio"]:checked+label,input[type="checkbox"]:checked+label{color:black;cursor:default;}input[type="radio"]:checked+label .icon,input[type="checkbox"]:checked+label .icon{background:url(../images/form_checktrue.png) no-repeat center center;width:30px;height:30px;vertical-align:middle;}
 #articles{position:relative;max-width:940px;min-width:460px;padding:0 40px;margin:0 auto;}
 .article .hover{display:none;}

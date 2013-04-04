@@ -19,8 +19,11 @@ var GlobalCtrl= [ '$scope'
 		, $scope.Login 	= $scope.resource 	( '/api/login'
 											, { _csrf: $cookies['csrf.token'] } )
 		$scope.$broadcast('settings_loaded');
+		var cts 	= $scope.settings.categories
+			, dfc 	= $scope.settings.defaultCategory
+		var ct = (cts[dfc] != undefined) ? dfc : 'all';
+		$scope.filters 	= { category: ct }
 	});
-	$scope.filters 	= { category: 'all' }
 
 	$scope.form 	= 	{ firstname: ''
 						, lastname: ''
