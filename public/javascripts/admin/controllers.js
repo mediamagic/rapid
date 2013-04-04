@@ -1472,9 +1472,15 @@ var CategoriesCtrl = ['$scope', function($scope){
 	}
 
 	$scope.defaultCategory = function(key) {
-		$scope.Settings.update({ defaultCategory:key }, function(res) {
-			$scope.settings.defaultCategory = key;			
-		});
+		if(key != $scope.settings.defaultCategory) {
+			$scope.Settings.update({ defaultCategory:key }, function(res) {
+				$scope.settings.defaultCategory = key;			
+			});
+		} else {
+			$scope.Settings.update({ defaultCategory:'' }, function(res) {
+				$scope.settings.defaultCategory = '';			
+			});
+		}
 	}
 
 }];
