@@ -73,7 +73,8 @@
 										a.font12(ng-click="toggleStatus(item._id)") {{ !item.status | status }}
 										span )
 									td.font12.center
-										a.font12(href="/admin#/editor/{{item._id}}") edit
+										a.font12(href="/admin#/editor/{{item._id}}")
+											i.icon-clipboard-2.white.center.link
 									td.font12.center
 										a.font12(ng-click="deleteArticle(item._id)")
 											i.icon-remove.white.center.link
