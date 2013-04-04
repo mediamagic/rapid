@@ -11,17 +11,16 @@ var GlobalCtrl= [ '$scope'
 				, '$cookies'
 				, '$http'
 				, function ( $scope, $resource, $location, $window, $cookies, $http ) {
-	$scope.Settings = $resource('/resources/settings')
-	$scope.location = $location
-	$scope.resource = $resource
+	$scope.Settings 	= $resource('/resources/settings')
+	$scope.location 	= $location
+	$scope.resource 	= $resource
 	$scope.Settings.get({}, function(settings)	{ 
 		$scope.settings = settings
-		, $scope.Login 	= $scope.resource 	( '/api/login'
-											, { _csrf: $cookies['csrf.token'] } )
+		, $scope.Login 	= $scope.resource 	( '/api/login', { _csrf: $cookies['csrf.token'] } )
 		$scope.$broadcast('settings_loaded');
-		var cts 	= $scope.settings.categories
-			, dfc 	= $scope.settings.defaultCategory
-		var ct = (cts[dfc] != undefined) ? dfc : 'all';
+		var cts 		= settings.categories
+			, dfc 		= settings.defaultCategory
+			, ct 		= (cts[dfc] != undefined) ? dfc : 'all';
 		$scope.filters 	= { category: ct }
 	});
 

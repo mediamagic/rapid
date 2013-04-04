@@ -48,10 +48,13 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     		opts.getSortData[c] = createOrderFn(c);
     	}
     	setTimeout(function(){
+            var dfc = scope.settings.defaultCategory
+                , cts = scope.settings.categories
+                , ct = (cts[dfc] != undefined) ? ct : 'all';
     		elm
                 .isotope(opts)
                 .isotope('reloadItems')
-                .isotope({sortBy:'all'});
+                .isotope({sortBy:ct});
     	},100)
     	scope.$watch('articles',function(n,o){
     		if (n!=o)
