@@ -3,6 +3,23 @@
 var staticForm = ''
     , host = window.document.location.protocol+
                     '//'+window.document.location.host
+    , ifr = $('<html />')
+                    , style = $('<link  />')
+                        .attr(  { 'type': "text/css"
+                                , 'rel': "stylesheet"
+                                , 'href': "/stylesheets/tinyFonts.css" })
+                    , head  = $('<head />')
+                    , wrap  = $('<body />')
+                        .attr('dir', 'rtl')
+                    , base = $('<base />')
+                        .attr('href', host)
+                base
+                    .appendTo(head)
+                style
+                    .appendTo(head)
+                ifr
+                    .append(head)
+                    .append(wrap)
 
 
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
@@ -283,32 +300,16 @@ function parseContent(obj, dim, type){
             break;
         case 'text':
         default:
-                var wrapper = $('<html />')
-                    , style = $('<link  />')
-                        .attr(  { 'type': "text/css"
-                                , 'rel': "stylesheet"
-                                , 'href': "/stylesheets/tinyFonts.css" })
-                    , head  = $('<head />')
-                    , wrap  = $('<body />')
-                        .attr('dir', 'rtl')
-                    , base = $('<base />')
-                        .attr('href', host)
-                base
-                    .appendTo(head)
-                style
-                    .appendTo(head)
-                wrap
+            var tmp = ifr.clone();
+                tmp
+                    .children('body')
                     .append(content)
-                wrapper
-                    .append(head)
-                    .append(wrap)
-                var iframe  = $('<iframe />')
-                    .attr(  { 'frameborder':0
-                            , style:"padding:0;border:none"
-                            , scrolling: 'no'
-                            , src: 'data:text/html;charset=utf-8,' +
-                              wrapper.html()
-                            , class: (obj[type].size || 'text' ) })
+            var iframe  = $('<iframe />')
+                .attr(  { 'frameborder':0
+                        , style:"padding:0;border:none"
+                        , scrolling: 'no'
+                        , src: 'data:text/html;charset=utf-8,' + tmp.html()
+                        , 'class': (obj[type].size || 'text' ) })
             html = iframe;
             break;
     }
