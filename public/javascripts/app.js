@@ -3,6 +3,23 @@
 var staticForm = ''
     , host = window.document.location.protocol+
                     '//'+window.document.location.host
+    , ifr = $('<html />')
+                    , style = $('<link  />')
+                        .attr(  { 'type': "text/css"
+                                , 'rel': "stylesheet"
+                                , 'href': "/stylesheets/tinyFonts.css" })
+                    , head  = $('<head />')
+                    , wrap  = $('<body />')
+                        .attr('dir', 'rtl')
+                    , base = $('<base />')
+                        .attr('href', host)
+                base
+                    .appendTo(head)
+                style
+                    .appendTo(head)
+                ifr
+                    .append(head)
+                    .append(wrap)
 
 
 angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
@@ -56,11 +73,11 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
             var itemIndex   = scope.$index
                 , article   = scope.articles[itemIndex]
                 , preview   = elm.children('.preview')
-            article.index = itemIndex;
-            article.form = staticForm;
+            article.index   = itemIndex;
+            article.form    = staticForm;
             article.compile = compile;
-            article.scope = scope;
-            var element = createPreview(preview, article);
+            article.scope   = scope;
+            var element     = createPreview(preview, article);
             if (article.preview.type == 'flash' 
                 || article.content.type == 'flash'){
                 elm.addClass('hidden-phone hidden-tablet')
@@ -75,16 +92,18 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
         priority: 0,
         restrict: 'A',
         link: function(scope, elm, attr) {
+            var i =0;
             setTimeout(function(){
                 var options = JSON.parse(elm.attr('iso-gallery'));
-                elm.slidesjs({
-                    navigation: {active: false},
-                    play: {
-                        auto: true,
-                        restartDelay: 1000
-                    }
-                })
+                elm.swiper( { speed: 1000
+                            , mode: 'horizontal'
+                            , autoPlay: 3000
+                            , createPagination: true
+                            , pagination: '.pagination'
+                            , paginationClass: 'p_'+i
+                            , loop: true } );
             },100);
+            i++;
         }
     }
 })
@@ -114,11 +133,11 @@ function createOrderFn(cat){
 }
 
 function createPreview(elm, obj){
-    var html  = ''
-        , d = obj.preview.size.split('x')
-        , dim = { width:  d[0]*220 + ((d[0]-1)*20)
-                , height: d[1]*220 + ((d[1]-1)*20) }
-    html = parseContent(obj, dim, 'preview');
+    var html    = ''
+        , d     = obj.preview.size.split('x')
+        , dim   =   { width:  d[0]*220 + ((d[0]-1)*20)
+                    , height: d[1]*220 + ((d[1]-1)*20) }
+    html        = parseContent(obj, dim, 'preview');
     elm
         .html(html)
         .css('background', obj.preview.bgColor)
@@ -257,17 +276,29 @@ function parseContent(obj, dim, type){
             html = w;
             break;
         case 'image':
-            var w   = $('<div class="image"></div>')
-                , c = content
+            var w       = $('<div class="image swiper-container" />')
+                , wi    = $('<div class="swiper-wrapper" />')
+                , iw    = $('<div class="swiper-slide" />')
+                , p     = $('<div class="pagination" />')
+                , c     = content
+
+            w.addClass('size_'+(obj[type].size || 'full' ))
+            iw.addClass('size_'+(obj[type].size || 'full' ))
             if (c.length > 1) {
                 w.attr('iso-gallery', JSON.stringify(dim))
             }
             for(var i=0;i<c.length;i++){
-                var img = $('<img />');
+                var img     = $('<img />')
+                    , wr    = iw.clone()
                 img
                     .attr('src', '/images/imgs/'+c[i].hashName)
-                    .appendTo(w);
+                    .appendTo(wr)
+                wr
+                    .appendTo(wi)
             }
+            w.append(wi);
+            w.append(p);
+            console.log('a', w.html());
             html = obj.compile(w)(obj.scope);
             break;
         case 'video':
@@ -283,32 +314,17 @@ function parseContent(obj, dim, type){
             break;
         case 'text':
         default:
-                var wrapper = $('<html />')
-                    , style = $('<link  />')
-                        .attr(  { 'type': "text/css"
-                                , 'rel': "stylesheet"
-                                , 'href': "/stylesheets/tinyFonts.css" })
-                    , head  = $('<head />')
-                    , wrap  = $('<body />')
-                        .attr('dir', 'rtl')
-                    , base = $('<base />')
-                        .attr('href', host)
-                base
-                    .appendTo(head)
-                style
-                    .appendTo(head)
-                wrap
+            var tmp = ifr.clone();
+                tmp
+                    .children('body')
                     .append(content)
-                wrapper
-                    .append(head)
-                    .append(wrap)
-                var iframe  = $('<iframe />')
-                    .attr(  { 'frameborder':0
-                            , style:"padding:0;border:none"
-                            , scrolling: 'no'
-                            , src: 'data:text/html;charset=utf-8,' +
-                              wrapper.html()
-                            , class: (obj[type].size || 'text' ) })
+            var iframe  = $('<iframe />')
+                .attr(  { 'frameborder':0
+                        , style:"padding:0;border:none"
+                        , scrolling: 'no'
+                        , src: 'data:text/html;charset=utf-8,' +
+                          tmp.html()
+                        , class: (obj[type].size || 'text' ) })
             html = iframe;
             break;
     }
