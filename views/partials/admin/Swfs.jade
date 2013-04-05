@@ -15,7 +15,7 @@
 							.progressPercents.white.bold(style="position:absolute; right:10px;") {{ upload.resource.uploadprogress }}
 							.a(style="position:absolute;left:5px;top:15px;")
 								i.icon-font.white
-								span.white Flash Resources
+								span.white Flash Resources ({{ editor.files.flash.length }})
 						#uploadNewSwf							
 							button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="upload.resource.uploading") Upload New SWF Resource
 							input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('resource', 'flash', this.files[0])", style="display:none;")

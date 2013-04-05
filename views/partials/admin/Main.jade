@@ -11,7 +11,7 @@
 					.span4(style="width:100%;")
 						h3.padding5.bg-color-green(style="height:40px;")
 							i.white.icon-clipboard-2
-							span.white Articles
+							span.white Articles ({{ content.length }})
 						#mainFilters
 							a((href="#/editor"))
 									button Create New Article
@@ -45,7 +45,7 @@
 								span Select By Categories:
 								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="filters.categories", ng-options="key as value for (key,value) in settings.categories")
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")												
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
 						table.bg-color-green
 							thead
 								tr
