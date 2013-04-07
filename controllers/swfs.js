@@ -67,7 +67,7 @@ module.exports = function(db){
 		update: function(req,res,next){
 			var id = req.swf.id
 				, data = req.body;
-			db.Swfs.edit({_id:id}, data, function(err,doc){
+			db.Swfs.upd({_id:id}, data, function(err,doc){
 				return res.send(handle(err,doc));
 			});
 		},
@@ -76,13 +76,14 @@ module.exports = function(db){
 			db.Swfs.delete({_id:req.swf._id}, function(err, resp){
 				if (err)
 					return res.send(handle(err,null));
-				if (!resp.external) 
+				if (!resp.external) {
 					try {
 						fs.unlinkSync(global.root + "public/images/swfs/"+hashName);
-						return res.send(handle(null,{error:0}));
 					} catch(e) {
 						return res.send(handle(e,null));
 					}
+				}
+				return res.send(handle(null,{error:0}));
 			})
 		}
 	}
