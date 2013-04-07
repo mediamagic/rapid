@@ -36,7 +36,8 @@ module.exports = function(db){
 					if (err)
 						return res.send(handle(err,null))
 					var obj = 	{ fileName: doc.fileName
-								, external: true }
+								, external: true
+								, _id: doc._id }
 					return res.send(obj);
 				})
 			} else {
