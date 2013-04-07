@@ -76,11 +76,13 @@ module.exports = function(db){
 			db.Swfs.delete({_id:req.swf._id}, function(err, resp){
 				if (err)
 					return res.send(handle(err,null));
-				fs.unlink(global.root + "public/images/swfs/"+hashName, function (err) {
-				  if (err)
-				  	return res.send(handle(err,null));
-				  return res.send(handle(null,{error:0}));
-				});
+				if (!resp.external) 
+					try {
+						fs.unlinkSync(global.root + "public/images/swfs/"+hashName);
+						return res.send(handle(null,{error:0}));
+					} catch(e) {
+						return res.send(handle(e,null));
+					}
 			})
 		}
 	}
