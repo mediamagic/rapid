@@ -5,8 +5,9 @@ var db = mongoose.connection
  */
 var swfsSchema = new mongoose.Schema(	{ fileName: String
 										, hashName: String
-										, params: String
-										, external: String });
+										, params: 	String
+										, external: { type: Boolean
+													, default: false } });
 
 /*
  * Users manipulation
