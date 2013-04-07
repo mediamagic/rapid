@@ -1,5 +1,34 @@
 'use strict'; 
 
+(function($) {
+    var re = /([^&=]+)=?([^&]*)/g;
+    var decode = function(str) {
+        return decodeURIComponent(str.replace(/\+/g, ' '));
+    };
+    $.parseParams = function(query) {
+        var params = {}, e;
+        if (query) {
+            if (query.substr(0, 1) == '?') {
+                query = query.substr(1);
+            }
+
+            while (e = re.exec(query)) {
+                var k = decode(e[1]);
+                var v = decode(e[2]);
+                if (params[k] !== undefined) {
+                    if (!$.isArray(params[k])) {
+                        params[k] = [params[k]];
+                    }
+                    params[k].push(v);
+                } else {
+                    params[k] = v;
+                }
+            }
+        }
+        return params;
+    };
+})(jQuery);
+
 var staticForm = ''
     , host = window.document.location.protocol+
                     '//'+window.document.location.host
@@ -280,14 +309,16 @@ function parseContent(obj, dim, type){
                 , height: '100%' }
     switch(obj[type].type) {
         case 'flash':
-            var w = $('<div class="flash"></div>');
-            var swfUrl = (content.external) ? content.fileName : '/images/swfs/'+content;
-            swfUrl += '?' + content.params;
-            w.flash({ swf: '/images/swfs/'+content
+            var w = $('<div class="flash"></div>')
+                , swfUrl = (content.external) 
+                    ? content.fileName : '/images/swfs/'+content.fileName
+                , params = $.parseParams(content.params)
+            w.flash({ swf: swfUrl
                     , width: dim.width
                     , height: dim.height
                     , wmode: 'transparent'
-                    , allowFullScreen: false })
+                    , allowFullScreen: false
+                    , vars: params })
             html = w;
             break;
         case 'iframe':

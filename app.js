@@ -149,6 +149,7 @@ if (cluster.isMaster) {
     app.get ('/api/uploads/swfs', ensureAuthenticated, Swfs.index);
     app.post('/api/uploads/swfs', ensureAuthenticated, Swfs.create);
     app.del ('/api/uploads/swfs/:id', ensureAuthenticated, Swfs.load, Swfs.del);
+    app.put ('/api/uploads/swfs/:id', ensureAuthenticated, Swfs.load, Swfs.update);
 
     //RESTful RESOURCES
     app.get ('/resources/articles', Articles.index);

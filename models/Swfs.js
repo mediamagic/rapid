@@ -15,7 +15,7 @@ var swfsSchema = new mongoose.Schema(	{ fileName: String
 
 module.exports = function(extendStaticMethods, cb){
 
-	swfsSchema.statics = extendStaticMethods('Swfs', ['list','add', 'get', 'delete']);
+	swfsSchema.statics = extendStaticMethods('Swfs', ['list','add', 'get','upd','delete']);
 	/*
 	 * Users Model
 	 */

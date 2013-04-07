@@ -64,6 +64,13 @@ module.exports = function(db){
 				});
 			}
 		},
+		update: function(req,res,next){
+			var id = req.swf.id
+				, data = req.body;
+			db.Swfs.edit({_id:id}, data, function(err,doc){
+				return res.send(handle(err,doc));
+			});
+		},
 		del: function(req,res,next){
 			var hashName = req.swf.hashName;
 			db.Swfs.delete({_id:req.swf._id}, function(err, resp){
