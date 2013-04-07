@@ -109,6 +109,29 @@ angular.module('rapid', ['ngResource', 'ngCookies', 'ui'])
     }
 })
 
+.directive('toggleForm', function(){
+    return {
+        priority: 800,
+        restrict: 'A',
+        scope: false,
+        link: function(scope, elm, attr) {
+            elm.bind('click', function(){
+                if (!scope.global.showForm) {
+                    var anim = { scrollTop: 0 }
+                    $("html, body")
+                        .animate(anim);
+                    scope.global.showForm = true;
+                    $('#headerForm').show();
+
+                } else {
+                    scope.global.showForm = false;
+                    $('#headerForm').hide();
+                }
+            });
+        }
+    }
+})
+
 .directive('totop', function(){
     return {
         priority:0,
@@ -257,7 +280,9 @@ function parseContent(obj, dim, type){
                 , height: '100%' }
     switch(obj[type].type) {
         case 'flash':
-            var w = $('<div class="flash"></div>')
+            var w = $('<div class="flash"></div>');
+            var swfUrl = (content.external) ? content.fileName : '/images/swfs/'+content;
+            swfUrl += '?' + content.params;
             w.flash({ swf: '/images/swfs/'+content
                     , width: dim.width
                     , height: dim.height

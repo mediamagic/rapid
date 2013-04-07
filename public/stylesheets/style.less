@@ -45,7 +45,7 @@ html {
 	height: 100%;
 }
 body {
-	background: transparent;
+	background: transparent url(../images/bg_top.png) repeat-x top left;
 	font: 14px "alfi regular";
 	margin: 0;
 	padding: 0;
@@ -61,7 +61,11 @@ h1,h2,h3,h4,h5,h6 {
 	clear:both;
 }
 
-
+#wrap {
+	background: transparent url(../images/bg_bottom.png) repeat-x bottom left;
+	padding-bottom: 20px;
+	margin-bottom: -20px;
+}
 
 #wrapper {
 	margin: 191px auto 0 auto;
@@ -82,12 +86,15 @@ h1,h2,h3,h4,h5,h6 {
 	bottom: 4px;
 	right: 0px;
 	height: 25px;
-	max-width: 36px;
+	max-width: 30px;
 	padding-top: 25px;
 	background: transparent url(../images/to_top.png) no-repeat top center;
 	cursor: pointer;
 	&.ui-scrollfix {
 		display: block;
+	}
+	a {
+		font-size: 11px;
 	}
 }
 

@@ -45,9 +45,8 @@ var GlobalCtrl= [ '$scope'
 				return false;
 			});
 	}
-	$scope.showForm = false;
-	$scope.toggleForm = function() {
-		$scope.showForm = !$scope.showForm;
+	$scope.global = {
+		showForm :false
 	}
 }];
 

@@ -1,6 +1,6 @@
-#headerForm(style="background: white;", ng-show="showForm")
+#headerForm(style="background: white;")
 	.form
-		.closeForm(ng-click="toggleForm()") x
+		.closeForm(toggle-form) x
 		span רוצה להתקדם למשפחתית אמיתית? השאר פרטים
 		form(ng-submit="formSubmit(this)", name="leadForm", novalidate)
 			input(type="text", name="firstname", ng-model="form.firstname", placeholder="שם פרטי", required)
