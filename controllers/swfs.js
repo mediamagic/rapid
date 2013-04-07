@@ -28,7 +28,7 @@ module.exports = function(db){
 			var obj 	= req.body
 				, path 	= require('path');
 			if (obj._csrf) delete obj._csrf;
-			var tmp = new db.Swfs(obj.fileName);
+			var tmp = new db.Swfs(obj);
 			if (obj.external) {
 				tmp.external = true;
 				tmp.fileName = obj.fileName;
@@ -37,6 +37,7 @@ module.exports = function(db){
 						return res.send(handle(err,null))
 					var obj = 	{ fileName: doc.fileName
 								, external: true }
+					return res.send(obj);
 				})
 			} else {
 				fs.readFile(req.files.fileName.path, function(err, data){
