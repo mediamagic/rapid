@@ -72,6 +72,27 @@ filter('contentType', function() {
         start = +start; //parse to int
         return input.slice(start);
     }
+}).filter('swfsFilter', function() {
+    return function(swfs) {
+        var output = [];
+
+        for(var swf in swfs)
+          output.push(swfs[swf]);
+
+        for(var swf in output) {          
+          if(output[swf].external) {
+            output[swf].hashName = '';                   
+            output[swf].url = output[swf].fileName;            
+          } else {
+            output[swf].url = this.host + 'images/swfs/' + output[swf].hashName;            
+          }
+
+          if(output[swf].params && output[swf].params.length > 0)
+           output[swf].url = output[swf].url + '?' + output[swf].params;
+        }
+
+        return output;
+    }
 }).filter('articlesFilter', function() {
     return function(articles) {
         var input = [];
