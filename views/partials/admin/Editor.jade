@@ -53,12 +53,20 @@
 										button.uploadButton(ng-click="triggerClick('uploadNewSwfInput_preview')", ng-disabled="upload.preview.uploading") Upload New SWF Resource
 										input#uploadNewSwfInput_preview(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('preview', 'flash', this.files[0])", style="display:none;")
 									ul#previewSwfs.listview
-										li.previewSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.preview.flash.data == swf.hashName}", ng-click="showSelectedSwf('preview', swf)")
-											h2.icon.icon-font
+										li.previewSwf.bg-color-green.unlink(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.preview.flash.data._id == swf._id}")
+											h2.icon.icon-font(ng-class="{ yellow:editor.tempContent.preview.flash.data._id == swf._id, white:editor.tempContent.preview.flash.data._id != swf._id }")
+											i.select.link.white(title="Select", ng-click="showSelectedSwf('preview', swf)", ng-class="{ 'icon-radio-checked':editor.tempContent.preview.flash.data._id == swf._id, 'icon-radio-unchecked':editor.tempContent.preview.flash.data._id != swf._id }")
+											a.view(title="View", href="{{ buildSwfUrl(swf, 'preview') }}", target="_blank")
+													i.icon-link.white.link
 											.data
-												{{ swf.fileName }}
-												br
-												a(href="{{ host }}/images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+												.fileName {{ swf.fileName }}												
+												.params 
+													.notSelected(ng-show="editor.tempContent.preview.flash.data._id != swf._id")
+														{{ swf.params }}
+													.isSelected(ng-show="editor.tempContent.preview.flash.data._id == swf._id")														
+														input.green(placeholder="insert parameters", value="{{ swf.params }}", ng-model="updateSwfTempData(swf, 'preview', 'params').params")																												
+														//i.link.white.icon-box-add(title="Update", ng-show="checkSwfDataChanges(swf._id, 'preview', 'params')", ng-click="updateSwfData(swf, 'preview')")
+														i.icon-earth.white.link(title="Restore Global Parameters", ng-show="showGlobalParamsButton(swf, 'preview')", ng-click="insertGlobalParameters(swf, 'preview')")
 								#iframePreview(ng-show="editor.data.preview.type == 'iframe'")
 									input(type="text", ng-model="editor.tempContent.preview.iframe", placeholder="url to external link", style="position:relative; margin:0 auto; margin-top:20px; width:80%; display:block;")
 									button(style="position:relative;margin:0 auto; margin-top:20px;display:block;", ng-click="updateIframeDisplay('preview')", ng-disabled="editor.tempContent.preview.iframe.length < 10") Update IFrame
@@ -102,12 +110,38 @@
 										button.uploadButton(ng-click="triggerClick('uploadNewSwfInput_content')", ng-disabled="upload.content.uploading") Upload New SWF Resource
 										input#uploadNewSwfInput_content(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('content', 'flash', this.files[0])", style="display:none;")										
 									ul#contentSwfs.listview
-										li.contentSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data == swf.hashName}", ng-click="showSelectedSwf('content', swf)")
-											h2.icon.icon-font
+										li.contentSwf.bg-color-green.unlink(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data._id == swf._id}")
+											h2.icon.icon-font(ng-class="{ yellow:editor.tempContent.content.flash.data._id == swf._id, white:editor.tempContent.content.flash.data._id != swf._id }")
+											i.select.link.white(title="Select", ng-click="showSelectedSwf('content', swf)", ng-class="{ 'icon-radio-checked':editor.tempContent.content.flash.data._id == swf._id, 'icon-radio-unchecked':editor.tempContent.content.flash.data._id != swf._id }")
+											a.view(title="View", href="{{ buildSwfUrl(swf, 'content') }}", target="_blank")
+													i.icon-link.white.link
 											.data
-												{{ swf.fileName }}
-												br
-												a(href="{{ host }}/images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+												.fileName {{ swf.fileName }}												
+												.params 
+													.notSelected(ng-show="editor.tempContent.content.flash.data._id != swf._id")
+														{{ swf.params }}
+													.isSelected(ng-show="editor.tempContent.content.flash.data._id == swf._id")														
+														input.green(placeholder="insert parameters", value="{{ swf.params }}", ng-model="updateSwfTempData(swf, 'content', 'params').params")	
+														i.icon-earth.white.link(title="Restore Global Parameters", ng-show="showGlobalParamsButton(swf, 'content')", ng-click="insertGlobalParameters(swf, 'content')")
+										//- li.contentSwf.bg-color-green.unlink(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data._id == swf._id}")
+										//- 	h2.icon.icon-font(ng-class="{ yellow:editor.tempContent.content.flash.data._id == swf._id, white:editor.tempContent.content.flash.data._id != swf._id }")
+										//- 	i.select.link.white(title="Select", ng-click="showSelectedSwf('content', swf)", ng-class="{ 'icon-radio-checked':editor.tempContent.content.flash.data._id == swf._id, 'icon-radio-unchecked':editor.tempContent.content.flash.data._id != swf._id }")
+										//- 	a.view(title="View", href="{{ buildSwfUrl(swf) }}", target="_blank")
+										//- 			i.icon-link.white.link
+										//- 	.data
+										//- 		.fileName {{ swf.fileName }}												
+										//- 		.params 
+										//- 			.notSelected(ng-show="editor.tempContent.content.flash.data._id != swf._id")
+										//- 				{{ swf.params }}
+										//- 			.isSelected(ng-show="editor.tempContent.content.flash.data._id == swf._id")
+										//- 				input.green(placeholder="insert parameters", value="{{ swf.params }}")
+										//- 				i.link.white.icon-box-add(title="Update")				
+										//- li.contentSwf.bg-color-green(ng-repeat="swf in editor.files.flash", ng-class="{ selected:editor.tempContent.content.flash.data._id == swf._id}", ng-click="showSelectedSwf('content', swf)")
+										//- 	h2.icon.icon-font.white
+										//- 	.data
+										//- 		{{ swf.fileName }}
+										//- 		br
+										//- 		a(href="{{ host }}/images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
 								#iframeContent(ng-show="editor.data.content.type == 'iframe'")									
 									//- input(type="text", ng-model="editor.tempContent.content.iframe", placeholder="url to external link", style="width:300px;")									
 									input(type="text", ng-model="editor.tempContent.content.iframe", placeholder="url to external link")

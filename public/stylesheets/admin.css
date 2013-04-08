@@ -18,7 +18,9 @@ a{color:#ffe821;}
 #closedEditorWrapper #upperForm .categories{position:absolute;top:30px;left:10px;width:120px;}
 #closedEditorWrapper #leftSide{position:relative;float:left;width:460px;}#closedEditorWrapper #leftSide #textPreview{-webkit-transition-property:background-color;-webkit-transition-duration:0.5s;}
 #closedEditorWrapper #leftSide #flashPreview{position:relative;width:100%;height:100%;}#closedEditorWrapper #leftSide #flashPreview .flashForm{position:relative;width:100%;height:80px;}#closedEditorWrapper #leftSide #flashPreview .flashForm .uploadButton{position:relative;margin:0 auto;top:20px;display:block;}
-#closedEditorWrapper #leftSide #flashPreview #previewSwfs{position:absolute;top:80px;width:100%;height:507px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf{width:100%;height:70px;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .data{color:#fff;}
+#closedEditorWrapper #leftSide #flashPreview #previewSwfs{position:absolute;top:80px;width:100%;height:507px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf{width:100%;height:70px;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .select{position:absolute;top:5px;right:5px;}
+#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .view{position:absolute;bottom:5px;right:5px;}
+#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .data{color:#fff;font-size:12px;}#closedEditorWrapper #leftSide #flashPreview #previewSwfs .previewSwf .data .params input{width:85%;}
 #closedEditorWrapper #leftSide #iframePreview{position:relative;width:100%;height:100%;}
 #closedEditorWrapper #leftSide #imagePreview .previewImages{width:100%;height:535px;overflow-x:hidden;overflow-y:scroll;}#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage{width:100%;}#closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage .removeImage{position:absolute;top:5px;right:5px;cursor:pointer;}
 #closedEditorWrapper #leftSide #imagePreview .previewImages .previewImage .move{position:absolute;top:5px;right:25px;cursor:pointer;}
@@ -40,7 +42,9 @@ a{color:#ffe821;}
 #openEditorWrapper #upperTypeForm #videoContent button{position:relative;margin:0 auto;margin-top:20px;display:block;}
 #openEditorWrapper #upperTypeForm #videoContent span{position:relative;width:100%;margin-top:20px;text-align:center;display:block;}
 #openEditorWrapper #upperTypeForm #flashContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #flashContent .flashForm{position:relative;width:100%;height:80px;}#openEditorWrapper #upperTypeForm #flashContent .flashForm .uploadButton{position:relative;margin:0 auto;top:20px;display:block;}
-#openEditorWrapper #upperTypeForm #flashContent #contentSwfs{position:absolute;top:80px;width:100%;height:220px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf{width:100%;height:70px;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .data{color:#fff;}
+#openEditorWrapper #upperTypeForm #flashContent #contentSwfs{position:absolute;top:80px;width:100%;height:220px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf{width:100%;height:70px;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .select{position:absolute;top:5px;right:5px;}
+#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .view{position:absolute;bottom:5px;right:5px;}
+#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .data{color:#fff;font-size:12px;}#openEditorWrapper #upperTypeForm #flashContent #contentSwfs .contentSwf .data .params input{width:90%;}
 #openEditorWrapper #upperTypeForm #iframeContent{position:relative;width:100%;height:100%;}#openEditorWrapper #upperTypeForm #iframeContent input{position:relative;margin:0 auto;margin-top:50px;width:80%;display:block;}
 #openEditorWrapper #upperTypeForm #iframeContent button{position:relative;margin:0 auto;margin-top:20px;display:block;}
 #openEditorWrapper #upperTypeForm #imageContent .previewImages{width:100%;height:247px;overflow-x:hidden;overflow-y:scroll;}#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage{width:100%;}#openEditorWrapper #upperTypeForm #imageContent .previewImages .previewImage .removeImage{position:absolute;top:5px;right:5px;cursor:pointer;}
@@ -60,7 +64,7 @@ a{color:#ffe821;}
 #openEditorWrapper #contentDisplay #rightSide .readMore{position:relative;width:240px;text-align:right;direction:rtl;padding-right:20px;padding-left:20px;}#openEditorWrapper #contentDisplay #rightSide .readMore a{font-size:13px;color:#00a300;text-decoration:underline;}
 #openEditorWrapper #contentDisplay #leftSide{position:absolute;width:700px;height:464px;top:0px;left:0px;}#openEditorWrapper #contentDisplay #leftSide #textContent{-webkit-transition-property:background-color;-webkit-transition-duration:0.5s;margin-top:-1px;}
 #openEditorWrapper #contentDisplay #leftSide #contentPreviewDisplay{position:relative;outline:solid #ccc 1px;margin:0 auto;overflow:hidden;-webkit-transition-property:background-color;-webkit-transition-duration:0.5s;}#openEditorWrapper #contentDisplay #leftSide #contentPreviewDisplay .original{position:absolute;top:0px;left:0px;}#openEditorWrapper #contentDisplay #leftSide #contentPreviewDisplay .original p{padding:0;margin:0;line-height:normal;font-size:13px;}
-#uploadNewSwf{text-align:center;}
+#uploadNewSwf{text-align:center;height:70px;}#uploadNewSwf .import button{margin-top:10px;}
 #saveCategory{width:100%;text-align:center;margin-top:10px;}#saveCategory input{width:200px;text-align:center;}
 #saveCategory button{margin-top:5px;}
 .fullWidth{width:100%;}
@@ -83,9 +87,11 @@ a{color:#ffe821;}
 .red{color:#b91d47;}
 .yellow{color:yellow;}
 .green{color:#00a300;}
+.blue{color:#2d89ef;}
 .bold{font-weight:bold;}
 .center{text-align:center;}
 .link{cursor:pointer;}
+.unlink{cursor:default !important;}
 .paginationWrapper{position:relative;width:100%;}
 .pagination{margin:20px 0;}
 .pagination ul{display:inline-block;*display:inline;*zoom:1;margin-left:0;margin-bottom:0;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);-moz-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);box-shadow:0 1px 2px rgba(0, 0, 0, 0.05);}

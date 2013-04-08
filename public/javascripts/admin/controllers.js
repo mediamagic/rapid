@@ -13,7 +13,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	, $scope.Stats = $scope.resource('/resources/stats/:type', {_csrf: $cookies['csrf.token']})
 	, $scope.Api = $scope.resource('/api/:action/:id', {_csrf: $cookies['csrf.token']});
 	$scope.cookies = $cookies;
-	$scope.Files = $scope.resource('/api/uploads/:type/:id', {_csrf: $cookies['csrf.token']});
+	$scope.Files = $scope.resource('/api/uploads/:type/:id', {_csrf: $cookies['csrf.token']}, {update: {method:'PUT'}});
 
 	$scope.host = $scope.location.$$protocol + '://' + $scope.location.$$host + ($scope.location.$$port == 80 ? '' : ':' + $scope.location.$$port) + '/';
 
@@ -252,6 +252,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 						},
 						flash: {
 									data:{},
+									tempData:{},
 									url:''
 						},
 						iframe:'',
@@ -266,6 +267,7 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 						},
 						flash: {
 									data:{},
+									tempData:{},
 									url:''
 						},
 						iframe:'',
@@ -465,11 +467,6 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 			$scope.buildGallery(type);
 	}
 
-	$scope.$watch('editor.files.flash.length', function(n,o){
-		if (n!=o && n!=undefined)
-			$scope.pagination.swfs.pages = Math.ceil(n / $scope.pagination.swfs.total);
-	}, true);
-
 	$scope.$watch('content.length', function(n,o){
 		if (n!=o && n!=undefined)
 			$scope.pagination.main.pages = Math.ceil(n / $scope.pagination.main.total);
@@ -479,10 +476,13 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		$scope.editor.files.flash = res;		
 	});
 
-	$scope.buildFlash = function(type) {		
+	$scope.buildFlash = function(type) {			
+		var flashVars = $scope.buildSwfParams($scope.editor.tempContent[type].flash.data, type);
+		
 		var swf =	'<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,40,0" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '" id="previewFlash">' +
 					'<param name="movie" value="' + $scope.editor.tempContent[type].flash.url +'" />' + 
 					'<param name="quality" value="high" />' +
+					'<param name="flashvars" value="' + flashVars + '" />' +
 					'<param name="bgcolor" value="' + $scope.editor.data[type].bgColor + '" />' +
 					'<embed src="' + $scope.editor.tempContent[type].flash.url +'" quality="high" bgcolor="' + $scope.editor.data[type].bgColor + '" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
 					'</embed>' +
@@ -650,7 +650,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	}
 
 	$scope.showSelectedSwf = function(type, swf) {
-		$scope.editor.tempContent[type].flash.data = swf.hashName;		
+		//$scope.editor.tempContent[type].flash.data = swf.hashName;
+		$scope.editor.tempContent[type].flash.data = swf;
 	}
 
 	$scope.menu = {
@@ -665,6 +666,31 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 		$scope.category = angular.copy(cats);
 		$scope.isotopeContent.original = angular.copy(isoContent);		
 	});
+
+	$scope.buildSwfParams = function(swf, type) {		
+		var params = '';
+
+		if($scope.editor.tempContent[type].flash.tempData[swf._id] != undefined && $scope.editor.tempContent[type].flash.tempData[swf._id].params != undefined) {
+			params = '?' + $scope.editor.tempContent[type].flash.tempData[swf._id].params;
+		} else {
+			var index = getIndexIfObjWithOwnAttr($scope.editor.files.flash, '_id', swf._id);
+
+			if(index >= 0) {
+				var globalSwf = $scope.editor.files.flash[index];	
+
+				// if(swf.params && swf.params.length > 0) {
+				// 	params = '?' + swf.params;
+				// } else 
+				if(globalSwf.params && globalSwf.params.length > 0) {
+					params = '?' + globalSwf.params;
+				} 
+				// else 
+				// 	params = '';
+			}	
+		}
+		
+		return params;
+	}
 }];
 
 var MainCtrl = ['$scope', function($scope){
@@ -828,15 +854,6 @@ var ListsCtrl = ['$scope', function($scope){
 				$scope.location.path('/main');				
 			}, res);
 		});				
-	}
-
-	var getIndexIfObjWithOwnAttr = function(array, attr, value) {
-	    for(var i = 0; i < array.length; i++) {
-	        if(array[i].hasOwnProperty(attr) && array[i][attr] === value) {
-	            return i;
-	        }
-	    }
-	    return -1;
 	}
 
 	$scope.getListsItemIcon = function(item) {
@@ -1088,8 +1105,14 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.savingArticle = false;
 
 	$scope.checkSaveStatus = function() {
-		if($scope.editor.data.name.length > 2 && !$scope.savingArticle)
-			return false;
+		if($scope.editor.data.name.length > 2 && !$scope.savingArticle) {
+			if($scope.editor.data.preview.type == 'flash' && !$scope.editor.tempContent.preview.flash.data._id) {
+				return true;
+			} else if($scope.editor.data.content.type == 'flash' && !$scope.editor.tempContent.content.flash.data._id) {
+				return true;
+			} else
+				return false;
+		}
 
 		return true;
 	}
@@ -1135,7 +1158,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.iframe;
 				break;
 				case 'flash':
+					$scope.editor.tempContent.preview.flash.data.params = $scope.editor.tempContent.preview.flash.tempData[$scope.editor.tempContent.preview.flash.data._id].params;
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.flash.data;
+
+					if($scope.editor.data.preview.content.url != undefined)
+						delete $scope.editor.data.preview.content.url;
 				break;
 				case 'image':
 					$scope.editor.data.preview.content = $scope.editor.tempContent.preview.image;
@@ -1155,7 +1182,11 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					$scope.editor.data.content.content = $scope.editor.tempContent.content.iframe;
 				break;		
 				case 'flash':
+					$scope.editor.tempContent.content.flash.data.params = $scope.editor.tempContent.content.flash.tempData[$scope.editor.tempContent.content.flash.data._id].params;
 					$scope.editor.data.content.content = $scope.editor.tempContent.content.flash.data;
+
+					if($scope.editor.data.content.content.url != undefined)
+						delete $scope.editor.data.content.content.url;
 				break;
 				case 'image':
 					$scope.editor.data.content.content = $scope.editor.tempContent.content.image;
@@ -1192,7 +1223,16 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.$watch("editor.tempContent.preview.flash.data", function(n, o) {				
 		if(n!= o && n != undefined) {
 			$scope.safeApply(function() {
-				$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + n;
+				var params = $scope.buildSwfParams(n, 'preview');				
+
+				if(n.external) {
+					$scope.editor.tempContent.preview.flash.url = n.fileName + params;
+				} else {
+					$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + n.hashName + params;
+				}
+
+				//console.log($scope.editor.tempContent.preview.flash);
+				// $scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + n;
 
 				$scope.buildFlash('preview');			
 			});
@@ -1202,18 +1242,121 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 	$scope.$watch("editor.tempContent.content.flash.data", function(n, o) {				
 		if(n!= o && n != undefined) {
 			$scope.safeApply(function() {
-				$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
+				var params = $scope.buildSwfParams(n, 'content');				
 
+				if(n.external) {
+					$scope.editor.tempContent.content.flash.url = n.fileName + params;
+				} else {
+					$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n.hashName + params;
+				}
+
+				//$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
 				$scope.buildFlash('content');
 			});
 		}
 	}, true);
+	
+	$scope.updateSwfTempData = function(swf, type, column) {		
+
+		if(!$scope.editor.tempContent[type].flash.tempData[swf._id]) {		
+
+			// var params = '';
+
+			// if($scope.editor.data[type].content[column] == undefined && swf[column] != undefined) {
+			// 	params = swf[column];
+			// } else {
+			// 	if($scope.editor.data[type].content._id == swf._id) {
+			// 		params = $scope.editor.data[type].content[column];
+			// 	} else 
+			// }
+
+			$scope.editor.tempContent[type].flash.tempData[swf._id] = {
+				params:'',
+				fileName:''
+			}
+
+			setTimeout(function() { 
+				$scope.safeApply(function() {	
+					if($scope.editor.data[type].content[column] == undefined && swf[column] != undefined) {
+						$scope.editor.tempContent[type].flash.tempData[swf._id][column] = swf[column];
+					} else {
+						if($scope.editor.data[type].content._id == swf._id) {
+							$scope.editor.tempContent[type].flash.tempData[swf._id][column] = $scope.editor.data[type].content[column];
+						} else {
+							$scope.editor.tempContent[type].flash.tempData[swf._id][column] = swf[column];
+						}
+					}	
+				});					
+			}, 200);
+
+
+			// setTimeout(function() { 				
+			// 	if($scope.editor.data[type].content[column] != undefined && $scope.editor.data[type].content._id == swf._id) {				
+			// 		$scope.safeApply(function() {	
+			// 			$scope.editor.tempContent[type].flash.tempData[swf._id][column] = $scope.editor.data[type].content[column];
+			// 		});					
+			// 	} else {					
+			// 		// if($scope.editor.data[type].content[column] == undefined && swf[column])
+			// 		// 	$scope.editor.tempContent[type].flash.tempData[swf._id][column] = swf[column];
+			// 	}
+			// }, 100);
+
+			return $scope.editor.tempContent[type].flash.tempData[swf._id];
+		} else {
+			// setTimeout(function() {
+			// 	if($scope.editor.data[type].content[column] == undefined && swf[column])
+			// 		$scope.editor.tempContent[type].flash.tempData[swf._id][column] = swf[column];
+			// }, 1000);
+		}
+
+		return $scope.editor.tempContent[type].flash.tempData[swf._id];
+	}
+
+	$scope.showGlobalParamsButton = function(swf, type) {						
+		if(swf.params != undefined && swf.params.length > 0 && $scope.editor.tempContent[type].flash.tempData[swf._id] != undefined && $scope.editor.tempContent[type].flash.tempData[swf._id].params != undefined && $scope.editor.tempContent[type].flash.tempData[swf._id].params.length == 0)
+			return true;
+
+		return false;
+	}
+
+	$scope.insertGlobalParameters = function(swf, type) {
+		if(swf.params != undefined && swf.params.length > 0)
+			$scope.editor.tempContent[type].flash.tempData[swf._id].params = swf.params;
+	}
+
+	// $scope.updateSwfData = function(swf, type) {
+	// 	//TODO: local data
+	// 	$scope.Articles.update({id:item._id}, { status:item.status }, function(res) { 				
+				
+	// 	});
+	// }
+
+	// $scope.checkSwfDataChanges = function(id, type, column) {
+	// 	if($scope.editor.tempContent[type].flash.tempData[id] && $scope.editor.tempContent[type].flash.tempData[id][column]) {
+	// 		if($scope.editor.tempContent[type].flash.tempData[id][column] != $scope.editor.tempContent[type].flash.data[column])
+	// 			return true;
+	// 	}		
+
+	// 	return false;
+	// }
 
 	$scope.updateIframeDisplay = function(type) {
 		if($scope.editor.tempContent[type].iframe.indexOf('//') != 0 && $scope.editor.tempContent[type].iframe.indexOf('http'))
 			$scope.editor.tempContent[type].iframe = 'http://' + $scope.editor.tempContent[type].iframe;
 		
 		$scope.editor.display[type].content.iframe = '<iframe scrolling="no" src="' + $scope.editor.tempContent[type].iframe + '" frameborder="0" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '"></iframe>';
+	}
+
+	$scope.buildSwfUrl = function(swf, type) {
+		var url = '';
+		
+		if(swf.external) {
+			url = swf.fileName + $scope.buildSwfParams(swf, type);
+		} else {
+			url = $scope.host + 'images/swfs/' + swf.hashName + $scope.buildSwfParams(swf, type);
+		}
+		
+		return url;
 	}
 
 	$scope.checkLinked = function() {
@@ -1260,15 +1403,24 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				case 'text':				
 					$scope.editor.tempContent.preview.text = angular.copy($scope.content[index].preview.content);					
 				break;
-				case 'flash':
-					for (var i in $scope.editor.files.flash){
-						if ($scope.editor.data.preview.content === $scope.editor.files.flash[i].hashName) {
-							$scope.editor.tempContent.preview.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
-							$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
-							$scope.rebuildGalleryOrFlash('preview');
-							break;
-						}
-					}
+				case 'flash':					
+					$scope.editor.tempContent.preview.flash.data = angular.copy($scope.content[index].preview.content);
+					$scope.editor.tempContent.preview.flash.url = $scope.buildSwfUrl($scope.editor.tempContent.preview.flash.data, 'preview') //$scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
+					$scope.rebuildGalleryOrFlash('preview');
+					// for (var i in $scope.editor.files.flash){
+					// 	if ($scope.editor.data.preview.content._id === $scope.editor.files.flash[i]._id) {
+					// 		$scope.editor.tempContent.preview.flash.data = angular.copy($scope.editor.files.flash[i]);
+					// 		$scope.editor.tempContent.preview.flash.url = $scope.buildSwfUrl($scope.editor.tempContent.preview.flash.data) //$scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
+					// 		$scope.rebuildGalleryOrFlash('preview');
+					// 		break;
+					// 	}
+					// 	// if ($scope.editor.data.preview.content === $scope.editor.files.flash[i].hashName) {
+					// 	// 	$scope.editor.tempContent.preview.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
+					// 	// 	$scope.editor.tempContent.preview.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
+					// 	// 	$scope.rebuildGalleryOrFlash('preview');
+					// 	// 	break;
+					// 	// }
+					// }
 				break;
 				case 'iframe':
 					$scope.editor.tempContent.preview.iframe = angular.copy($scope.content[index].preview.content);
@@ -1291,14 +1443,23 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 					$scope.buildEmbedVideo('content');
 				break;
 				case 'flash':
-					for (var i in $scope.editor.files.flash){
-						if ($scope.editor.data.content.content === $scope.editor.files.flash[i].hashName) {
-							$scope.editor.tempContent.content.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
-							$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.content.flash.data;
-							$scope.rebuildGalleryOrFlash('content');
-							break;
-						}
-					}
+					$scope.editor.tempContent.content.flash.data = angular.copy($scope.content[index].content.content);
+					$scope.editor.tempContent.content.flash.url = $scope.buildSwfUrl($scope.editor.tempContent.content.flash.data, 'content') //$scope.host + 'images/swfs/' + $scope.editor.tempContent.preview.flash.data;
+					$scope.rebuildGalleryOrFlash('content');
+					// for (var i in $scope.editor.files.flash){
+					// 	if ($scope.editor.data.content.content._id === $scope.editor.files.flash[i]._id) {
+					// 		$scope.editor.tempContent.content.flash.data = angular.copy($scope.editor.files.flash[i]);
+					// 		$scope.editor.tempContent.content.flash.url = $scope.buildSwfUrl($scope.editor.tempContent.content.flash.data); //$scope.host + 'images/swfs/' + $scope.editor.tempContent.content.flash.data;
+					// 		$scope.rebuildGalleryOrFlash('content');
+					// 		break;
+					// 	}
+					// 	// if ($scope.editor.data.content.content === $scope.editor.files.flash[i].hashName) {
+					// 	// 	$scope.editor.tempContent.content.flash.data = angular.copy($scope.editor.files.flash[i].hashName);
+					// 	// 	$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + $scope.editor.tempContent.content.flash.data;
+					// 	// 	$scope.rebuildGalleryOrFlash('content');
+					// 	// 	break;
+					// 	// }
+					// }
 				break;
 				case 'iframe':
 					$scope.editor.tempContent.content.iframe = angular.copy($scope.content[index].content.content);
@@ -1358,16 +1519,39 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 var SwfsCtrl = ['$scope', function($scope){
 	$scope.updateMenuButtonText('article', 'Add New Article');
 
+	$scope.swfUploadMode = true;
+	$scope.insertSwf = {
+		url:'',
+		updating:false
+	}	
+
+	$scope.swfsObject = [];
+
+	$scope.$on('SETTINGS_LOADED', function(event) {
+		$scope.swfsObject = angular.copy($scope.editor.files.flash);		
+	});
+
+	if($scope.settingsLoaded)
+		$scope.swfsObject = angular.copy($scope.editor.files.flash);
+
+	$scope.$watch('editor.files.flash.length', function(n,o){
+		if (n!=o && n!=undefined)
+			$scope.pagination.swfs.pages = Math.ceil(n / $scope.pagination.swfs.total);
+			$scope.swfsObject = angular.copy($scope.editor.files.flash);
+	}, true);
+
 	$scope.deleteSwf = function(swf) {
 		var inUse = false;
 		var confirmText = 'are you sure you want to delete ' + swf.fileName + ' ?';
 
 		for(var item in $scope.content) {
 
-			if($scope.content[item].preview.type == 'flash' && typeof($scope.content[item].preview.content) == 'string' && $scope.content[item].preview.content == swf.hashName) 
+			//if($scope.content[item].preview.type == 'flash' && typeof($scope.content[item].preview.content) == 'string' && $scope.content[item].preview.content == swf.hashName) 
+			if($scope.content[item].preview.type == 'flash' && $scope.content[item].preview.content._id == swf._id) 
 				inUse = true;
 
-			if($scope.content[item].content.type == 'flash' && typeof($scope.content[item].content.content) == 'string' && $scope.content[item].content.content == swf.hashName)
+			// if($scope.content[item].content.type == 'flash' && typeof($scope.content[item].content.content) == 'string' && $scope.content[item].content.content == swf.hashName)
+			if($scope.content[item].content.type == 'flash' && $scope.content[item].content.content._id == swf._id)
 				inUse = true;			
 
 			if(inUse) {
@@ -1376,13 +1560,100 @@ var SwfsCtrl = ['$scope', function($scope){
 			}
 		}
 
-		if(confirm(confirmText)) {
-			$scope.Files.delete({type:'swfs', id:swf._id}, function(res) {									
+		if(confirm(confirmText)) {			
+			$scope.Files.delete({type:'swfs', id:swf._id, external:swf.external}, function(res) {									
 				if(res.error == 0) {					
 					$scope.editor.files.flash.splice($scope.editor.files.flash.indexOf(swf), 1);					
 				}
 			});
 		}
+	}
+
+	$scope.changeSwf = function(column, swf, content) {
+		var index = getIndexIfObjWithOwnAttr($scope.swfsObject, '_id', swf._id);
+		if(column == 'fileName') { 
+			content = $scope.checkProtocol(content);
+		} else if(column == 'params') {
+			content = $scope.removeQuestionMark(content);
+		}
+
+		$scope.safeApply(function() {	
+			$scope.swfsObject[index][column] = content;
+		});		
+	}
+
+	$scope.checkProtocol = function(content) {
+		if(content.length >= 4 && content.indexOf('http') != 0) {			
+			content = 'http://' + content;
+		}
+
+		return content;
+	}
+
+	$scope.removeQuestionMark = function(content) {
+		if(content.length >= 1 && content.indexOf('?') == 0) {			
+			content = content.substr(1, content.length);
+		}
+
+		return content;
+	}
+
+	$scope.showSaveButton = function(swf) {				
+		var indexOriginal = getIndexIfObjWithOwnAttr($scope.editor.files.flash, '_id', swf._id);
+		var indexCopy = getIndexIfObjWithOwnAttr($scope.swfsObject, '_id', swf._id);
+
+		if(indexOriginal >= 0 && indexCopy >= 0) {					
+			if($scope.editor.files.flash[indexOriginal].params != $scope.swfsObject[indexCopy].params) 
+				return true;
+
+			if($scope.editor.files.flash[indexOriginal].external && $scope.editor.files.flash[indexOriginal].fileName != $scope.swfsObject[indexCopy].fileName) {
+				var end = '.swf';
+				if($scope.swfsObject[indexCopy].fileName.indexOf(end, $scope.swfsObject[indexCopy].fileName.length - end.length) !== -1)
+					return true;						
+			}
+		}
+
+		return false;
+	}
+
+	$scope.updateSwf = function(swf) {		
+		var indexOriginal = getIndexIfObjWithOwnAttr($scope.editor.files.flash, '_id', swf._id);
+		var indexCopy = getIndexIfObjWithOwnAttr($scope.swfsObject, '_id', swf._id);
+
+		if(indexOriginal >= 0 && indexCopy >= 0) {
+
+			$scope.Files.update({ id:swf._id ,type:'swfs'}, { fileName:$scope.swfsObject[indexCopy].fileName, params:$scope.swfsObject[indexCopy].params}, function(res) {
+				$scope.editor.files.flash[indexOriginal].params = $scope.swfsObject[indexCopy].params;
+				$scope.editor.files.flash[indexOriginal].fileName = $scope.swfsObject[indexCopy].fileName;
+			});	
+		}
+	}
+
+	$scope.insertSwf = function() {
+		$scope.insertSwf.updating = true;
+
+		if($scope.insertSwf.url.substr(0, 4) != 'http')
+			$scope.insertSwf.url = 'http://' + $scope.insertSwf.url;
+
+		$scope.Files.save({type:'swfs'}, { fileName:$scope.insertSwf.url, external:true}, function(res) {			
+			$scope.editor.files.flash.push(res)
+			//$scope.swfsObject = angular.copy($scope.editor.files.flash);
+			$scope.insertSwf.updating = false;
+			$scope.insertSwf.url = '';
+		});		
+	}
+
+	$scope.checkIfValidSwfAddress = function() {
+		if($scope.insertSwf.updating)
+			return true;
+
+		if($scope.insertSwf.url) {
+			var end = '.swf';
+			if($scope.insertSwf.url.indexOf(end, $scope.insertSwf.url.length - end.length) !== -1)		
+				return false;
+		}
+
+		return true;
 	}
 }];
 
@@ -1415,7 +1686,7 @@ var CategoriesCtrl = ['$scope', function($scope){
 		}
 	}
 
-	$scope.checkIfValidCategory = function(category) {				
+	$scope.checkIfValidCategory = function(category) {			
 		if(category && category.length > $scope.minimumLength) {
 			for(var cat in $scope.settings.categories) {
 				if($scope.settings.categories[cat] == category) {					
@@ -1484,3 +1755,12 @@ var CategoriesCtrl = ['$scope', function($scope){
 	}
 
 }];
+
+var getIndexIfObjWithOwnAttr = function(array, attr, value) {
+    for(var i = 0; i < array.length; i++) {
+        if(array[i].hasOwnProperty(attr) && array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
+}

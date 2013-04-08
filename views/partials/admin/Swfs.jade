@@ -17,21 +17,37 @@
 								i.icon-font.white
 								span.white Flash Resources ({{ editor.files.flash.length }})
 						#uploadNewSwf							
-							button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="upload.resource.uploading") Upload New SWF Resource
-							input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('resource', 'flash', this.files[0])", style="display:none;")
+							i.link.green(ng-click="swfUploadMode = !swfUploadMode", ng-class="{ 'icon-new-tab': swfUploadMode , 'icon-upload-3': !swfUploadMode}")
+							.upload(ng-show="swfUploadMode")
+								button(ng-click="triggerClick('uploadNewSwfInput_swfs')", ng-disabled="upload.resource.uploading") Upload New SWF Resource
+								input#uploadNewSwfInput_swfs(type="file", accept="application/x-shockwave-flash", onchange="angular.element(this).scope().uploadNewResource('resource', 'flash', this.files[0])", style="display:none;")
+							.import(ng-show="!swfUploadMode")
+								input.bg-color-green.white.noBorder.center(type="text", placeholder="swf external url", ng-model="insertSwf.url", style="width:500px;")
+								br
+								button(ng-click="insertSwf()", ng-disabled="checkIfValidSwfAddress()") Insert SWF
 						.paginationWrapper
 							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
 						table.bg-color-green
 							thead
 								tr
-									th.white.bold.center Original File Name
-									th.white.bold.center OnDisk File Name
+									th.white.bold.center(style="width:40%;") Original File									
+									th.white.bold.center(style="width:40%;") Parameters
+									th.white.bold.center View
+									th.white.bold.center Save
 									th.white.bold.center Delete
 							tbody
-								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id' | startFrom:(pagination.swfs.page - 1)*pagination.swfs.total | limitTo:pagination.swfs.total", ui-animate)
-									td.font12.white.center {{ swf.fileName }}
+								tr(ng-repeat="swf in editor.files.flash | orderBy:'-_id' | startFrom:(pagination.swfs.page - 1)*pagination.swfs.total | limitTo:pagination.swfs.total | swfsFilter", ui-animate)
+									td.font12.white.center
+										span(ng-show="!swf.external") {{ swf.fileName }}
+										input.center.fullWidth.bg-color-green.white.noBorder(type="text", ng-show="swf.external", style="width:100%;", value="{{ swf.fileName }}", onkeyup="angular.element(this).scope().changeSwf('fileName', {{ swf }}, this.value)")
 									td.font12.white.center 
-										a.font12(href="{{ host }}images/swfs/{{ swf.hashName }}", target="_blank") {{ swf.hashName }}
+										input.center.fullWidth.bg-color-green.white.noBorder(type="text", style="width:100%;", value="{{ swf.params }}", onkeyup="angular.element(this).scope().changeSwf('params', {{ swf }}, this.value)")
+									td.font12.white.center
+										a.font12(href="{{ swf.url }}", target="_blank")
+											i.icon-link.white.center.link
+									td.font12.white.center
+										a.font12(ng-click="updateSwf(swf)", ng-show="showSaveButton(swf)") 
+											i.icon-box-add.white.center.link									
 									td.font12.white.center
 										a.font12(ng-click="deleteSwf(swf)") 
 											i.icon-remove.white.center.link
