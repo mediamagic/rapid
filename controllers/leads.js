@@ -40,8 +40,8 @@ module.exports = function(db) {
 								data.marketing +
 								"</body></html>"
 				, message =	{ text: "i hope this works"
-							, from: "mediamagic mail server <djabor@gmail.com>"
-							, to: "Skoda <benny@mediamagic.co.il>"
+							, from: "mediamagic mail server <info@mediamagic.co.il>"
+							, to: "Skoda <skoda-service@champ.co.il>"
 							, subject: "Skoda Rapid - " + data.type.toUpperCase()
 							, attachment: 	{ data: mail
 											, alternative:true } };

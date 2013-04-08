@@ -38,6 +38,7 @@ var GlobalCtrl= [ '$scope'
 		}
 		$http.post('/resources/leads?_csrf='+$cookies['csrf.token'], $scope.form)
 			.success(function ( data, status, headers, config ) {
+				$window.alert('תודה, פנייתך התקבלה. נציגנו יחזרו אליך בהקדם');
 				$scope.form = angular.copy($scope.formReset);
 				return false;
 			})
