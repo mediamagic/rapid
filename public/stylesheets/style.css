@@ -63,7 +63,7 @@ input[type="radio"]:checked+label,input[type="checkbox"]:checked+label{color:bla
 .article.preview.size2x2 .mask{width:460px;height:460px;}
 .article.preview.size2x2 iframe{width:460px;height:460px;}
 .article.preview .preview{margin-bottom:20px;}
-.article.preview.disabled .disabled{display:block;position:absolute;top:0;left:0;background:white;opacity:0.4;z-index:2000;}
+.article.preview.disabled .disabled{display:block;position:absolute;top:0;left:0;background:white;opacity:0.7;z-index:2000;}
 .article.preview.enabled .disabled{display:none;}
 .article.preview.linked .hover{position:absolute;top:0;left:0;background:black;opacity:0.8;display:none;z-index:2000;cursor:pointer;}.article.preview.linked .hover .hovercontent{color:white;height:100%;width:100%;opacity:1;display:table-cell;vertical-align:middle;text-align:center;font-size:18px;}.article.preview.linked .hover .hovercontent .text{margin:0 0 18px 0;font-size:20px;}
 .article.preview.linked .hover .hovercontent button{width:112px;height:35px;font-weight:bold;background:#4aa82e;color:white;font-size:20px;border:none;cursor:pointer;}
@@ -72,7 +72,7 @@ input[type="radio"]:checked+label,input[type="checkbox"]:checked+label{color:bla
 .article.preview.linked:hover .hover{display:table;}
 .article.preview.unlinked{cursor:default;}.article.preview.unlinked .hover{display:none !important;}
 .article.preview.unlinked .mobile{display:none !important;}
-.article.preview.masked .mask{position:absolute;top:0;left:0;background:white;opacity:0.4;display:block;z-index:2000;}
+.article.preview.masked .mask{position:absolute;top:0;left:0;background:white;opacity:0.7;display:block;z-index:2000;}
 .article.preview.masked:hover.linked .mask{display:none;}
 .article.preview.masked:hover.linked .hover{display:table !important;}
 .article.content{height:641px;}.article.content>.content{position:relative;max-width:960px;min-width:460px;border:solid 1px #8c9299;margin:20px 0;}.article.content>.content .close{position:absolute;top:-20px;right:0;width:50px;height:20px;direction:rtl;background:#4aa82e;text-align:center;color:white;font-weight:bold;cursor:pointer;}
