@@ -487,7 +487,8 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 					'<embed src="' + $scope.editor.tempContent[type].flash.url +'" quality="high" bgcolor="' + $scope.editor.data[type].bgColor + '" width="' + $scope.editor.display[type].width + '" height="' + $scope.editor.display[type].height + '" name="previewFlash" align="" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">' +
 					'</embed>' +
 					'</object>';
-		$scope.editor.display[type].content.flash = swf;
+		
+		$scope.editor.display[type].content.flash = swf;		
 	}
 
 	$scope.buildGallery = function(type) {
@@ -1043,7 +1044,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 		}			
 	}, true);	
 
-	$scope.$watch('editor.data.content.type', function(n, o) { 		
+	$scope.$watch('editor.data.content.type', function(n, o) {	
 		if(n != o && n != '' && n != undefined) {
 			//console.log('changing content type to ' + n)			
 			$scope.changeContentFormsSizes(n);
@@ -1251,6 +1252,7 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 				}
 
 				//$scope.editor.tempContent.content.flash.url = $scope.host + 'images/swfs/' + n;
+				
 				$scope.buildFlash('content');
 			});
 		}

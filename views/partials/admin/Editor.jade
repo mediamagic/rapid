@@ -190,7 +190,7 @@
 									.readMore.alfi
 										a.alfi(href="{{ editor.data.sidebar.readMore.url }}", target="_blank") {{ editor.data.sidebar.readMore.title }}									
 								#leftSide									
-									#textContent(ng-show="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
+									#textContent(ui-if="editor.data.content.type == 'text'", style="background-color:{{ editor.data.content.bgColor }};")									
 										textarea#editorOpen.tinyEditor(ui-tinymce="editor.tinymceContentOptions", ng-model="editor.tempContent.content.text", rows="15", cols="80", width="700", style="width:700px !important;border:none;")
 											{{ editor.tempContent.content.text }}											
 										input#uploadNewImageTinymce_content(type="file", accept="image/*", onchange="angular.element(this).scope().uploadResourceImageForTiny('content', this.files[0])", style="display:none;")
