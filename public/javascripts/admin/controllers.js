@@ -710,11 +710,14 @@ var GlobalCtrl = ['$scope', '$compile', '$filter', '$resource', '$location', '$w
 	$scope.getDateById = function(id) {
 	    return new Date(parseInt(id.toString().slice(0,8), 16)*1000);
 	}
+
+	$scope.$watch('location.path()', function(n,o){
+		if(n != o)		
+			$scope.updateMenuButtonText('article', 'New Article');
+	});
 }];
 
 var MainCtrl = ['$scope', function($scope){
-
-	$scope.updateMenuButtonText('article', 'New Article');
 
 	$scope.filters = {
 		text:'',
@@ -779,7 +782,6 @@ var MainCtrl = ['$scope', function($scope){
 }];
 
 var ListsCtrl = ['$scope', function($scope){
-	$scope.updateMenuButtonText('article', 'New Article');
 
 	$scope.filter.category = 0;	
 	
@@ -910,7 +912,6 @@ var ListsCtrl = ['$scope', function($scope){
 }];
 
 var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
-	$scope.updateMenuButtonText('article', 'New Article');
 
 	var id = $scope.route.id;
 	$scope.articleEditMode = false;
@@ -1533,7 +1534,6 @@ var EditorCtrl = ['$scope', '$filter', function($scope, $filter){
 }];
 
 var SwfsCtrl = ['$scope', function($scope){
-	$scope.updateMenuButtonText('article', 'New Article');
 
 	$scope.swfUploadMode = true;
 	$scope.insertSwf = {
@@ -1674,7 +1674,6 @@ var SwfsCtrl = ['$scope', function($scope){
 }];
 
 var CategoriesCtrl = ['$scope', function($scope){	
-	$scope.updateMenuButtonText('article', 'New Article');
 
 	$scope.categoryName = '';
 
