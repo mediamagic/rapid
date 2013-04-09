@@ -1,15 +1,15 @@
-// var cluster = require('cluster')
-//   , numCPUs = require('os').cpus().length
-//   , i       = 0;
+var cluster = require('cluster')
+  , numCPUs = require('os').cpus().length
+  , i       = 0;
 
-// if (cluster.isMaster) {
-//   for (; i < numCPUs; i++) {
-//     cluster.fork();
-//   }
-//   cluster.on('death', function(worker) {
-//     cluster.fork();
-//   });
-// } else {
+if (cluster.isMaster) {
+  for (; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  cluster.on('death', function(worker) {
+    cluster.fork();
+  });
+} else {
   var express = require('express')
     , routes  = require('./routes')
     , admin   = require('./routes/admin')
@@ -167,10 +167,11 @@
     app.get ('/resources/stats/:type', ensureAuthenticated, Stats.index);
 
     app.post('/resources/leads', Leads.create);
+    app.get ('/resources/leads', ensureAuthenticated, Leads.index);
 
     var server = http.createServer(app);
     server.listen(app.get('port'), function(){
       console.log("Express server listening on port " + app.get('port'));
     });
   });
-//}
+}

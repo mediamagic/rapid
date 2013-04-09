@@ -1,6 +1,6 @@
 var email 	= require('emailjs')
-	, smtp  = email.server.connect( { user: "benny@mmdev.co.il"
-									, password: "chipo$$2010"
+	, smtp  = email.server.connect( { user: "djabor@gmail.com"
+									, password: "p?/tx1Rs"
 									, host: "smtp.gmail.com"
 									, port: 465
 									, ssl: true })
@@ -37,15 +37,17 @@ module.exports = function(db) {
 								"<br> type: "+
 								data.type +
 								"<br> marketing: "+
-								data.marketing +
+								(data.marketing || 'false')  +
 								"</body></html>"
-				, message =	{ from: "mediamagic mail server <info@mediamagic.co.il>"
+				, message =	{ text: 'Skoda Rapid'
+							, from: "mediamagic mail server <info@mediamagic.co.il>"
 							, to: "Skoda <skoda-service@champ.co.il>"
 							, subject: "Skoda Rapid - " + data.type.toUpperCase()
 							, attachment: 	{ data: mail
 											, alternative:true } };
-				res.send(handle(err,doc));
+				res.send(handle(err,doc));											
 				smtp.send(message, function(err, message) { 
+					if (err) return console.log(err);
 					return
 				});
 			});
