@@ -364,11 +364,12 @@ function parseContent(obj, dim, type){
                 tmp
                     .children('body')
                     .append(content)
+            window.tmp = $('<div>').append(tmp).html();
             var iframe  = $('<iframe />')
                 .attr(  { 'frameborder':0
                         , style:"padding:0;border:none"
                         , scrolling: 'no'
-                        , src: 'data:text/html;charset=utf-8,' + tmp.html()
+                        , src: 'javascript:(function(){document.open();var ht = parent.tmp; console.log(parent); console.log(ht);document.domain="' + document.domain + '";document.write(ht);document.close();})()'
                         , 'class': (obj[type].size || 'text' ) })
             html = iframe;
             break;
