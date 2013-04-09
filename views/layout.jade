@@ -22,12 +22,22 @@ html(ng-app="rapid", ng-controller="GlobalCtrl", class="{{glob.mode}}")
 	body
 		script
 			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', '']);
+			_gaq.push(['_setAccount', 'UA-32470373-1']);
+			_gaq.push(['_setDomainName', 'skoda.co.il']);
+			_gaq.push(['_trackPageview']);
 			(function() {
 				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
 				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
+			var google_conversion_id = 1000078520;
+				, google_conversion_label = "QOS4CMip2wMQuPnv3AM";
+				, google_custom_params = window.google_tag_params;
+				, google_remarketing_only = true;
+		script(type="text/javascript", src="//www.googleadservices.com/pagead/conversion.js")
+		noscript
+			div(style="display:inline;")
+				img(height="1", width="1", style="border-style:none;", alt="", src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/1000078520/?value=0&amp;label=QOS4CMip2wMQuPnv3AM&amp;guid=ON&amp;script=0")
 		#wrap
 			#header(ui-scrollfix="+20")
 				#nav
