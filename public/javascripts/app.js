@@ -29,19 +29,19 @@
     };
 })(jQuery);
 
-var staticForm = ''
-    , host = window.document.location.protocol+
+var staticForm  = ''
+    , host      = window.document.location.protocol+
                     '//'+window.document.location.host
-    , ifr = $('<html />')
-                    , style = $('<link  />')
-                        .attr(  { 'type': "text/css"
-                                , 'rel': "stylesheet"
-                                , 'href': "/stylesheets/tinyFonts.css" })
-                    , head  = $('<head />')
-                    , wrap  = $('<body />')
-                        .attr('dir', 'rtl')
-                    , base = $('<base />')
-                        .attr('href', host)
+    , ifr       = $('<html />')
+    , style = $('<link  />')
+        .attr(  { 'type': "text/css"
+                , 'rel': "stylesheet"
+                , 'href': "/stylesheets/tinyFonts.css" })
+                , head  = $('<head />')
+                , wrap  = $('<body />')
+                    .attr('dir', 'rtl')
+                , base = $('<base />')
+                    .attr('href', host)
                 base
                     .appendTo(head)
                 style
@@ -203,6 +203,7 @@ function createPreview(elm, obj){
                     $('.close').click()
                     var content = (obj.preview.link.type != 'none') 
                         ? createContent(obj) : ''
+                    //obj.form = $('.form').clone();
                     elm
                         .hide()
                         .parent()
@@ -255,8 +256,8 @@ function createContent(obj){
         .bind('click', function(){
             elm
                 .hide(0, function(){
+                    $(this).children('.inner').html('')
                     $(this)
-                        .html('')
                         .siblings('.preview')
                         .show()
                         .parent()
