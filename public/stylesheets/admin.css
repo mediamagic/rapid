@@ -71,6 +71,12 @@ a{color:#ffe821;}
 .noBorder{border:none;}
 .placeHolderWhite::-webkit-input-placeholder{color:#fff;}
 .colorPicker{width:60px;height:60px;cursor:pointer;border:solid #ccc 1px;}
+#leadsFilters{position:relative;width:100%;height:50px;margin-top:10px;}#leadsFilters .freeText{position:absolute;font-size:12px;left:0px;top:0px;}#leadsFilters .freeText span{color:#00a300;}
+#leadsFilters .freeText input{position:absolute;top:25px;left:0px;width:250px;}
+#leadsFilters .type{position:absolute;font-size:12px;left:380px;top:0px;}#leadsFilters .type span{color:#00a300;}
+#leadsFilters .type select{position:absolute;left:120px;width:80px;}
+#leadsFilters .marketing{position:absolute;font-size:12px;left:380px;top:25px;}#leadsFilters .marketing span{color:#00a300;}
+#leadsFilters .marketing select{position:absolute;left:120px;width:80px;}
 #mainFilters{position:relative;width:100%;height:70px;margin-top:10px;}#mainFilters a{position:absolute;right:-9px;}
 #mainFilters .freeText{position:absolute;font-size:12px;left:0px;top:0px;}#mainFilters .freeText span{color:#00a300;}
 #mainFilters .freeText input{position:absolute;top:25px;left:0px;width:250px;}

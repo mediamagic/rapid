@@ -17,7 +17,7 @@
 									button Create New Article
 							.freeText
 								span Select By Name / Title
-								input(type="text", placeholder="search article", ng-model="filters.text", style="margin-bottom:5px; width:250px")								
+								input(type="text", placeholder="search article", ng-model="filters.text", style="margin-bottom:5px; width:250px", spellcheck="true", x-webkit-speech)								
 							.previewType
 								span Select By Preview Type:
 								select.bg-color-green.white(ng-model="filters.preview")

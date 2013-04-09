@@ -8,6 +8,7 @@ config(['$routeProvider', '$locationProvider', function($routeProvider, $locatio
 		when('/editor/:id', {templateUrl: '/views/admin/Editor.html', controller: EditorCtrl, name:'Editor'}).
     when('/swfs', {templateUrl: '/views/admin/Swfs.html', controller: SwfsCtrl, name:'Flash Resources'}).
     when('/categories', {templateUrl: '/views/admin/Categories.html', controller: CategoriesCtrl, name:'Categories Manager'}).
+    when('/leads', {templateUrl: '/views/admin/Leads.html', controller: LeadsCtrl, name:'Leads'}).
 		otherwise({redirectTo: '/main'});
 }]).
 filter('status', function() {
@@ -62,10 +63,13 @@ filter('categories', function() {
 
     return obj;
   }
-}).
-filter('contentType', function() {
+}).filter('contentType', function() {
   return function(item) {     
     return item.preview.link.type == 'none' ? 'none' : item.preview.link.type == 'external' ? 'external' : item.content.type;
+  }
+}).filter('leadType', function() {
+  return function(lead) {    
+    return lead.type == 'business' ? 'עיסקי' : lead.type == 'private' ? 'פרטי' : lead.type;
   }
 }).filter('startFrom', function() {
     return function(input, start) {
@@ -136,6 +140,42 @@ filter('contentType', function() {
         }
 
         this.pagination.main.pages = Math.ceil(input.length / this.pagination.main.total);
+
+        return input;
+    }
+}).filter('leadsFilter', function() {
+    return function(leads) {
+        var input = [];
+        var filters = this.filters;        
+
+        for(var i in leads) {
+          var lead = leads[i];          
+
+          if(lead.marketing == undefined)
+            lead.marketing = false;
+
+          var valid = {
+                        text:false,
+                        marketing:false,
+                        type:false
+          }
+
+          var regex = new RegExp(filters.text, "gi");          
+          
+          if(filters.text.length == 0 || lead.firstname.match(regex) || lead.lastname.match(regex) || lead.email.match(regex) || lead.phone.match(regex))
+            valid.text = true;
+
+          if(filters.type == 0 || lead.type == filters.type)
+            valid.type = true;
+
+          if(filters.marketing == 0 || lead.marketing.toString() == filters.marketing)
+            valid.marketing = true;
+          
+          if(valid.text && valid.marketing && valid.type)
+            input.push(lead)
+        }
+
+        this.pagination.leads.pages = Math.ceil(input.length / this.pagination.leads.total);
 
         return input;
     }
