@@ -1,4 +1,5 @@
 'use strict';
+
 angular.module  ( 'rapid.controllers'
 				, 	[ 'ngResource'
 					,'ngCookies'
@@ -16,7 +17,7 @@ var GlobalCtrl= [ '$scope'
 	$scope.resource 	= $resource
 	$scope.Settings.get({}, function(settings)	{ 
 		$scope.settings = settings
-		, $scope.Login 	= $scope.resource 	( '/api/login', { _csrf: $cookies['csrf.token'] } )
+		, $scope.Login 	= $scope.resource 	( '/api/login', { _csrf: encodeURIComponent($cookies['csrf.token']) } )
 		$scope.$broadcast('settings_loaded');
 		var cts 		= settings.categories
 			, dfc 		= settings.defaultCategory
@@ -36,7 +37,7 @@ var GlobalCtrl= [ '$scope'
 		if (a.leadForm.$invalid) {
 			return a.leadForm.$setDirty();
 		}
-		$http.post('/resources/leads?_csrf='+$cookies['csrf.token'], $scope.form)
+		$http.post('/resources/leads?_csrf='+encodeURIComponent($cookies['csrf.token']), $scope.form)
 			.success(function ( data, status, headers, config ) {
 				$window.alert('תודה, פנייתך התקבלה. נציגנו יחזרו אליך בהקדם');
 				$scope.form = angular.copy($scope.formReset);
