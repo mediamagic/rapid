@@ -41,6 +41,8 @@ var GlobalCtrl= [ '$scope'
 			.success(function ( data, status, headers, config ) {
 				$window.alert('תודה, פנייתך התקבלה. נציגנו יחזרו אליך בהקדם');
 				$scope.form = angular.copy($scope.formReset);
+				var img = new Image();
+				img.src = 'http://www.googleadservices.com/pagead/conversion/1000078520/?value=0&amp;label=gyfkCMCq2wMQuPnv3AM&amp;guid=ON&amp;script=0';
 				return false;
 			})
 			.error(function (data, status, headers, config) {
