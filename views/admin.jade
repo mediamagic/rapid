@@ -44,11 +44,15 @@ html(ng-app="admin", ng-controller="GlobalCtrl")
 						li
 							a.navigation-text(href="#/categories") 
 								i(ng-class="{ yellow: location.path() == '/categories'}").icon-copy
-								span(ng-class="{ yellow: location.path() == '/categories'}")  Categories Manager
+								span(ng-class="{ yellow: location.path() == '/categories'}")  Categories
 						li
 							a.navigation-text(href="#/swfs") 
 								i(ng-class="{ yellow: location.path() == '/swfs'}").icon-font
 								span(ng-class="{ yellow: location.path() == '/swfs'}")  Flash Resources
+						li
+							a.navigation-text(href="#/leads") 
+								i(ng-class="{ yellow: location.path() == '/leads'}").icon-user-2
+								span(ng-class="{ yellow: location.path() == '/leads'}")  Leads
 						li
 							a.navigation-text(href="/", target="_blank")
 								i.icon-new-tab-2

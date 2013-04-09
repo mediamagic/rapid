@@ -1,0 +1,53 @@
+.page
+	.page-header 
+		.page-header-content
+			h1 Leads
+				small &nbsp;
+
+	.page-region
+		.page-region-content
+			.grid
+				.row
+					.span4(style="width:100%;")
+						h3.padding5.bg-color-green(style="height:40px;")
+							i.white.icon-user-2
+							span.white Leads ({{ leads.length }})
+						#leadsFilters							
+							.freeText
+								span Select By FirstName / LastName / Email / Phone
+								input(type="text", placeholder="search lead", ng-model="filters.text", style="margin-bottom:5px; width:250px", spellcheck="true", x-webkit-speech)								
+							.type
+								span Select By Type:
+								select.bg-color-green.white(ng-model="filters.type")
+									option(value="0") all
+									option(value="business") business									
+									option(value="private") private															
+							.marketing
+								span Select By Marketing:
+								select.bg-color-green.white(ng-model="filters.marketing")
+									option(value="0") all
+									option(value="true") True
+									option(value="false") False
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
+						table.bg-color-green
+							thead
+								tr
+									th.white.bold.center First Name
+									th.white.bold.center Last Name									
+									th.white.bold.center Phone
+									th.white.bold.center Email
+									th.white.bold.center Type
+									th.white.bold.center Marketing
+									th.white.bold.center Date Created									
+							tbody								
+								tr(ng-repeat="lead in leads | leadsFilter | startFrom:(pagination.leads.page - 1)*pagination.leads.total | limitTo:pagination.leads.total", ui-animate)
+									td.font12.white.center {{ lead.firstname }}
+									td.font12.white.center {{ lead.lastname }}
+									td.font12.white.center {{ lead.phone }}
+									td.font12.white.center {{ lead.email }}
+									td.font12.white.center {{ lead | leadType }}
+									td.font12.white.center(ng-class="{ 'icon-checkmark':lead.marketing, 'icon-cancel-2 red':!lead.marketing }")
+									td.font12.white.center {{ getDateById(lead._id) | date:'dd/MM/yyyy HH:mm' }}
+						.paginationWrapper
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
