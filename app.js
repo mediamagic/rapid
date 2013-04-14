@@ -107,6 +107,8 @@ if (cluster.isMaster) {
               return done(err)
             if (resp)
               return done(null, doc[0]);
+            else
+              return done(null, false);
           })
         })
       }
@@ -136,6 +138,7 @@ if (cluster.isMaster) {
 
     //API
     app.post('/api/login', pass.authenticate('local'), function(req,res) {
+      console.log(req.user);
       if (req.user) res.json({error:0});
       else res.send(401);
     });

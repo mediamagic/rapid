@@ -369,7 +369,7 @@ function parseContent(obj, dim, type){
                 .attr(  { 'frameborder':0
                         , style:"padding:0;border:none"
                         , scrolling: 'no'
-                        , src: 'javascript:(function(){document.open();var ht = parent.tmp; console.log(parent); console.log(ht);document.domain="' + document.domain + '";document.write(ht);document.close();})()'
+                        , src: 'javascript:(function(){document.open();var ht = parent.tmp;document.domain="' + document.domain + '";document.write(ht);document.close();})()'
                         , 'class': (obj[type].size || 'text' ) })
             html = iframe;
             break;

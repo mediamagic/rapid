@@ -17,7 +17,7 @@ var GlobalCtrl= [ '$scope'
 	$scope.resource 	= $resource
 	$scope.Settings.get({}, function(settings)	{ 
 		$scope.settings = settings
-		, $scope.Login 	= $scope.resource 	( '/api/login', { _csrf: encodeURIComponent($cookies['csrf.token']) } )
+		, $scope.Login 	= $scope.resource 	( '/api/login', {}, {login: {method: 'post', headers: {"X-CSRF-Token": $cookies['csrf.token']}}} )
 		$scope.$broadcast('settings_loaded');
 		var cts 		= settings.categories
 			, dfc 		= settings.defaultCategory
@@ -37,7 +37,7 @@ var GlobalCtrl= [ '$scope'
 		if (a.leadForm.$invalid) {
 			return a.leadForm.$setDirty();
 		}
-		$http.post('/resources/leads?_csrf='+encodeURIComponent($cookies['csrf.token']), $scope.form)
+		$http.post('/resources/leads', $scope.form, {headers: {"X-CSRF-Token": $cookies['csrf.token']} })
 			.success(function ( data, status, headers, config ) {
 				$window.alert('תודה, פנייתך התקבלה. נציגנו יחזרו אליך בהקדם');
 				$scope.form = angular.copy($scope.formReset);
@@ -91,16 +91,17 @@ var MainCtrl = ['$scope', function ( $scope ){
 	}
 }];
 
-var LoginCtrl = ['$scope', '$window' , function ( $scope, $window ){
+var LoginCtrl = ['$scope', '$window', '$http', '$cookies' , function ( $scope, $window, $http, $cookies ){
 	var prevUrl = $scope.location.$$search.url;
 	$scope.loginSubmit = function (){
-		$scope.Login.save(	{}
-							, { username: $scope.username
-							, password: $scope.password }
-							, function(resp){
-				if (resp.error === 0){
-					$window.location.href = '/admin';
-				} 
-			});
+		$http.post('/api/login', { username: $scope.username, password: $scope.password }, {headers: {"X-CSRF-Token": $cookies['csrf.token']} })
+		.success(function ( data, status, headers, config ) {
+			$window.location.href = '/admin';
+			return false;
+		})
+		.error(function (data, status, headers, config) {
+			$window.alert('סיסמא שגויה, נא נסה/י שנית')
+			return false;
+		});
 	}
 }];
