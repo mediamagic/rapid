@@ -7,6 +7,7 @@ a{color:#ffe821;}
 #wrapper{height:700px;margin:0 auto;width:1024px;position:relative;}
 #listWrapper .itemInList{width:300px;height:70px;cursor:move;}#listWrapper .itemInList .data{color:#fff;}
 #listWrapper .itemInList .move{position:absolute;top:5px;right:5px;color:yellow;}
+#downloadCsv{position:absolute;right:10px;}#downloadCsv i{font-size:27px;}
 #closedEditorWrapper{position:relative;top:0px;width:940px;height:589px;border:solid #ccc 1px;overflow:hidden;}#closedEditorWrapper #upperForm{position:relative;width:478px;height:107px;border-bottom:solid #ccc 1px;border-left:solid #ccc 1px;float:right;}#closedEditorWrapper #upperForm .colorPicker{position:absolute;top:20px;left:20px;}
 #closedEditorWrapper #upperForm .name{position:absolute;top:5px;left:10px;width:225px;}
 #closedEditorWrapper #upperForm .type{position:absolute;top:30px;left:135px;width:100px;}

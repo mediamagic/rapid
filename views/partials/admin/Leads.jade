@@ -12,6 +12,8 @@
 						h3.padding5.bg-color-green(style="height:40px;")
 							i.white.icon-user-2
 							span.white Leads ({{ leads.length }})
+							a#downloadCsv(href="api/createCSV", download="rapid-leads.csv", title="Download CSV")								
+								i.icon-download-2.link.white
 						#leadsFilters							
 							.freeText
 								span Select By FirstName / LastName / Email / Phone
