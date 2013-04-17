@@ -28,13 +28,13 @@ module.exports = function(db){
 		var params = {};
 		if (req.params.id != undefined)
 			params._id = req.params.id;
-		db.Users.list(params, function(err,resp){
+		db.Leads.list(params, function(err,resp){
 			var tmp = [];
-			tmp.push('"Slogan",','"Name",','"Email",','"Phone",','"Age",','"Gender",','"Marketing",','"Referer",', '"Date Created"\n');
+			tmp.push('"First Name",','"Last Name",','"Email",','"Phone",','"Marketing",','"Type"\n');
 			for (var i = 0; i<resp.length;i++){
 				var row = [];
 				var val = resp[i];
-				row.push('"'+val.slogan+'"','"'+val.name+'"','"'+val.email+'"','="'+val.phone+'"','"'+val.age+'"','"'+val.gender+'"','"'+val.marketing+'"','"'+val.ref+'"', '"'+val.dateCreated+'"\n')
+				row.push('"'+val.firstname+'"','"'+val.lastname+'"','"'+val.email+'"','="'+val.phone+'"','"'+(val.marketing || 'false')+'"','"'+val.type +'"\n')
 				row = row.join(',');
 				tmp.push(row);
 				delete row;

@@ -143,7 +143,6 @@ if (cluster.isMaster) {
       else res.send(401);
     });
     app.get ('/api/createCSV', ensureAuthenticated,  Api.createCSV);
-    app.get ('/api/createCSV/:id', ensureAuthenticated, Api.createCSV);
     app.get ('/api/videoCheck/:id', Api.videoCheck);
 
     app.get ('/api/uploads/images', ensureAuthenticated, Images.index);
