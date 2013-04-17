@@ -30,11 +30,11 @@ module.exports = function(db){
 			params._id = req.params.id;
 		db.Leads.list(params, function(err,resp){
 			var tmp = [];
-			tmp.push('"First Name",','"Last Name",','"Email",','"Phone",','"Marketing",','"Type"\n');
+			tmp.push('"First Name",','"Last Name",','"Email",','"Phone",','"Marketing",','"Type",', '"Date"\n');
 			for (var i = 0; i<resp.length;i++){
 				var row = [];
 				var val = resp[i];
-				row.push('"'+val.firstname+'"','"'+val.lastname+'"','"'+val.email+'"','="'+val.phone+'"','"'+(val.marketing || 'false')+'"','"'+val.type +'"\n')
+				row.push('"'+val.firstname+'"','"'+val.lastname+'"','"'+val.email+'"','="'+val.phone+'"','"'+(val.marketing || 'false')+'"','"'+val.type +'"','"'+new Date(parseInt(val._id.toString().slice(0,8), 16)*1000)+'"\n')
 				row = row.join(',');
 				tmp.push(row);
 				delete row;
