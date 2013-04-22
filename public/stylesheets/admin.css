@@ -31,10 +31,10 @@ a{color:#ffe821;}
 #closedEditorWrapper #rightSide #previewDisplay:hover.linked .hover{display:table;}
 #listsPreviewWrapper{position:relative;float:right;width:616px;}#listsPreviewWrapper #listsIsotope .listItem{display:table;margin-bottom:5px;border:solid #ccc 1px;}#listsPreviewWrapper #listsIsotope .listItem.marked{background-color:#4aa82e;color:#fff;border:solid #343434 1px;}
 #listsPreviewWrapper #listsIsotope .listItem .marked_icon{color:#fff;}#listsPreviewWrapper #listsIsotope .listItem .marked_icon a i{color:#fff;}
-#listsPreviewWrapper #listsIsotope .listItem.size1x1{width:150px;height:150px;}
-#listsPreviewWrapper #listsIsotope .listItem.size1x2{width:150px;height:305px;}
-#listsPreviewWrapper #listsIsotope .listItem.size2x1{width:305px;height:150px;}
-#listsPreviewWrapper #listsIsotope .listItem.size2x2{width:305px;height:305px;}
+#listsPreviewWrapper #listsIsotope .listItem.size1x1{width:150px;height:152px;}
+#listsPreviewWrapper #listsIsotope .listItem.size1x2{width:150px;height:307px;}
+#listsPreviewWrapper #listsIsotope .listItem.size2x1{width:305px;height:152px;}
+#listsPreviewWrapper #listsIsotope .listItem.size2x2{width:305px;height:307px;}
 #listsPreviewWrapper #listsIsotope .listItem .name{position:absolute;width:100%;text-align:center;bottom:5px;}
 #listsPreviewWrapper #listsIsotope .listItem .edit{position:absolute;top:5px;left:5px;z-index:5;}#listsPreviewWrapper #listsIsotope .listItem .edit a{color:#4aa82e;}
 #listsPreviewWrapper #listsIsotope .listItem .edit a:hover{color:red;}
