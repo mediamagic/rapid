@@ -26,7 +26,7 @@
 								br
 								button(ng-click="insertSwf()", ng-disabled="checkIfValidSwfAddress()") Insert SWF
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="«", next-text="»", first-text="««", last-text="»»")
 						table.bg-color-green
 							thead
 								tr
@@ -52,5 +52,5 @@
 										a.font12(ng-click="deleteSwf(swf)") 
 											i.icon-remove.white.center.link
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.swfs.pages", current-page="pagination.swfs.page", max-size="pagination.swfs.total", previous-text="«", next-text="»", first-text="««", last-text="»»")
 					

@@ -31,7 +31,7 @@
 									option(value="true") True
 									option(value="false") False
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="«", next-text="»", first-text="««", last-text="»»")						
 						table.bg-color-green
 							thead
 								tr
@@ -52,4 +52,4 @@
 									td.font12.white.center(ng-class="{ 'icon-checkmark':lead.marketing, 'icon-cancel-2 red':!lead.marketing }")
 									td.font12.white.center {{ getDateById(lead._id) | date:'dd/MM/yyyy HH:mm' }}
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.leads.pages", current-page="pagination.leads.page", max-size="pagination.leads.total", previous-text="«", next-text="»", first-text="««", last-text="»»")

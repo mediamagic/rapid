@@ -789,6 +789,18 @@ var ListsCtrl = ['$scope', function($scope){
 		$scope.categoryCopy = angular.copy($scope.category);
 		$scope.isotopeContent.copy = angular.copy($scope.isotopeContent.original);
 	}
+
+	$scope.toggleIsoBox = function(mark, id) {
+		if(mark) {
+			$('#item_' + id).addClass('marked');
+			$('#item_' + id + '_icon').addClass('marked_icon');
+			$('#item_' + id + '_edit').addClass('marked_icon');
+		} else {
+			$('#item_' + id).removeClass('marked');
+			$('#item_' + id + '_icon').removeClass('marked_icon');
+			$('#item_' + id + '_edit').removeClass('marked_icon');
+		}
+	}
 	
 	$scope.$watch('filter.category', function(n,o){				
 		if (n!=o && n!=0 && n!=undefined && $scope.settingsLoaded && $scope.categoryCopy[n]) 			

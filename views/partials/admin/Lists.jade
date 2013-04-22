@@ -22,14 +22,14 @@
 							#listsIsotope(ui-isotope, options='{"itemSelector":".listItem", "animationEngine":"best-available", "masonry": { "columnWidth": 150, "gutterWidth": 5} }')
 								.listItem(ng-repeat="item in isotopeContent.copy", rel="{{item.categories}}", id="item_{{item._id}}", ng-class="getCategory($index)")
 									.name {{ item.name }}
-									.edit
+									.edit(id="item_{{ item._id }}_edit")
 										a.font12(href="/admin#/editor/{{item._id}}", title="Edit Article")
-											.icon-pencil
+											i.icon-pencil
 									.iconWrapper
-										h1.icon(ng-class="getListsItemIcon(item)")									
+										i(ng-class="getListsItemIcon(item)", id="item_{{ item._id }}_icon")									
 								.clear
 						ul#listWrapper.listview(ui-sortable="sortableOptions", ng-model="categoryCopy[filter.category]")
-							li.itemInList.bg-color-green(ng-repeat="item in categoryCopy[filter.category]")
+							li.itemInList.bg-color-green(ng-repeat="item in categoryCopy[filter.category]", onmouseover="angular.element(this).scope().toggleIsoBox(true, '{{ item._id}}')", onmouseout="angular.element(this).scope().toggleIsoBox(false, '{{ item._id}}')")
 								.move(ng-class="{'icon-arrow-down':$first, 'icon-arrow-up':$last, 'icon-menu':$middle}")
 								h2.icon.white(ng-class="getListsItemIcon(item)")
 								.data

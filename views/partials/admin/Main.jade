@@ -45,7 +45,7 @@
 								span Select By Categories:
 								select.bg-color-green.white.categories(size="3", multiple, ng-multiple="true", ng-model="filters.categories", ng-options="key as value for (key,value) in settings.categories")
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")						
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="«", next-text="»", first-text="««", last-text="»»")						
 						table.bg-color-green
 							thead
 								tr
@@ -79,4 +79,4 @@
 										a.font12(ng-click="deleteArticle(item._id)")
 											i.icon-remove.white.center.link
 						.paginationWrapper
-							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="&laquo;", next-text="&raquo;", first-text="&laquo;&laquo;", last-text="&raquo;&raquo;")
+							pagination.pagination-centered(boundary-links="true", num-pages="pagination.main.pages", current-page="pagination.main.page", max-size="pagination.main.total", previous-text="«", next-text="»", first-text="««", last-text="»»")
